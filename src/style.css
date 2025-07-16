@@ -1,1 +1,37 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-limeGreen: #c3d183;
+  --color-ivory: #fdfbf4;
+  --color-gray: #999999;
+  --color-black: #000000;
+  --font-kb-thin: 'kb-font-thin';
+  --font-kb-medium: 'kb-font-medium';
+  --font-kb-bold: 'kb-font-bold';
+}
+
+@font-face {
+  font-family: 'kb-font-thin';
+  src: url('./assets/fonts/KBFONT-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'kb-font-medium';
+  src: url('./assets/fonts/KBFONT-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'kb-font-bold';
+  src: url('./assets/fonts/KBFONT-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: var(--font-kb-medium);
+}
