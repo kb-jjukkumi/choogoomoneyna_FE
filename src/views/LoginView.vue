@@ -3,7 +3,7 @@
     <div class="bg-ivory flex w-[390px] flex-col gap-8 px-4">
       <!-- 동물 캐릭터 이미지 -->
       <div class="mt-8 flex justify-center">
-        <img src="./assets/images/logo.png" alt="logo" />
+        <img src="../assets/images/logo.png" alt="logo" />
       </div>
       <!-- 타이틀 -->
       <div class="flex flex-col items-center">
@@ -74,7 +74,6 @@
 
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 
 const email = ref('');
 const password = ref('');
