@@ -1,37 +1,125 @@
 @import 'tailwindcss';
+@import 'normalize.css';
 
 @theme {
+  /* 컬러 */
   --color-limeGreen: #c3d183;
   --color-ivory: #fdfbf4;
   --color-gray: #999999;
-  --color-black: #000000;
-  --font-kb-thin: 'kb-font-thin';
-  --font-kb-medium: 'kb-font-medium';
-  --font-kb-bold: 'kb-font-bold';
+  --color-green: #228b22;
+  --color-light: #f9faf3;
+  --color-light-hover: #f6f8ec;
+  --color-light-active: #ecf1d9;
+  --color-normal: #c3d183;
+  --color-normal-hover: #b0bc76;
+  --color-normal-active: #9ca769;
+  --color-dark: #929662;
+  --color-dark-hover: #757d4f;
+  --color-dark-active: #585e3b;
+  --color-darker: #44492e;
+  /* 폰트 */
+  --font-jua: 'jua';
+  --font-spoqa: 'spoqa';
 }
 
 @font-face {
-  font-family: 'kb-font-thin';
-  src: url('./assets/fonts/KBFONT-Thin.woff') format('woff');
-  font-weight: 100;
+  font-family: 'jua';
+  src: url('./assets/fonts/JUA.woff') format('woff');
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
-  font-family: 'kb-font-medium';
-  src: url('./assets/fonts/KBFONT-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'kb-font-bold';
-  src: url('./assets/fonts/KBFONT-Bold.woff') format('woff');
-  font-weight: 700;
+  font-family: 'spoqa';
+  src: url('./assets/fonts/spoqa.woff') format('woff');
   font-style: normal;
   font-display: swap;
 }
 
 :root {
-  font-family: var(--font-kb-medium);
+  font-family: var(--font-jua);
+}
+
+/* 기본 시멘틱 태그 스타일 */
+h1,
+h2,
+h3,
+h4,
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.75rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+a {
+  color: #2563eb; /* Tailwind의 blue-600 */
+  text-decoration: underline;
+}
+a:hover {
+  color: #1d4ed8; /* Tailwind의 blue-700 */
+}
+
+/* list */
+ul,
+ol {
+  margin-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+ul {
+  list-style-type: disc;
+}
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  margin-bottom: 0.25rem;
+}
+
+/* button, input, textarea */
+button,
+input,
+textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: var(--color-limeGreen);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+input,
+textarea {
+  border: 1px solid var(--color-gray);
+  border-radius: 10px;
+  width: 100%;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* layout tags */
+section,
+article,
+header,
+footer,
+main {
+  margin-bottom: 1rem;
 }
