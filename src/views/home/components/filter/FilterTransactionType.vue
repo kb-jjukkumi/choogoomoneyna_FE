@@ -7,7 +7,7 @@
       @click="toggleDropdown"
     >
       <!-- 현재 선택된 항목 표시 (한글 라벨) -->
-      <span>{{ TRANSFER_TYPE_MAP[selectedType] }}</span>
+      <span>{{ TRANSACTION_TYPE_MAP[selectedType] }}</span>
       <!-- ▼ 토글 아이콘 -->
       <img :src="icon_toggle" alt="토글 아이콘" class="size-2.5" />
     </div>
@@ -18,18 +18,18 @@
       class="absolute top-full mt-0.5 left-0 w-full bg-ivory text-limegreen-700 border-2 border-limegreen-500 rounded-lg shadow z-50 overflow-y-auto"
     >
       <li
-        v-for="transferType in transferTypeList"
-        :key="transferType"
-        @click="selectType(transferType)"
+        v-for="transactionType in transactionTypeList"
+        :key="transactionType"
+        @click="selectType(transactionType)"
         :class="[
           'px-4 py-2 cursor-pointer hover:bg-limegreen-100 transition',
           {
-            ' font-bold text-green': transferType === selectedType,
+            ' font-bold text-green': transactionType === selectedType,
           },
         ]"
       >
         <!-- 드롭다운 항목 한글 라벨로 표시 - 전체/입금/출금 -->
-        {{ TRANSFER_TYPE_MAP[transferType] || transferType }}
+        {{ TRANSACTION_TYPE_MAP[transactionType] || transactionType }}
       </li>
     </ul>
   </div>
@@ -41,14 +41,14 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import icon_toggle from '@/assets/img/icons/feature/icon_toggle.png';
 
 // 드롭다운 옵션 영문key - 한글라벨 매핑
-const TRANSFER_TYPE_MAP = {
+const TRANSACTION_TYPE_MAP = {
   All: '전체',
   Input: '입금',
   Output: '출금',
 };
 
 // 드롭다운 항목 (영문 key)
-const transferTypeList = ['All', 'Input', 'Output'];
+const transactionTypeList = ['All', 'Input', 'Output'];
 
 // 선택된 거래유형을 부모 컴포넌트로 전달할 emit 선언
 const emit = defineEmits(['selectedType']);
