@@ -3,20 +3,20 @@
 
 @theme {
   /* 컬러 */
-  --color-limeGreen: #c3d183;
-  --color-ivory: #fdfbf4;
-  --color-gray: #999999;
-  --color-green: #228b22;
-  --color-light: #f9faf3;
-  --color-light-hover: #f6f8ec;
-  --color-light-active: #ecf1d9;
-  --color-normal: #c3d183;
-  --color-normal-hover: #b0bc76;
-  --color-normal-active: #9ca769;
-  --color-dark: #929662;
-  --color-dark-hover: #757d4f;
-  --color-dark-active: #585e3b;
-  --color-darker: #44492e;
+  --color-white: #FFFFFF;
+  --color-ivory: #FDFBF4;
+  --color-gray-100: #D9D9D9;
+  --color-gray-200: #BDBFB5;
+  --color-gray-300: #999999;
+  --color-limegreen-100: #ECF1D9;
+  --color-limegreen-500: #C3D183;
+  --color-limegreen-600: #929D62;
+  --color-limegreen-700: #757D4F;
+  --color-limegreen-800: #ECF1D9;
+  --color-limegreen-900: #44492E;
+  --color-green: #228ㅠ22;
+  --color-red: #FF0F0F;
+  --color-black: #000000;
   /* 폰트 */
   --font-jua: 'jua';
   --font-spoqa: 'spoqa';
@@ -123,3 +123,4 @@ footer,
 main {
   margin-bottom: 1rem;
 }
+
