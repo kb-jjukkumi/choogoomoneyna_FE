@@ -1,21 +1,21 @@
-@import 'tailwindcss';
 @import 'normalize.css';
+@import 'tailwindcss';
 
 @theme {
   /* 컬러 */
-  --color-white: #FFFFFF;
-  --color-ivory: #FDFBF4;
-  --color-gray-100: #D9D9D9;
-  --color-gray-200: #BDBFB5;
+  --color-white: #ffffff;
+  --color-ivory: #fdfbf4;
+  --color-gray-100: #d9d9d9;
+  --color-gray-200: #bdbfb5;
   --color-gray-300: #999999;
-  --color-limegreen-100: #ECF1D9;
-  --color-limegreen-500: #C3D183;
-  --color-limegreen-600: #929D62;
-  --color-limegreen-700: #757D4F;
-  --color-limegreen-800: #ECF1D9;
-  --color-limegreen-900: #44492E;
-  --color-green: #228ㅠ22;
-  --color-red: #FF0F0F;
+  --color-limegreen-100: #ecf1d9;
+  --color-limegreen-500: #c3d183;
+  --color-limegreen-600: #929d62;
+  --color-limegreen-700: #757d4f;
+  --color-limegreen-800: #ecf1d9;
+  --color-limegreen-900: #44492e;
+  --color-green: #228b22;
+  --color-red: #ff0f0f;
   --color-black: #000000;
   /* 폰트 */
   --font-jua: 'jua';
@@ -96,12 +96,9 @@ textarea {
   font-size: 1rem;
 }
 
+/* 기본 버튼 스타일 제거 - Tailwind 클래스가 우선 적용되도록 */
 button {
   cursor: pointer;
-  border: none;
-  background-color: var(--color-limeGreen);
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
 }
 
 input,
@@ -123,4 +120,3 @@ footer,
 main {
   margin-bottom: 1rem;
 }
-
