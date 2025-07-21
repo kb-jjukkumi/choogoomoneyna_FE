@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import HomeView from '@/views/home/HomeView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
@@ -11,7 +12,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      redirect: '/login',
+      component: HomeView,
     },
     {
       path: '/login',
@@ -42,9 +43,11 @@ router.beforeEach((to, from, next) => {
   const publicPages = ['/login'];
   const authRequired = !publicPages.includes(to.path);
 
+  // localStorage에 accessToken이 없으면 로그인 페이지로 이동
   if (authRequired && !accessToken) {
     return next('/login');
   }
+  // localStorage에 accessToken이 있으면 메인 페이지로 이동
   if (to.path === '/login' && accessToken) {
     return next('/home');
   }
