@@ -6,7 +6,7 @@
 
       <!-- 입력 폼 -->
       <form class="flex flex-col gap-8 w-full" @submit.prevent="join">
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-2">
           <div class="flex flex-col">
             <label for="name" class="block mb-1 font-bold">닉네임</label>
             <div class="flex gap-3">
@@ -16,9 +16,11 @@
                 type="text"
                 placeholder="한글,영문,숫자 2~10자리"
                 class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+                @input="inputName"
               />
               <button
                 class="flex-1 w-full text-white bg-limegreen-500 rounded-lg"
+                @click="checkName"
               >
                 중복 확인
               </button>
@@ -26,9 +28,9 @@
           </div>
           <p
             class="h-3 text-xs"
-            :class="errorMessage ? 'text-red-500' : 'text-transparent'"
+            :class="nameErrorMessage ? 'text-red-500' : 'text-transparent'"
           >
-            {{ errorMessage }}
+            {{ nameErrorMessage }}
           </p>
         </div>
 
@@ -65,9 +67,9 @@
             </div>
             <p
               class="h-3 text-xs"
-              :class="errorMessage ? 'text-red-500' : 'text-transparent'"
+              :class="emailErrorMessage ? 'text-red-500' : 'text-transparent'"
             >
-              {{ errorMessage }}
+              {{ emailErrorMessage }}
             </p>
           </div>
         </div>
@@ -88,7 +90,7 @@
               >비밀번호 확인</label
             >
             <input
-              v-model="member.password2"
+              v-model="password2"
               id="password2"
               type="password"
               placeholder="비밀번호 확인"
@@ -98,14 +100,15 @@
           </div>
           <p
             class="h-3 text-xs"
-            :class="errorMessage ? 'text-red-500' : 'text-transparent'"
+            :class="pwdErrorMessage ? 'text-red-500' : 'text-transparent'"
           >
-            {{ errorMessage }}
+            {{ pwdErrorMessage }}
           </p>
         </div>
         <button
           type="submit"
           class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal"
+          :disabled="disableSubmit"
         >
           다음
         </button>
@@ -117,16 +120,59 @@
 <script setup>
 import { reactive, ref } from 'vue';
 
+import authApi from '@/api/authApi';
+
+const nameErrorMessage = ref('');
+const emailErrorMessage = ref('');
+const pwdErrorMessage = ref('');
+
+const password2 = ref('');
+const disableSubmit = ref(true);
+const isNameChecked = ref(false); // 닉네임 중복확인 여부
+
 const member = reactive({
   email: '',
   password: '',
-  password2: '',
   name: '',
 });
 
+//닉네임 중복 체크
+const checkName = async () => {
+  if (!member.name.trim()) {
+    nameErrorMessage.value = '닉네임을 입력하세요.';
+    isNameChecked.value = false;
+    return;
+  }
+
+  disableSubmit.value = await authApi.checkName(member.name);
+
+  if (disableSubmit.value) {
+    nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
+    isNameChecked.value = false;
+  } else {
+    nameErrorMessage.value = '사용 가능한 닉네임 입니다.';
+    isNameChecked.value = true;
+  }
+};
+
+//닉네임 입력 핸들러
+const inputName = () => {
+  isNameChecked.value = false;
+  disableSubmit.value = true;
+  if (member.name.trim()) {
+    nameErrorMessage.value = 'ID 중복 체크를 해주세요.';
+  } else {
+    nameErrorMessage.value = '';
+  }
+};
+
 const join = () => {
-  if (member.password != member.password2) {
-    errorMessage.value = '비밀번호가 일치하지 않습니다.';
+  if (!member.name.trim()) {
+    nameErrorMessage.value = '닉네임을 입력해주세요.';
+    return;
+  }
+  if (member.password != password2.value) {
+    pwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     return;
   }
   try {
@@ -135,6 +181,4 @@ const join = () => {
     console.error(e);
   }
 };
-
-const errorMessage = ref('');
 </script>
