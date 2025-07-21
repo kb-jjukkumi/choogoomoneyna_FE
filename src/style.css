@@ -59,3 +59,14 @@ h4 {
 button {
   cursor: pointer;
 }
+
+/* 오토필 배경, 텍스트 색상 덮어쓰기 */
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  box-shadow: 0 0 0 1000px var(--color-limegreen-100) inset !important;
+  -webkit-text-fill-color: var(--color-limegreen-900) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  font-family: var(--font-jua) !important;
+}
