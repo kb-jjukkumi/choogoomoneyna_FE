@@ -1,54 +1,95 @@
 <template>
-  <div class="flex h-screen justify-center">
-    <div class="bg-ivory flex w-[390px] flex-col gap-8 px-4">
-      <!-- 동물 캐릭터 이미지 -->
-      <div class="mt-8 flex justify-center">
-        <img src="@/assets/img/loginLogo.png" alt="logo" />
-      </div>
+  <div class="flex h-100vh justify-center">
+    <div class="bg-ivory flex w-[calc(100vh_*_390_/_844)] flex-col gap-8 px-4">
       <!-- 타이틀 -->
       <div class="flex flex-col items-center">
-        <span class="font-kb-bold mb-2 text-2xl font-bold tracking-widest"
-          >CHOOGOOMONEYNNA!</span
-        >
+        <span class="text-3xl text-limegreen-900">로그인</span>
+      </div>
+      <!-- 동물 캐릭터 이미지 -->
+      <div class="flex justify-center">
+        <img
+          src="../../assets/img/icons/system/system_login.png"
+          alt="login_logo"
+        />
       </div>
       <!-- 입력 폼 -->
       <form class="flex flex-col gap-4">
         <div>
-          <label for="email" class="font-kb-bold mb-1 block font-bold"
-            >이메일</label
+          <label for="email" class="mb-2 block text-limegreen-900"
+            >이메일 ID</label
           >
-          <input
-            v-model="email"
-            id="email"
-            type="email"
-            placeholder="이메일 입력"
-            class="border-gray font-kb-regular focus:ring-limeGreen w-full rounded-lg border bg-white px-4 py-3 font-normal focus:ring-2 focus:outline-none"
-          />
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                class="size-6 text-[#BDBFB5]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                />
+              </svg>
+            </div>
+            <input
+              v-model="email"
+              id="email"
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              class="w-full h-11 rounded-[10px] bg-limegreen-100 pl-10 pr-4 py-3 focus:outline-none placeholder:text-[#BDBFB5] text-limegreen-900"
+            />
+          </div>
         </div>
         <div>
-          <label for="password" class="font-kb-bold mb-1 block font-bold"
+          <label for="password" class="mb-2 block text-limegreen-900"
             >비밀번호</label
           >
-          <input
-            v-model="password"
-            id="password"
-            type="password"
-            placeholder="비밀번호 입력"
-            class="border-gray font-kb-regular focus:ring-limeGreen w-full rounded-lg border bg-white px-4 py-3 font-normal focus:ring-2 focus:outline-none"
-          />
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                class="size-6 text-[#BDBFB5]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <input
+              v-model="password"
+              id="password"
+              type="password"
+              placeholder="비밀번호를 입력해주세요"
+              class="w-full rounded-[10px] h-11 font-spoqa! placeholder:font-jua bg-limegreen-100 pl-10 pr-4 py-3 focus:outline-none placeholder:text-[#BDBFB5] text-limegreen-900"
+            />
+          </div>
         </div>
-        <button
-          @click="handleLogin"
-          type="submit"
-          class="bg-gray font-kb-bold mt-2 w-full rounded-lg py-3 text-lg font-bold text-white"
-        >
-          로그인
-        </button>
+        <div class="mt-12">
+          <button
+            @click="handleLogin"
+            type="submit"
+            class="w-full rounded-[10px] h-13 text-xl! text-ivory bg-limegreen-500"
+          >
+            로그인
+          </button>
+        </div>
       </form>
       <!-- 하단 버튼 -->
-      <div class="mt-2 flex gap-2">
+      <div class="flex gap-2">
         <button
-          class="font-kb-bold flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#ffe812] py-3 text-base font-bold text-black shadow-sm"
+          class="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-[#ffe812] h-12 text-black shadow-sm"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +104,7 @@
           카카오 로그인
         </button>
         <button
-          class="text-gray font-kb-bold flex-1 rounded-lg bg-[#e3eac9] py-3 text-base font-bold"
+          class="text-limegreen-900 flex-1 rounded-[10px] bg-transparent border-2 border-limegreen-500 h-12"
         >
           회원가입
         </button>
