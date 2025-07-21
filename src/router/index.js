@@ -19,11 +19,6 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
-    },
-    {
       path: '/ranking',
       name: 'ranking',
       component: RankingView,
@@ -39,6 +34,21 @@ const router = createRouter({
       component: MyPageView,
     },
   ],
+});
+
+// 라우터 가드
+router.beforeEach((to, from, next) => {
+  const accessToken = localStorage.getItem('accessToken');
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+
+  if (authRequired && !accessToken) {
+    return next('/login');
+  }
+  if (to.path === '/login' && accessToken) {
+    return next('/home');
+  }
+  next();
 });
 
 export default router;
