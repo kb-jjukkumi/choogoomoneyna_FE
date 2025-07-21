@@ -1,49 +1,6 @@
-<script setup>
-import bank_kakao from '@/assets/img/banks/bank_kakao.png';
-import bank_kb from '@/assets/img/banks/bank_kb.png';
-import bank_shinhan from '@/assets/img/banks/bank_shinhan.png';
-import character_savings from '@/assets/img/characters/savings.png';
-import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
-import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
-
-const accounts = [
-  {
-    logo: bank_kb,
-    type: '입출금',
-    name: '국민 2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_shinhan,
-    type: '입출금',
-    name: '신한 2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_kakao,
-    type: '입출금',
-    name: '카카오 2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_kakao,
-    type: '입출금',
-    name: '카카오 2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-];
-</script>
-
 <template>
   <div class="main_wrapper bg-ivory">
     <!-- 상단 로고 -->
-    <div class="header">
-      <h1>CHOOGOOMONEYNA!</h1>
-    </div>
 
     <!-- 프로필 박스 -->
     <div class="profile">
@@ -91,14 +48,20 @@ const accounts = [
       <h3>연동 계좌 목록</h3>
 
       <!-- 연동 계좌 목록 -->
-      <div class="accounts max-h-[400px] overflow-y-auto">
-        <div class="account" v-for="(account, i) in accounts" :key="i">
+      <!-- 계좌 목록의 길이가 '374px'을 넘어가면 스크롤 처리 -->
+      <div class="accounts max-h-[374px] overflow-y-auto">
+        <div
+          v-for="(account, i) in accounts"
+          :key="i"
+          @click="goToTransaction(account)"
+          class="account"
+        >
           <!-- 은행 로고 -->
           <img :src="account.logo" class="account_logo" alt="은행 로고" />
           <!-- 계좌 정보 -->
           <div class="account_info">
-            <p class="account_type">입출금</p>
-            <p>{{ account.name }}</p>
+            <p class="account_type">{{ account.type }}</p>
+            <p>{{ account.bankName }} {{ account.accountNumber }}</p>
             <p class="account_balance">
               {{ account.balance.toLocaleString() }}원
             </p>
@@ -121,17 +84,72 @@ const accounts = [
   </div>
 </template>
 
-<style scoped>
-/* 상단 로고 */
-.header h1 {
-  text-align: center;
-  font-size: 30px;
-  padding: 30px 16px 0;
-}
+<script setup>
+import { useRouter } from 'vue-router';
 
+import bank_kakao from '@/assets/img/banks/bank_kakao.png';
+import bank_kb from '@/assets/img/banks/bank_kb.png';
+import bank_shinhan from '@/assets/img/banks/bank_shinhan.png';
+import bank_woori from '@/assets/img/banks/bank_woori.png';
+import character_savings from '@/assets/img/characters/savings.png';
+import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
+import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
+
+const router = useRouter();
+
+const accounts = [
+  {
+    logo: bank_kb,
+    type: '입출금',
+    bankName: '국민',
+    accountNumber: '2452-12-24521',
+    balance: 500000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    logo: bank_shinhan,
+    type: '입출금',
+    bankName: '신한',
+    accountNumber: '2452-12-24521',
+    balance: 500000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    logo: bank_kakao,
+    type: '입출금',
+    bankName: '카카오',
+    accountNumber: '2452-12-24521',
+    balance: 500000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    logo: bank_woori,
+    type: '입출금',
+    bankName: '우리',
+    accountNumber: '2452-12-24521',
+    balance: 500000,
+    date: '2025.07.16 14:22',
+  },
+];
+
+const goToTransaction = account => {
+  router.push({
+    name: 'transaction',
+    params: {
+      bankName: account.bankName,
+      accountNumber: account.accountNumber,
+    },
+    query: {
+      balance: account.balance,
+    },
+  });
+};
+</script>
+
+<style scoped>
 /* 프로필 박스 */
 .profile {
-  margin: 60px 0 30px;
+  margin: 80px 0 30px;
 }
 
 /* 프로필 캐릭터 */
@@ -213,7 +231,7 @@ const accounts = [
   padding: 2vh 3vh;
   border-radius: 50px 50px 0 0;
   width: calc(100vh * 390 / 844);
-  height: 640px;
+  height: 620px;
 }
 
 /* 연동 계좌 목록 타이틀 */
