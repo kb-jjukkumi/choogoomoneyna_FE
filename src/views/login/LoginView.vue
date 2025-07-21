@@ -1,6 +1,8 @@
 <template>
-  <div class="flex h-100vh justify-center">
-    <div class="bg-ivory flex w-[calc(100vh_*_390_/_844)] flex-col gap-8 px-4">
+  <div class="flex justify-center">
+    <div
+      class="bg-ivory flex w-[calc(100vh_*_390_/_844)] flex-col gap-8 px-[3vh]"
+    >
       <!-- 타이틀 -->
       <div class="flex flex-col items-center">
         <span class="text-3xl text-limegreen-900">로그인</span>
@@ -13,7 +15,7 @@
         />
       </div>
       <!-- 입력 폼 -->
-      <form class="flex flex-col gap-4">
+      <form class="flex flex-col gap-4" @submit.prevent="handleLogin">
         <div>
           <label for="email" class="mb-2 block text-limegreen-900"
             >이메일 ID</label
@@ -78,7 +80,6 @@
         </div>
         <div class="mt-12">
           <button
-            @click="handleLogin"
             type="submit"
             class="w-full rounded-[10px] h-13 text-xl! text-ivory bg-limegreen-500"
           >
@@ -111,15 +112,93 @@
       </div>
     </div>
   </div>
+  <LoginModal
+    v-if="showAlert"
+    title="알림"
+    :message="alertMessage"
+    @close="showAlert = false"
+  />
+  <LoginModal
+    v-if="showModal"
+    :title="modalType === 'fail' ? '로그인 실패' : '로그인 성공'"
+    :message="
+      modalType === 'fail' ? '로그인을 다시 시도해보세요' : '환영합니다!'
+    "
+    @close="handleModalClose"
+  >
+    <template #icon>
+      <img
+        v-if="modalType === 'fail'"
+        src="../../assets/img/icons/system/system_login_fail.svg"
+      />
+      <svg v-else width="56" height="56" fill="none" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" fill="#D9E6C3" />
+        <path
+          d="M8 12l3 3 5-5"
+          stroke="#8B9A5B"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
+    </template>
+  </LoginModal>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import axiosInstance from '@/api/axios';
+
+import LoginModal from './components/LoginModal.vue';
+
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
+const showModal = ref(false);
+const modalType = ref('fail');
+const alertMessage = ref('');
+const showAlert = ref(false);
 
-const handleLogin = () => {
-  console.log(email.value, password.value);
+const handleLogin = async () => {
+  if (showAlert.value) return; // 모달이 떠 있으면 로그인 동작 막기
+  if (!email.value) {
+    alertMessage.value = '이메일을 입력해 주세요!';
+    showAlert.value = true;
+    return;
+  }
+  if (!password.value) {
+    alertMessage.value = '비밀번호를 입력해 주세요!';
+    showAlert.value = true;
+    return;
+  }
+  try {
+    const response = await axiosInstance.post('/api/users/login', {
+      email: email.value,
+      password: password.value,
+    });
+    // accessToken, refreshToken 저장
+    window.localStorage.setItem('accessToken', response.data.accessToken);
+    window.localStorage.setItem('refreshToken', response.data.refreshToken);
+    // 로그인 성공 시 모달 창 띄우기
+    showModal.value = true;
+    modalType.value = 'success';
+  } catch (error) {
+    showModal.value = true;
+    modalType.value = 'fail';
+  }
+};
+
+const handleModalClose = () => {
+  showModal.value = false;
+  const token = window.localStorage.getItem('accessToken');
+  // 토큰이 있으면 메인 페이지로 이동
+  if (token) {
+    router.push('/');
+  } else {
+    // 토큰이 없으면 로그인 페이지로 이동
+    router.push('/login');
+  }
 };
 </script>
