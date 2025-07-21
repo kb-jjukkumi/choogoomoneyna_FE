@@ -12,7 +12,7 @@
   --color-limegreen-500: #c3d183;
   --color-limegreen-600: #929d62;
   --color-limegreen-700: #757d4f;
-  --color-limegreen-800: #ecf1d9;
+  --color-limegreen-800: #585e3b;
   --color-limegreen-900: #44492e;
   --color-green: #228b22;
   --color-red: #ff0f0f;
@@ -38,6 +38,9 @@
 
 :root {
   font-family: var(--font-jua);
+  background-color: var(--color-black);
+  /* 전체 페이지 스크롤 X */
+  overflow: hidden;
 }
 
 /* 기본 시멘틱 태그 스타일 */
