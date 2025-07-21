@@ -9,9 +9,6 @@ import TopNavigation from './components/TopNavigation.vue';
     <div
       class="bg-ivory flex min-h-screen w-[calc(100vh_*_390_/_844)] justify-center rounded-[10px] px-4 shadow-lg relative"
     >
-      <!-- TopNavigation을 상단에 고정 -->
-      <TopNavigation :show-back="true" :show-logo-text="true" />
-
       <!-- 메인 콘텐츠 영역에 상단 패딩 추가 -->
       <div class="w-full pt-16 pb-20">
         <router-view />
