@@ -38,6 +38,7 @@
 
 :root {
   font-family: var(--font-jua);
+  overflow: hidden;
 }
 
 /* 기본 시멘틱 태그 스타일 */
