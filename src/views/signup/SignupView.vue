@@ -21,6 +21,7 @@
               <button
                 class="flex-1 w-full text-white bg-limegreen-500 rounded-lg"
                 @click="checkName"
+                type="button"
               >
                 중복 확인
               </button>
@@ -39,7 +40,7 @@
           <div class="flex flex-col gap-2">
             <div class="flex gap-3">
               <input
-                v-model="member.email"
+                v-model="email.email"
                 id="email"
                 type="email"
                 placeholder="이메일을 입력해주세요"
@@ -47,20 +48,24 @@
               />
               <button
                 class="flex-1 w-full text-white font-thin bg-limegreen-500 rounded-lg"
+                @click="send"
+                type="button"
               >
                 인증 요청
               </button>
             </div>
             <div class="flex gap-3">
               <input
-                v-model="member.email"
+                v-model="vefityEmail.code"
                 id="email"
-                type="email"
+                type="text"
                 placeholder="인증번호를 입력해주세요."
                 class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
               />
               <button
                 class="flex-1 w-full text-white font-thin bg-limegreen-500 rounded-lg"
+                @click="verify"
+                type="button"
               >
                 확인
               </button>
@@ -129,12 +134,57 @@ const pwdErrorMessage = ref('');
 const password2 = ref('');
 const disableSubmit = ref(true);
 const isNameChecked = ref(false); // 닉네임 중복확인 여부
+const isEmailChecked = ref(false); // 이메일 인증 여부
+const isPwdChecked = ref(false);
 
 const member = reactive({
-  email: '',
+  email: email.email,
   password: '',
   name: '',
 });
+
+//이메일 전송용
+const email = reactive({
+  email: '',
+});
+
+//이메일 인증코드 확인용
+const vefityEmail = reactive({
+  email: email.email,
+  code: '',
+});
+
+//이메일 인증 처리
+const send = async () => {
+  if (!email.email.trim()) {
+    emailErrorMessage.value = '이메일을 입력해주세요.';
+    return;
+  } else {
+    await authApi.sendCode(email);
+    return;
+  }
+};
+
+//이메일 인증번호 확인
+const verify = async () => {
+  const verifyPayload = {
+    email: email.email,
+    code: vefityEmail.code,
+  };
+
+  try {
+    const result = await authApi.verifyCode(verifyPayload);
+    isEmailChecked.value = result;
+
+    emailErrorMessage.value = result
+      ? '이메일 인증이 완료되었습니다.'
+      : '인증번호가 올바르지 않습니다.';
+  } catch (e) {
+    console.error(e);
+    isEmailChecked.value = false;
+    emailErrorMessage.value = '인증번호가 올바르지 않습니다.';
+  }
+};
 
 //닉네임 중복 체크
 const checkName = async () => {
@@ -166,11 +216,28 @@ const inputName = () => {
   }
 };
 
+//회원가입 처리
 const join = () => {
   if (!member.name.trim()) {
     nameErrorMessage.value = '닉네임을 입력해주세요.';
     return;
   }
+
+  if (!email.email.trim()) {
+    emailErrorMessage.value = '이메일을 입력해주세요.';
+    return;
+  }
+
+  if (!isEmailChecked) {
+    emailErrorMessage.value = '이메일 인증을 해주세요.';
+    return;
+  }
+
+  if (!member.password.trim()) {
+    pwdErrorMessage.value = '비밀번호를 입력해주세요.';
+    return;
+  }
+
   if (member.password != password2.value) {
     pwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     return;
