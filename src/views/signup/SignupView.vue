@@ -228,7 +228,7 @@ const join = () => {
     return;
   }
 
-  if (!isEmailChecked) {
+  if (!isEmailChecked.value) {
     emailErrorMessage.value = '이메일 인증을 해주세요.';
     return;
   }
