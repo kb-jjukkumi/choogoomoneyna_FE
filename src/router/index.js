@@ -16,7 +16,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/transaction/:bankName/:accountNumber',
+      path: '/transaction/:bankName/:accountNumber/:type',
       name: 'transaction',
       component: TransactionView,
     },
