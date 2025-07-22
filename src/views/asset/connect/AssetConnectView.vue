@@ -1,19 +1,3 @@
-<script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
-
-import TopNavigation from '@/components/TopNavigation.vue';
-
-import { BANK_LIST } from '../constants/bankList';
-
-const route = useRoute();
-
-const bankId = computed(() => route.query.bankId);
-const bankImg = computed(
-  () => BANK_LIST.find(bank => bank.id === bankId.value).icon
-);
-</script>
-
 <template>
   <div class="min-h-screen bg-ivory flex flex-col items-center pt-10">
     <TopNavigation :show-back="true" :show-logo-text="false" />
@@ -65,3 +49,18 @@ const bankImg = computed(
     </form>
   </div>
 </template>
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+import TopNavigation from '@/components/TopNavigation.vue';
+
+import { BANK_LIST } from '../constants/bankList';
+
+const route = useRoute();
+
+const bankId = computed(() => route.query.bankId);
+const bankImg = computed(
+  () => BANK_LIST.find(bank => bank.id === bankId.value).icon
+);
+</script>
