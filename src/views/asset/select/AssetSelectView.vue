@@ -9,7 +9,7 @@
     />
     <!-- 은행 목록 컨테이너 -->
     <div
-      class="font-spoqa text-[16px] bg-limegreen-100 w-full rounded-2xl p-4 flex flex-col gap-3 max-h-[calc(100vh-300px)] overflow-y-auto [&::-webkit-scrollbar]:hidden"
+      class="font-spoqa text-[16px] bg-limegreen-100 w-full rounded-2xl p-6 flex flex-col gap-3 max-h-[calc(100vh-300px)] overflow-y-auto [&::-webkit-scrollbar]:hidden"
     >
       <div
         v-for="bank in BANK_LIST"
