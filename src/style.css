@@ -38,6 +38,7 @@
 
 :root {
   font-family: var(--font-jua);
+  /* 전체 페이지 스크롤 X */
   overflow: hidden;
 }
 
