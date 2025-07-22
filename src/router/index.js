@@ -4,7 +4,7 @@ import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
-import SignupView from '@/views/signup/signupView.vue';
+import SignupView from '@/views/signup/SignupView.vue';
 import TestView from '@/views/TestView.vue';
 
 const router = createRouter({
