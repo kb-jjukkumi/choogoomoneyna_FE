@@ -1,8 +1,6 @@
 <template>
   <div class="flex justify-center">
-    <div
-      class="bg-ivory flex w-[calc(100vh_*_390_/_844)] flex-col gap-8 px-[3vh]"
-    >
+    <div class="bg-ivory flex w-full flex-col gap-8 px-4">
       <!-- 타이틀 -->
       <div class="flex flex-col items-center">
         <span class="text-3xl text-limegreen-900">로그인</span>
