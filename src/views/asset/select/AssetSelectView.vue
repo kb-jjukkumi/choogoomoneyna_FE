@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center">
+  <div class="min-h-screen flex flex-col items-center relative">
     <TopNavigation :show-back="true" :show-logo-text="false" />
 
     <p class="text-[25px] h-[25px] my-10">자산 연동</p>
