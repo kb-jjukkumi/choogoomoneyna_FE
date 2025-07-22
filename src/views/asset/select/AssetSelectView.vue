@@ -1,8 +1,10 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center relative">
-    <TopNavigation :show-back="true" :show-logo-text="false" />
-
-    <p class="text-[25px] h-[25px] my-10">자산 연동</p>
+  <div class="min-h-screen flex flex-col items-center relative justify-center">
+    <TopNavigation
+      :show-back="true"
+      :show-logo-text="true"
+      :logo-text="'자산 연동'"
+    />
     <!-- 은행 목록 컨테이너 -->
     <div
       class="font-spoqa text-[16px] bg-limegreen-100 w-[332px] rounded-2xl p-4 flex flex-col gap-3 max-h-[563px] overflow-y-auto [&::-webkit-scrollbar]:hidden"
