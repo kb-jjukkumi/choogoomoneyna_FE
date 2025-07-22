@@ -35,7 +35,8 @@
     <!-- 선택 버튼 -->
     <div class="w-[332px] bottom-10 fixed">
       <button
-        class="w-full bg-limegreen-500 text-limegreen-900 rounded-[10px] h-12 text-[22px]!"
+        class="w-full bg-limegreen-500 text-limegreen-900 rounded-[10px] h-12 text-[22px]! disabled:opacity-50"
+        :disabled="!selectedBank"
         @click="confirmSelection"
       >
         선택
@@ -46,25 +47,32 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import TopNavigation from '@/components/TopNavigation.vue';
 
-import { BANK_LIST } from './constants/bankList';
+import { BANK_LIST } from '../constants/bankList';
 
 const selectedBank = ref(null);
+const router = useRouter();
 
-function toggleBankSelection(bankId) {
+const toggleBankSelection = bankId => {
   if (selectedBank.value === bankId) {
     selectedBank.value = null;
   } else {
     selectedBank.value = bankId;
   }
-}
+};
 
-function confirmSelection() {
-  console.log('선택된 은행:', selectedBank.value);
-  // 여기에 선택 확인 로직 추가
-}
+const goToConnect = bankId => {
+  if (!bankId) return;
+
+  router.push({ name: 'assetConnect', query: { bankId } });
+};
+
+const confirmSelection = () => {
+  goToConnect(selectedBank.value);
+};
 </script>
 
 <style scoped>
