@@ -5,6 +5,9 @@ import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
+import SignupView from '@/views/signup/SignupView.vue';
+import SurveyView1 from '@/views/signup/SurveyView1.vue';
+import SurveyView2 from '@/views/signup/SurveyView2.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +21,21 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignupView,
+    },
+    {
+      path: '/survey1',
+      name: 'survey1',
+      component: SurveyView1,
+    },
+    {
+      path: '/survey2',
+      name: 'survey2',
+      component: SurveyView2,
     },
     {
       path: '/ranking',
