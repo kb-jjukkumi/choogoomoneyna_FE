@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-center w-full">
-    <div class="bg-ivory flex flex-col gap-7 w-full">
+    <div class="bg-ivory flex flex-col gap-6 w-full px-6">
       <!-- 타이틀 -->
-      <div class="text-center">
+      <div class="flex flex-col text-center gap-2">
         <div class="tfont-bold text-2xl justify-center">사전 조사</div>
         <div class="text-limegreen-700 text-sm">
           현재 자산 유형 분석을 위한 질문입니다.
@@ -10,15 +10,15 @@
       </div>
 
       <!-- 설문조사 문항 -->
-      <div class="">
+      <div class="flex flex-col gap-7">
         <div
           v-for="question in questions"
           :key="question.id"
-          class="bg-ivory rounded-lg p-6"
+          class="flex flex-col gap-3 bg-ivory rounded-lg"
         >
           <!-- 질문 제목 -->
           <div
-            class="mb-6 px-2 py-1.5 rounded-lg flex bg-limegreen-100 justify-between items-center"
+            class="px-3 py-1 rounded-lg flex bg-limegreen-100 justify-between items-center"
           >
             <div class="flex items-center">
               <div class="font-thin text-sm text-limegreen-800">
@@ -35,12 +35,48 @@
               {{ question.priceUnit }}
             </div>
           </div>
+
+          <!-- 설문조사 응답 버튼과 라벨을 함께 -->
+          <div class="flex items-start justify-between px-1">
+            <template v-for="(option, index) in question.options" :key="index">
+              <!-- 각 옵션을 컨테이너로 묶기 -->
+              <div class="flex flex-col justify-center items-center">
+                <div
+                  @click="selectOption(question.id, option.value)"
+                  :class="[
+                    'w-6 h-6 rounded-full border-2 text-gray-300 border-limegreen-500 flex items-center justify-center text-xs cursor-pointer transition-colors',
+                    answers[question.id] === option.value
+                      ? 'bg-limegreen-100'
+                      : 'bg-white hover:bg-limegreen-100',
+                  ]"
+                >
+                  {{ index + 1 }}
+                </div>
+                <!-- 라벨 -->
+                <div
+                  @click="selectOption(question.id, option.value)"
+                  class="text-xs text-center text-gray-300 mt-2"
+                >
+                  {{ option.label }}
+                </div>
+              </div>
+
+              <!--  연결선 (마지막 항목 제외)
+              <div
+                v-if="index < question.options.length - 1"
+                class="flex-1 h-0.5 bg-limegreen-500 mt-3.5"
+              ></div> -->
+            </template>
+          </div>
         </div>
       </div>
 
       <!-- 다음 버튼 -->
-      <div class="mt-8">
-        <button class="w-full bg-limegreen-500 text-white py-4 rounded-lg">
+      <div>
+        <button
+          @click="handleNext"
+          class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg"
+        >
           다음
         </button>
       </div>
@@ -69,9 +105,9 @@ const questions = [
     title: '현재 직업 상태가 어떻게 되나요?',
     options: [
       { value: 1, label: '학생' },
-      { value: 2, label: '취업\n준비중' },
+      { value: 2, label: '취업 준비중' },
       { value: 3, label: '직장인' },
-      { value: 4, label: '프리랜서\n자영업' },
+      { value: 4, label: '프리랜서/자영업' },
       { value: 5, label: '기타' },
     ],
   },
