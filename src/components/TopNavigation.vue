@@ -16,12 +16,12 @@
         </button>
       </div>
 
-      <!-- 중앙 영역: 로고 텍스트 -->
-      <div
-        v-if="showLogoText && logoText"
-        class="flex justify-center items-center"
-      >
-        <p class="text-xl font-jua">{{ logoText }}</p>
+      <!-- 중앙 영역: 로고 텍스트  -->
+      <div class="flex justify-center items-center">
+        <!-- 로고 텍스트 표시 -->
+        <p v-if="showLogoText && logoText" class="text-xl font-jua">
+          {{ logoText }}
+        </p>
       </div>
 
       <!-- 오른쪽 영역: 빈 공간 (균형을 위해) -->
