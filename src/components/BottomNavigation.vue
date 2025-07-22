@@ -1,8 +1,6 @@
 <template>
-  <nav
-    class="fixed bottom-0 bg-ivory w-[calc(100vh_*_390_/_844)] border-gray-200 z-10"
-  >
-    <div class="flex justify-around items-center py-2 pb-5 mx-auto">
+  <nav class="fixed bottom-0 bg-ivory w-[390px] border-gray-200 z-10">
+    <div class="flex justify-around items-center h-22 mx-auto">
       <router-link
         to="/"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
