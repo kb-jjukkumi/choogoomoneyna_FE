@@ -44,7 +44,9 @@ const topNavigationProps = computed(() => {
 
 <template>
   <div class="flex items-center justify-center h-screen">
-    <div class="bg-ivory flex min-h-screen w-[390px] justify-center rounded-[10px] shadow-lg relative z-10">
+    <div
+      class="bg-ivory flex min-h-screen w-[390px] justify-center rounded-[10px] shadow-lg z-10"
+    >
       <!-- TopNavigation: 로그인 페이지가 아닐 때만 표시 -->
       <TopNavigation
         v-if="isNeedNavigation"
