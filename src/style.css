@@ -12,7 +12,7 @@
   --color-limegreen-500: #c3d183;
   --color-limegreen-600: #929d62;
   --color-limegreen-700: #757d4f;
-  --color-limegreen-800: #ecf1d9;
+  --color-limegreen-800: #585e3b;
   --color-limegreen-900: #44492e;
   --color-green: #228b22;
   --color-red: #ff0f0f;
@@ -38,6 +38,7 @@
 
 :root {
   font-family: var(--font-jua);
+  overflow: hidden;
 }
 
 /* 기본 시멘틱 태그 스타일 */
@@ -57,4 +58,15 @@ h4 {
 /* button */
 button {
   cursor: pointer;
+}
+
+/* 오토필 배경, 텍스트 색상 덮어쓰기 */
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  box-shadow: 0 0 0 1000px var(--color-limegreen-100) inset !important;
+  -webkit-text-fill-color: var(--color-limegreen-900) !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  font-family: var(--font-jua) !important;
 }
