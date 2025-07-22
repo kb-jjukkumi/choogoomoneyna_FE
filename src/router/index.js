@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import AssetConnectView from '@/views/asset-connect/AssetConnectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
@@ -57,6 +58,11 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
+    },
+    {
+      path: '/asset-connect',
+      name: 'asset-connect',
+      component: AssetConnectView,
     },
   ],
 });
