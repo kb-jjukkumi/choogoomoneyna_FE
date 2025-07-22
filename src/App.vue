@@ -1,9 +1,3 @@
-<script setup>
-import BottomNavigation from '@/components/BottomNavigation.vue';
-
-import TopNavigation from './components/TopNavigation.vue';
-</script>
-
 <template>
   <div class="flex items-center justify-center h-screen">
     <div
@@ -16,5 +10,3 @@ import TopNavigation from './components/TopNavigation.vue';
     </div>
   </div>
 </template>
-
-<style scoped></style>
