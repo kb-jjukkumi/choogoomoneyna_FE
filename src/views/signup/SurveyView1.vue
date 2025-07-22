@@ -37,10 +37,10 @@
           </div>
 
           <!-- 설문조사 응답 버튼과 라벨을 함께 -->
-          <div class="flex items-start justify-between px-1">
+          <div class="grid grid-cols-5 gap-0 px-4">
             <template v-for="(option, index) in question.options" :key="index">
               <!-- 각 옵션을 컨테이너로 묶기 -->
-              <div class="flex flex-col justify-center items-center">
+              <div class="flex flex-col items-center">
                 <div
                   @click="selectOption(question.id, option.value)"
                   :class="[
@@ -55,7 +55,7 @@
                 <!-- 라벨 -->
                 <div
                   @click="selectOption(question.id, option.value)"
-                  class="text-xs text-center text-gray-300 mt-2"
+                  class="text-xs text-center text-gray-300 mt-1 whitespace-pre-line"
                 >
                   {{ option.label }}
                 </div>
@@ -105,9 +105,9 @@ const questions = [
     title: '현재 직업 상태가 어떻게 되나요?',
     options: [
       { value: 1, label: '학생' },
-      { value: 2, label: '취업 준비중' },
+      { value: 2, label: '취업\n준비중' },
       { value: 3, label: '직장인' },
-      { value: 4, label: '프리랜서/자영업' },
+      { value: 4, label: '프리랜서\n자영업' },
       { value: 5, label: '기타' },
     ],
   },
@@ -127,7 +127,7 @@ const questions = [
   {
     id: 'save',
     title: '매월 저축을 얼마나 하나요?',
-    subtitle: '(단위: 10,000원)',
+    priceUnit: '(단위: 10,000원)',
     options: [
       { value: 1, label: '~5' },
       { value: 2, label: '5~15' },
