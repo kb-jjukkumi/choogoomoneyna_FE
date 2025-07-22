@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import HomeView from '@/views/home/HomeView.vue';
+import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+    },
+    {
+      path: '/transaction/:bankName/:accountNumber/:type',
+      name: 'transaction',
+      component: TransactionView,
     },
     {
       path: '/login',

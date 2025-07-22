@@ -1,6 +1,6 @@
 <template>
   <nav class="fixed bottom-0 bg-ivory w-[390px] border-gray-200 z-10">
-    <div class="flex justify-around items-center h-22 mx-auto">
+    <div class="flex justify-around items-center h-16 mx-auto">
       <router-link
         to="/"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
@@ -10,12 +10,12 @@
           <img
             :src="isActive('home') ? homeSelected : homeBasic"
             alt="home"
-            class="w-6 h-6 transition-transform duration-200 object-contain hover:scale-110"
+            class="size-5 transition-transform duration-200 object-contain hover:scale-110"
             :class="{ 'scale-110': $route.path === '/' }"
           />
         </div>
         <span
-          class="text-sm font-spoqa text-center"
+          class="text-[10px] font-spoqa text-center"
           :class="{ 'font-semibold': $route.path === '/' }"
         >
           Home
@@ -31,12 +31,12 @@
           <img
             :src="isActive('ranking') ? rankingSelected : rankingBasic"
             alt="ranking"
-            class="w-6 h-6 transition-transform duration-200 object-contain hover:scale-110"
+            class="size-5 transition-transform duration-200 object-contain hover:scale-110"
             :class="{ 'scale-110': $route.path === '/ranking' }"
           />
         </div>
         <span
-          class="text-sm font-spoqa text-center"
+          class="text-[10px] font-spoqa text-center"
           :class="{ 'font-semibold': $route.path === '/ranking' }"
         >
           Ranking
@@ -52,12 +52,12 @@
           <img
             :src="isActive('matching') ? matchingSelected : matchingBasic"
             alt="matching"
-            class="w-6 h-6 transition-transform duration-200 object-contain hover:scale-110"
+            class="size-5 transition-transform duration-200 object-contain hover:scale-110"
             :class="{ 'scale-110': $route.path === '/matching' }"
           />
         </div>
         <span
-          class="text-sm font-spoqa text-center"
+          class="text-[10px] font-spoqa text-center"
           :class="{ 'font-semibold': $route.path === '/matching' }"
         >
           Matching
@@ -73,12 +73,12 @@
           <img
             :src="isActive('mypage') ? mypageSelected : mypageBasic"
             alt="mypage"
-            class="w-6 h-6 transition-transform duration-200 object-contain hover:scale-110"
+            class="size-5 transition-transform duration-200 object-contain hover:scale-110"
             :class="{ 'scale-110': $route.path === '/mypage' }"
           />
         </div>
         <span
-          class="text-sm font-spoqa text-center"
+          class="text-[10px] font-spoqa text-center"
           :class="{ 'font-semibold': $route.path === '/mypage' }"
         >
           MyPage
