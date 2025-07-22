@@ -1,5 +1,5 @@
 <template>
-  <div class="main_wrapper bg-ivory min-h-screen pt-50">
+  <div class="main_wrapper bg-ivory min-h-screen pt-20">
     <!-- 프로필 박스 -->
     <div class="mb-8 flex flex-col items-center">
       <!-- 프로필 캐릭터 -->
@@ -49,16 +49,16 @@
 
     <!-- 연동 계좌 목록 박스 -->
     <div
-      class="bg-limegreen-500 rounded-t-[50px] p-6 w-[calc(100vh*390/844)] h-[680px] mx-auto"
+      class="bg-limegreen-500 rounded-t-[50px] p-6 w-[calc(100vh*390/844)] h-[655px] mx-auto"
     >
-      <p class="text-[33px] text-limegreen-900 pt-6 pb-7 px-4">
+      <p class="text-[33px] text-limegreen-900 pt-6 pb-4 px-4">
         연동 계좌 목록
       </p>
 
       <!-- 연동 계좌 목록 -->
       <!-- 계좌 목록의 길이가 '374px'을 넘어가면 스크롤 처리 -->
       <div
-        class="max-h-[430px] overflow-scroll [&::-webkit-scrollbar]:hidden px-3 space-y-5"
+        class="max-h-[430px] overflow-scroll [&::-webkit-scrollbar]:hidden px-3 space-y-4"
       >
         <div
           v-for="(account, i) in accounts"
@@ -107,7 +107,7 @@
 
       <!-- 계좌 추가 버튼 -->
       <div
-        class="bg-[#fffcee] rounded-xl mt-5 mx-3 flex justify-center items-center"
+        class="bg-ivory rounded-xl mt-5 mx-3 flex justify-center items-center"
       >
         <img
           :src="icon_plus"
