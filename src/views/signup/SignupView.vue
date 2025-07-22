@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center w-full">
     <div class="bg-ivory flex flex-col gap-7 w-full px-4">
       <!-- 타이틀 -->
       <div class="flex font-bold text-xl justify-center">회원가입</div>
@@ -113,7 +113,6 @@
         <button
           type="submit"
           class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal"
-          @click="join"
         >
           다음
         </button>
@@ -126,6 +125,7 @@
 import { reactive, ref } from 'vue';
 
 import authApi from '@/api/authApi';
+import router from '@/router';
 import { useMemberStore } from '@/stores/memberStore';
 
 const memberStore = useMemberStore();
@@ -262,6 +262,7 @@ const join = () => {
     console.log('회원가입 정보:', member);
     memberStore.setMember(member);
     console.log('store에 저장된 멤버:', memberStore.member);
+    router.push({ name: 'survey1' });
   } catch (e) {
     console.error(e);
   }
