@@ -126,6 +126,9 @@
 import { reactive, ref } from 'vue';
 
 import authApi from '@/api/authApi';
+import { useMemberStore } from '@/stores/memberStore';
+
+const memberStore = useMemberStore();
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -257,6 +260,8 @@ const join = () => {
 
   try {
     console.log('회원가입 정보:', member);
+    memberStore.setMember(member);
+    console.log('store에 저장된 멤버:', memberStore.member);
   } catch (e) {
     console.error(e);
   }
