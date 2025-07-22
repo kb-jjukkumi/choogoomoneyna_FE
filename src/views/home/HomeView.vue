@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-col main_wrapper bg-ivory min-h-screen mt-20">
-    <TopNavigation />
+  <TopNavigation />
+  <div class="relative flex flex-col main_wrapper bg-ivory min-h-screen mt-20">
     <!-- 프로필 박스 -->
     <div class="flex flex-col items-center">
       <!-- 프로필 캐릭터 -->
       <img
         :src="character_savings"
         alt="저축실천형 캐릭터"
-        class="w-[120px] mx-auto mt-13"
+        class="w-[120px] mx-auto mt-8"
       />
 
       <!-- 추구미 유형명 -->
@@ -48,17 +48,17 @@
 
     <!-- 연동 계좌 목록 박스 -->
     <div
-      class="flex flex-col bg-limegreen-500 rounded-t-[30px] px-3 py-2 w-full h-full mt-5 mx-auto"
+      class="flex flex-grow flex-col bg-limegreen-500 rounded-t-[30px] px-3 py-2 w-full h-full mt-4 mx-auto"
     >
       <p class="text-lg text-limegreen-900 pt-4 pb-3 px-4">연동 계좌 목록</p>
 
       <!-- 연동 계좌 목록 -->
       <!-- 계좌 목록의 길이가 '430px'을 넘어가면 스크롤 처리 -->
       <div
-        class="flex-grow max-h-[194px] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
+        class="max-h-[calc(100vh-520px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
       >
         <div
-          v-for="(account, i) in accounts"
+          v-for="(account, i) in ACCOUNTS"
           :key="i"
           @click="goToTransaction(account)"
           class="bg-ivory rounded-xl px-3 py-2 flex items-center cursor-pointer"
@@ -105,8 +105,8 @@
         <img :src="icon_plus" alt="추가하기 아이콘" class="size-7 m-1" />
       </div>
     </div>
-    <BottomNavigation />
   </div>
+  <BottomNavigation />
 </template>
 
 <script setup>
@@ -124,7 +124,7 @@ import TopNavigation from '@/components/TopNavigation.vue';
 
 const router = useRouter();
 
-const accounts = [
+const ACCOUNTS = [
   {
     logo: bank_kb,
     type: '입출금',
