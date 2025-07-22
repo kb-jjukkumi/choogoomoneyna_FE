@@ -1,11 +1,11 @@
 <template>
   <div class="flex justify-center">
-    <div class="bg-ivory flex flex-col gap-5">
+    <div class="bg-ivory flex flex-col gap-7 w-full px-4">
       <!-- 타이틀 -->
       <div class="flex font-bold text-xl justify-center">회원가입</div>
 
       <!-- 입력 폼 -->
-      <form class="flex flex-col gap-8 w-full" @submit.prevent="join">
+      <form class="flex flex-col gap-6" @submit.prevent="join">
         <div class="flex flex-col gap-2">
           <div class="flex flex-col">
             <label for="nickname" class="block mb-1 font-bold">닉네임</label>
@@ -15,10 +15,10 @@
                 id="nickname"
                 type="text"
                 placeholder="한글,영문,숫자 2~10자리"
-                class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+                class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full text-white bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg"
                 @click="checkName"
                 type="button"
               >
@@ -43,10 +43,10 @@
                 id="email"
                 type="email"
                 placeholder="이메일을 입력해주세요"
-                class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+                class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full text-white font-thin bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg"
                 @click="send"
                 type="button"
               >
@@ -59,10 +59,10 @@
                 id="email-code"
                 type="text"
                 placeholder="인증번호를 입력해주세요."
-                class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+                class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full text-white font-thin bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg"
                 @click="verify"
                 type="button"
               >
@@ -86,7 +86,7 @@
               type="password"
               placeholder="비밀번호 입력"
               style="font-family: Arial, sans-serif"
-              class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
             />
           </div>
           <div>
@@ -99,7 +99,7 @@
               type="password"
               placeholder="비밀번호 확인"
               style="font-family: Arial, sans-serif"
-              class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
+              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               @input="validatePassword"
             />
           </div>
