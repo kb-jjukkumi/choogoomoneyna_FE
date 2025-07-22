@@ -8,11 +8,11 @@
       <form class="flex flex-col gap-8 w-full" @submit.prevent="join">
         <div class="flex flex-col gap-2">
           <div class="flex flex-col">
-            <label for="name" class="block mb-1 font-bold">닉네임</label>
+            <label for="nickname" class="block mb-1 font-bold">닉네임</label>
             <div class="flex gap-3">
               <input
-                v-model="member.name"
-                id="name"
+                v-model="member.nickname"
+                id="nickname"
                 type="text"
                 placeholder="한글,영문,숫자 2~10자리"
                 class="border-2 border-limegreen-500 flex-2 w-full rounded-lg bg-white px-3 py-3"
@@ -143,7 +143,7 @@ const isPwdChecked = ref(false);
 const member = reactive({
   email: '',
   password: '',
-  name: '',
+  nickname: '',
 });
 
 //이메일 전송용
@@ -159,13 +159,13 @@ const verifyEmail = reactive({
 
 //닉네임 중복 체크
 const checkName = async () => {
-  if (!member.name.trim()) {
+  if (!member.nickname.trim()) {
     nameErrorMessage.value = '닉네임을 입력하세요.';
     isNameChecked.value = false;
     return;
   }
 
-  const result = await authApi.checkName(member.name);
+  const result = await authApi.checkName(member.nickname);
 
   if (result) {
     nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
