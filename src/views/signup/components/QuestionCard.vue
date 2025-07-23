@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-3 justify-center bg-limegreen-100 px-4 py-6 rounded-lg text-center h-100"
+    class="flex flex-col gap-5 justify-center bg-limegreen-100 px-4 rounded-lg text-center h-100"
   >
     <div class="flex flex-col gap-3">
       <div class="text-green">{{ question.question }}</div>
@@ -10,8 +10,8 @@
     </div>
     <div
       :class="[
-        'grid gap-3 px-3 items-center',
-        question.type === 4 ? 'grid-cols-1 h-60' : 'grid-cols-2 h-45',
+        'grid px-3 items-center',
+        question.type === 4 ? 'grid-cols-1 h-50' : 'grid-cols-2 h-45',
       ]"
     >
       <button
