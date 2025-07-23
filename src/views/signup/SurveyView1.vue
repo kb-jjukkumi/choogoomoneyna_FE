@@ -78,7 +78,7 @@
         다음
       </button>
 
-      <!-- 모달 -->
+      <!--선택하지 않은 항목이 있을 때 모달 -->
       <LoginModal
         v-if="showModal"
         title="알림"
