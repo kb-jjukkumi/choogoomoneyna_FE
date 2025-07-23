@@ -46,7 +46,7 @@
       <LoginModal
         v-if="showModal"
         title="알림"
-        message="모든 항목에 응답해주세요."
+        message="질문에 응답해주세요."
         buttonText="확인"
         @close="showModal = false"
       />
