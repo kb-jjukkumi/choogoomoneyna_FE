@@ -66,4 +66,20 @@ const selectedOption = ref(null);
 const showModal = ref(false);
 
 const currentQuestion = computed(() => questionList[currentIndex.value]);
+
+const handleNext = () => {
+  if (!selectedOption.value) {
+    showModal.value = true;
+    return;
+  }
+
+  console.log('선택:', selectedOption.value);
+
+  if (currentIndex.value < questionList.length) {
+    currentIndex.value++;
+    selectedOption.value = null;
+  } else {
+    console.log('설문 완료');
+  }
+};
 </script>
