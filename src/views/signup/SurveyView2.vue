@@ -43,7 +43,7 @@
       </button>
 
       <!--선택하지 않은 항목이 있을 때 모달 -->
-      <LoginModal
+      <AlertModal
         v-if="showModal"
         title="알림"
         message="질문에 응답해주세요."
@@ -57,7 +57,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-import LoginModal from '../login/components/LoginModal.vue';
+import AlertModal from '@/components/AlertModal.vue';
+
 import QuestionCard from './components/QuestionCard.vue';
 import { questionList } from './question';
 

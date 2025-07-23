@@ -79,7 +79,7 @@
       </button>
 
       <!--선택하지 않은 항목이 있을 때 모달 -->
-      <LoginModal
+      <AlertModal
         v-if="showModal"
         title="알림"
         message="모든 항목에 응답해주세요."
@@ -93,9 +93,8 @@
 <script setup>
 import { reactive, ref } from 'vue';
 
+import AlertModal from '@/components/AlertModal.vue';
 import router from '@/router';
-
-import LoginModal from '../login/components/LoginModal.vue';
 
 // 답변
 const answers = reactive({
