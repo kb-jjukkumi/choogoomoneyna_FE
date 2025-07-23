@@ -103,20 +103,22 @@
           카카오 로그인
         </button>
         <button
+          type="button"
           class="text-limegreen-900 flex-1 rounded-[10px] bg-transparent border-2 border-limegreen-500 h-12"
+          @click="goToSignup"
         >
           회원가입
         </button>
       </div>
     </div>
   </div>
-  <LoginModal
+  <AlertModal
     v-if="showAlert"
     title="알림"
     :message="alertMessage"
     @close="showAlert = false"
   />
-  <LoginModal
+  <AlertModal
     v-if="showModal"
     :title="modalType === 'fail' ? '로그인 실패' : '로그인 성공'"
     :message="
@@ -139,7 +141,7 @@
         />
       </svg>
     </template>
-  </LoginModal>
+  </AlertModal>
 </template>
 
 <script setup>
@@ -147,8 +149,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
-
-import LoginModal from './components/LoginModal.vue';
+import AlertModal from '@/components/AlertModal.vue';
 
 const router = useRouter();
 
@@ -198,5 +199,9 @@ const handleModalClose = () => {
     // 토큰이 없으면 로그인 페이지로 이동
     router.push('/login');
   }
+};
+
+const goToSignup = () => {
+  router.push('/signup');
 };
 </script>
