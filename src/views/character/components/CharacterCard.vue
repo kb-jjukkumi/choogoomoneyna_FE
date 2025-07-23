@@ -12,12 +12,6 @@
     <span :class="['text-sm text-center font-bold text-limegreen-900']">
       {{ label }}
     </span>
-    <span
-      v-if="characterName"
-      :class="['text-xs text-center text-gray-600 mt-1']"
-    >
-      {{ characterName }}
-    </span>
   </div>
 </template>
 
@@ -25,7 +19,6 @@
 defineProps({
   img: { type: String, required: true },
   label: { type: String, required: true },
-  characterName: { type: String, default: '' },
   selected: { type: Boolean, default: false },
 });
 
