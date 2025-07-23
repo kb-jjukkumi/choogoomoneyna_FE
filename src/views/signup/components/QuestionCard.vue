@@ -11,7 +11,7 @@
     <div
       :class="[
         'grid px-3 items-center',
-        question.type === 4 ? 'grid-cols-1 h-50' : 'grid-cols-2 h-45',
+        question.type === 4 ? 'grid-cols-1 h-50' : 'grid-cols-2 h-45 gap-5',
       ]"
     >
       <button
@@ -19,7 +19,7 @@
         :key="index"
         @click="$emit('select', option.value)"
         :class="[
-          'flex justify-center items-center border-2 border-limegreen-500 rounded-lg p-3 text-sm!',
+          'flex justify-center items-center border-2 border-limegreen-500 rounded-lg p-3 text-sm! whitespace-pre-line',
           question.type === 2 ? 'h-35' : 'h-11',
           selectedOption === option.value
             ? 'bg-limegreen-500 text-ivory'
