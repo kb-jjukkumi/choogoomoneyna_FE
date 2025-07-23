@@ -8,10 +8,10 @@
         <span
           class="absolute -top-[2px] bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
         >
-          {{ MATCHING_DATA.value.user1.ranking }}
+          {{ MATCHING_DATA.user1.ranking }}
         </span>
         <img
-          :src="profile_savings"
+          :src="MATCHING_DATA.user1.profileImageUrl"
           class="bg-limegreen-100 rounded-full mt-1.5 w-23"
         />
         <span
@@ -28,10 +28,10 @@
         <span
           class="absolute -top-[2px] bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
         >
-          {{ MATCHING_DATA.value.user2.ranking }}
+          {{ MATCHING_DATA.user2.ranking }}
         </span>
         <img
-          :src="profile_savings"
+          :src="MATCHING_DATA.user2.profileImageUrl"
           class="bg-limegreen-100 rounded-full mt-1.5 w-23"
         />
         <span
@@ -106,13 +106,13 @@ const MATCHING_DATA = ref({
   matchingId: 123,
   user1: {
     nickname: '키카오대학교라이언',
-    profileImageUrl: 'profile_savings',
+    profileImageUrl: profile_savings,
     score: 200,
     ranking: 10,
   },
   user2: {
     nickname: '카카오대학교어피치',
-    profileImageUrl: 'profile_savings',
+    profileImageUrl: profile_savings,
     score: 250,
     ranking: 11,
   },
