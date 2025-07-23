@@ -118,17 +118,35 @@
         </button>
       </form>
     </div>
+    <AlertModal
+      v-if="isSendEmailSuccess"
+      title="이메일 인증"
+      :message="
+        isSendEmailSuccess
+          ? '인증 이메일이 발송되었습니다.'
+          : '다시 시도해주세요!'
+      "
+      @close="isSendEmailSuccess = false"
+    />
+    <AlertModal
+      v-if="isSignupSuccess"
+      title="회원가입"
+      :message="
+        isSignupSuccess ? '회원가입이 완료되었습니다.' : '다시 시도해주세요!'
+      "
+      @close="goToLogin"
+    />
   </div>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import authApi from '@/api/authApi';
-import router from '@/router';
-import { useMemberStore } from '@/stores/memberStore';
+import AlertModal from '@/components/AlertModal.vue';
 
-const memberStore = useMemberStore();
+const router = useRouter();
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -142,11 +160,16 @@ const isNameChecked = ref(false);
 const isEmailChecked = ref(false);
 const isPwdChecked = ref(false);
 
+const isSendEmailSuccess = ref(false);
+const isSignupSuccess = ref(false);
+
 //회원가입 dto 항목
 const member = reactive({
+  profileImage: null,
   email: '',
   password: '',
   nickname: '',
+  choogooMi: 'A',
 });
 
 //이메일 전송용
@@ -186,6 +209,7 @@ const send = async () => {
     return;
   } else {
     await authApi.sendCode(email);
+    isSendEmailSuccess.value = true;
     return;
   }
 };
@@ -235,7 +259,7 @@ const validatePassword = () => {
 };
 
 //회원가입 처리
-const join = () => {
+const join = async () => {
   let hasError = false;
 
   if (!isNameChecked.value) {
@@ -259,12 +283,25 @@ const join = () => {
   member.email = email.email;
 
   try {
-    console.log('회원가입 정보:', member);
-    memberStore.setMember(member);
-    console.log('store에 저장된 멤버:', memberStore.member);
-    router.push({ name: 'survey1' });
-  } catch (e) {
-    console.error(e);
+    // 실제 회원가입 API 호출
+    const signupData = {
+      profileImage: null,
+      email: member.email,
+      password: member.password,
+      nickname: member.nickname,
+      choogooMi: member.choogooMi,
+    };
+
+    await authApi.signup(signupData);
+
+    // 회원가입 성공 시 로그인 페이지로 이동
+    isSignupSuccess.value = true;
+  } catch (error) {
+    isSignupSuccess.value = false;
   }
+};
+
+const goToLogin = () => {
+  router.push('/login');
 };
 </script>

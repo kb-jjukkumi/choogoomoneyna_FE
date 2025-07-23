@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import AssetConnectView from '@/views/asset/connect/AssetConnectView.vue';
+import AssetSelectView from '@/views/asset/select/AssetSelectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
@@ -58,13 +60,23 @@ const router = createRouter({
       name: 'mypage',
       component: MyPageView,
     },
+    {
+      path: '/asset/connect',
+      name: 'assetConnect',
+      component: AssetConnectView,
+    },
+    {
+      path: '/asset/select',
+      name: 'assetSelect',
+      component: AssetSelectView,
+    },
   ],
 });
 
 // 라우터 가드
 router.beforeEach((to, from, next) => {
   const accessToken = localStorage.getItem('accessToken');
-  const publicPages = ['/login'];
+  const publicPages = ['/login', '/signup', '/survey1', '/survey2'];
   const authRequired = !publicPages.includes(to.path);
 
   // localStorage에 accessToken이 없으면 로그인 페이지로 이동
