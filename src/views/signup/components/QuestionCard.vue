@@ -7,7 +7,7 @@
       {{ question.subtitle }}
     </div>
     <div
-      class="grid gap-3"
+      class="grid gap-3 px-3"
       :class="question.type === 4 ? 'grid-cols-1' : 'grid-cols-2'"
     >
       <button
@@ -15,7 +15,7 @@
         :key="index"
         @click="$emit('select', option.value)"
         :class="[
-          'border-2 border-limegreen-500 rounded-lg p-3 text-sm',
+          'flex justify-center border-2 border-limegreen-500 rounded-lg p-3 text-sm! h-11',
           selectedOption === option.value
             ? 'bg-limegreen-500 text-ivory'
             : 'bg-ivory text-limegreen-700 bg hover:bg-limegreen-500 hover:text-ivory',

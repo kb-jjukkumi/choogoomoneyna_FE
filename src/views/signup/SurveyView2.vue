@@ -10,6 +10,22 @@
       </div>
 
       <!-- Progress Bar -->
+      <div>
+        <div class="w-full h-2 bg-limegreen-100 rounded-full">
+          <div
+            class="h-full bg-green rounded-full transition-all"
+            :style="{
+              width: `${((currentIndex + 1) / questionList.length) * 100}%`,
+            }"
+          ></div>
+        </div>
+        <div class="flex items-center text-xs mt-1 text-limegreen-700">
+          <div class="text-sm text-green">
+            {{ currentIndex + 1 }}
+          </div>
+          <div class="px-1">/ {{ questionList.length }}</div>
+        </div>
+      </div>
 
       <!-- 질문 카드 컴포넌트 -->
       <QuestionCard
