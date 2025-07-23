@@ -1,0 +1,109 @@
+<template>
+  <div class="min-h-screen bg-ivory flex flex-col items-center py-8">
+    <div class="text-2xl font-bold text-limegreen-900 mb-8">추구미 선택</div>
+    <div class="w-full max-w-xs">
+      <!-- 첫 번째 행: 2개 -->
+      <div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-8">
+        <CharacterCard
+          v-for="character in CHOOGOOMI_CHARACTERS.slice(0, 2)"
+          :key="character.choogoomiId"
+          :img="character.img"
+          :label="character.label"
+          :selected="selected === character.choogoomiId"
+          @click="select(character.choogoomiId)"
+        />
+      </div>
+
+      <!-- 두 번째 행: 1개 (가운데 정렬) -->
+      <div class="flex justify-center mb-8">
+        <CharacterCard
+          :img="CHOOGOOMI_CHARACTERS[2].img"
+          :label="CHOOGOOMI_CHARACTERS[2].label"
+          :selected="selected === CHOOGOOMI_CHARACTERS[2].choogoomiId"
+          @click="select(CHOOGOOMI_CHARACTERS[2].choogoomiId)"
+        />
+      </div>
+
+      <!-- 세 번째 행: 2개 -->
+      <div class="grid grid-cols-2 gap-x-8 gap-y-8">
+        <CharacterCard
+          v-for="character in CHOOGOOMI_CHARACTERS.slice(3, 5)"
+          :key="character.choogoomiId"
+          :img="character.img"
+          :label="character.label"
+          :selected="selected === character.choogoomiId"
+          @click="select(character.choogoomiId)"
+        />
+      </div>
+    </div>
+    <CharacterDetailModal
+      v-if="isModalOpen"
+      :selected-character="selectedCharacter"
+      @close="isModalOpen = false"
+    />
+  </div>
+</template>
+
+<script setup>
+import { computed, ref } from 'vue';
+
+import CharacterCard from './components/CharacterCard.vue';
+import CharacterDetailModal from './components/CharacterDetailModal.vue';
+
+const selected = ref(null);
+const isModalOpen = ref(false);
+
+const CHOOGOOMI_CHARACTERS = [
+  {
+    choogoomiId: 1,
+    img: '/src/assets/img/characters/A.png',
+    label: '지출제로형',
+    explain:
+      "카페, 배달, 외식, 쇼핑… 지름 유혹이 넘쳐나는 지구에서도 콜리는 오직 필요한 순간에만 소비해. 그 외엔 단 한 푼도 쓰지 않지! \"오늘 하루도 0원 도전 완료!\" '지출 없는 하루'를 목표로 매주 외식/쇼핑/배달 내역을 깔끔하게 '0'으로 채워가는 콜리. 콜리에게 절약은 의무가 아닌 성장 루틴, 나무처럼 묵묵히 자라며 지출 제로의 경지에 도전하는 '지출제로형'이 바로 너야!",
+  },
+  {
+    choogoomiId: 2,
+    img: '/src/assets/img/characters/B.png',
+    label: '합리소비형',
+    explain:
+      '롤로별에서 온 라무는 긍정 에너지가 가득한 자유로운 라마! 일상에서 소소한 행복(커피, 외식 등)은 즐기지만 불필요한 낭비와 충동구매는 단호하게 거절하는 합리적 소비파야. "오늘 하루도 충분히 행복해!" 라무는 가계부와 예산을 챙기며 실속을 추구하지만, 긍정적 마인드로 낭비에 흔들리지 않는 멋진 실속러!',
+  },
+  {
+    choogoomiId: 3,
+    img: '/src/assets/img/characters/C.png',
+    label: '저축실천형',
+    explain:
+      "비비는 단순히 돈을 모으는 게 아니야. '비상금 50만원', '1년 안에 여행비 100만원', '내 집 마련 종잣돈'처럼 구체적인 목표를 세우고, 그걸 실천 가능한 계획으로 바꿔나가. 이번 주 10만원 모으기, 수입의 20% 자동이체, 잔돈 남김없이 이체하기, 새로운 적금 계좌 만들기까지— 작은 습관 하나도 미래를 바꾸는 시작이라고 믿는 비비. \"매달 조금씩 쌓이는 숫자들이 내일의 나를 도와줄 거야!\" 누구보다 따뜻하고 책임감 있게 행동으로 저축을 실천하는 당신, 바로 저축실천형이야!",
+  },
+  {
+    choogoomiId: 4,
+    img: '/src/assets/img/characters/D.png',
+    label: '투자도전형',
+    explain:
+      '주식, ETF, 코인… 아직 실전 경험은 부족하지만, 투자 기회를 먼저 발견하고, 먼저 기록하고, 먼저 시도하는 열정 넘치는 초보 투자러야. 뉴스 기사 요약부터 투자 용어 메모, 기업 조사, 퀴즈 학습, 투자 회고까지— 아거에게 투자란 단순한 돈벌이가 아닌 습관과 성장의 과정이야. 실패해도 "괜찮아, 이건 경험치니까!" 금요일 밤이면 오늘도 한 줄 회고를 남기며, 스스로를 점검하는 \'지식형 투자도전자\', 그게 바로 투자도전형, 포스아거!',
+  },
+  {
+    choogoomiId: 5,
+    img: '/src/assets/img/characters/E.png',
+    label: '금융탐구형',
+    explain:
+      '오늘은 계좌를 연결하고, 내일은 뉴스 속 금융 이슈를 요약하고, 주말엔 퀴즈로 금융 용어까지 복습하는 금융 루틴 실천러, 그게 바로 키키야! "잘 몰라도 괜찮아, 알아가면 되지!" 키키는 모르는 걸 두려워하지 않아. 궁금하면 바로 검색하고, 퀴즈로 테스트하고, 소액이라도 써보고, 안 쓰는 날은 기록으로 남겨. 금융 탐색 → 학습 → 행동 → 피드백 이 사이클을 꾸준히 반복하며 오늘도 한 걸음씩 성장하는 금융탐구형. 아직은 준비 중이지만, 누구보다 멀리 갈 준비가 된 너야!',
+  },
+];
+
+const select = idx => {
+  selected.value = idx;
+  const selectedChar = CHOOGOOMI_CHARACTERS.find(
+    char => char.choogoomiId === idx
+  );
+  console.log('선택된 캐릭터:', selectedChar);
+  isModalOpen.value = true;
+};
+
+// 선택된 캐릭터 정보
+const selectedCharacter = computed(() => {
+  return selected.value !== null
+    ? CHOOGOOMI_CHARACTERS.find(char => char.choogoomiId === selected.value)
+    : null;
+});
+</script>
