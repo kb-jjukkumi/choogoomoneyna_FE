@@ -64,7 +64,7 @@ const router = createRouter({
 // 라우터 가드
 router.beforeEach((to, from, next) => {
   const accessToken = localStorage.getItem('accessToken');
-  const publicPages = ['/login'];
+  const publicPages = ['/login', '/signup', '/survey1', '/survey2'];
   const authRequired = !publicPages.includes(to.path);
 
   // localStorage에 accessToken이 없으면 로그인 페이지로 이동

@@ -36,4 +36,19 @@ const verifyCode = async verifyEmail => {
   }
 };
 
-export default { checkName, sendCode, verifyCode };
+//회원가입
+const signup = async signupData => {
+  try {
+    const { data } = await axiosInstance.post('api/users/signup', signupData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log(data);
+    return data;
+  } catch {
+    throw new Error('회원가입 실패');
+  }
+};
+
+export default { checkName, sendCode, verifyCode, signup };
