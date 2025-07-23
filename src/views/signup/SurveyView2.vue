@@ -10,9 +10,13 @@
       </div>
 
       <!-- Progress Bar -->
-      <div></div>
 
-      <!-- 설문조사 항목 -->
+      <!-- 질문 카드 컴포넌트 -->
+      <QuestionCard
+        :question="currentQuestion"
+        :selectedOption="selectedOption"
+        @select="val => (selectedOption = val)"
+      />
 
       <!-- 다음 버튼 -->
       <button
@@ -34,4 +38,16 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, ref } from 'vue';
+
+import LoginModal from '../login/components/LoginModal.vue';
+import QuestionCard from './components/QuestionCard.vue';
+import { questionList } from './question';
+
+const currentIndex = ref(0);
+const selectedOption = ref(null);
+const showModal = ref(false);
+
+const currentQuestion = computed(() => questionList[currentIndex.value]);
+</script>
