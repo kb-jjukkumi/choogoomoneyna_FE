@@ -20,17 +20,10 @@
         }"
         @click="toggleBankSelection(bank.id)"
       >
-        <div class="w-10 h-10 mr-4 flex items-center justify-center">
-          <img
-            :src="bank.icon"
-            :alt="bank.name"
-            class="w-full h-full object-contain"
-          />
+        <div class="flex items-center justify-center mr-4">
+          <BankIcon :assets="bank.icon" :alt="bank.name" :size="10" />
         </div>
-        <div
-          class="text-base font-medium"
-          :class="selectedBank === bank.id ? 'text-white' : 'text-black'"
-        >
+        <div :class="selectedBank === bank.id ? 'text-white' : 'text-black'">
           {{ bank.name }}
         </div>
       </div>
@@ -55,6 +48,7 @@ import { useRouter } from 'vue-router';
 
 import TopNavigation from '@/components/TopNavigation.vue';
 
+import BankIcon from '../connect/components/BankIcon.vue';
 import { BANK_LIST } from '../constants/bankList';
 
 const selectedBank = ref(null);
