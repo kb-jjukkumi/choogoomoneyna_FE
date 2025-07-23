@@ -1,7 +1,11 @@
 <template>
-  <div class="p-4 rounded-lg">
-    <div class="font-semibold text-lg mb-4">{{ question.question }}</div>
-    <div class="whitespace-pre-line">{{ question.subtitle }}</div>
+  <div
+    class="flex flex-col gap-3 bg-limegreen-100 px-4 py-6 rounded-lg text-center"
+  >
+    <div class="text-green">{{ question.question }}</div>
+    <div class="text-limegreen-800 text-sm leading-6 whitespace-pre-line">
+      {{ question.subtitle }}
+    </div>
     <div
       class="grid gap-3"
       :class="question.type === 4 ? 'grid-cols-1' : 'grid-cols-2'"
@@ -11,10 +15,10 @@
         :key="index"
         @click="$emit('select', option.value)"
         :class="[
-          'border rounded-lg p-3 text-sm',
+          'border-2 border-limegreen-500 rounded-lg p-3 text-sm',
           selectedOption === option.value
-            ? 'bg-limegreen-200 border-limegreen-500 font-semibold'
-            : 'bg-white',
+            ? 'bg-limegreen-500 text-ivory'
+            : 'bg-ivory text-limegreen-700 bg hover:bg-limegreen-500 hover:text-ivory',
         ]"
       >
         {{ option.label }}
