@@ -1,65 +1,71 @@
 <template>
-  <div class="pt-16 px-9 bg-ivory min-h-screen">
+  <TopNavigation />
+  <div class="relative pt-3 px-6 bg-ivory">
     <!-- 계좌 정보 -->
     <div
-      class="bg-limegreen-500 h-[180px] rounded-[20px] text-center flex flex-col justify-center p-4 mb-10"
+      class="flex flex-col bg-limegreen-500 h-[110px] rounded-xl text-center justify-center p-4 mb-6"
     >
       <p
-        class="bg-limegreen-100 text-limegreen-600 text-center text-[20px] px-2 py-1 mx-auto my-1 rounded-[8px] w-fit"
+        class="bg-limegreen-100 text-limegreen-600 text-center text-xs px-[6px] py-[1px] mx-auto my-0.5 rounded-[5px] w-fit"
       >
         {{ type }}
       </p>
-      <p class="text-limegreen-900 text-[25px] leading-tight mb-1">
+      <p class="text-limegreen-900 text-lg leading-tight mb-1">
         {{ bankName }} {{ accountNumber }}
       </p>
-      <p class="text-green text-[30px]">{{ formattedBalance }}원</p>
+      <p class="text-green text-xl leading-none">{{ formattedBalance }}원</p>
     </div>
 
     <!-- 거래 내역 -->
     <div>
-      <div class="flex justify-between items-center mb-4">
+      <div class="flex justify-between items-center mt-6 mb-4">
         <!-- 왼쪽: 제목 -->
-        <p class="text-limegreen-900 text-[33px]">거래 내역</p>
+        <p class="text-limegreen-900 text-xl">거래 내역</p>
 
         <!-- 오른쪽: 필터 -->
-        <div class="w-fit">
-          <FilterTransferType />
-        </div>
+        <FilterTransferType />
       </div>
 
       <div
-        class="h-[140px] font-spoqa bg-limegreen-100 p-6 rounded-[20px] mb-3 flex justify-between items-start"
-        v-for="(transaction, i) in transactions"
-        :key="i"
+        class="max-h-[calc(100vh-320px)] overflow-scroll [&::-webkit-scrollbar]:hidden font-spoqa"
       >
-        <!-- 왼쪽: 날짜, 설명 -->
-        <div class="text-left">
-          <p class="text-sm text-limegreen-900 mb-2">
-            {{ transaction.date }}
-          </p>
-          <p class="text-2xl text-medium">
-            {{ transaction.desc }}
-          </p>
-        </div>
-
-        <!-- 오른쪽: 금액, 잔액 -->
-        <div class="text-right">
-          <p class="text-2xl font-weight mt-8 text-limegreen-800">
-            {{ transaction.transferType }}
-            {{ transaction.amount.toLocaleString() }}원
-          </p>
-          <p class="text-basic text-gray-300 mt-1">
-            잔액 {{ transaction.balance.toLocaleString() }}원
-          </p>
+        <div
+          class="bg-limegreen-100 px-4 py-3 rounded-xl mb-3 flex justify-between items-start"
+          v-for="(transaction, i) in transactions"
+          :key="i"
+        >
+          <!-- 왼쪽: 날짜, 설명 -->
+          <div class="text-left">
+            <p class="text-xs text-limegreen-900 mb-1">
+              {{ transaction.date }}
+            </p>
+            <p class="text-sm text-limegreen-800 text-medium">
+              {{ transaction.desc }}
+            </p>
+          </div>
+          <!-- 오른쪽: 금액, 잔액 -->
+          <div class="text-right">
+            <p class="text-limegreen-800 text-sm font-medium mt-5">
+              {{ transaction.transferType }}
+              {{ transaction.amount.toLocaleString() }}원
+            </p>
+            <p class="text-gray-300 text-xs">
+              잔액 {{ transaction.balance.toLocaleString() }}원
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <BottomNavigation />
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+
+import BottomNavigation from '@/components/BottomNavigation.vue';
+import TopNavigation from '@/components/TopNavigation.vue';
 
 import FilterTransferType from './components/FilterTransferType.vue';
 
@@ -86,6 +92,41 @@ const transactions = ref([
     desc: '메머드 커피',
     amount: 1500,
     balance: 598500,
+    date: '2025.07.16 14:22',
+  },
+  {
+    transferType: '입금',
+    desc: '알바비',
+    amount: 100000,
+    balance: 600000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    transferType: '입금',
+    desc: '알바비',
+    amount: 100000,
+    balance: 600000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    transferType: '입금',
+    desc: '알바비',
+    amount: 100000,
+    balance: 600000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    transferType: '입금',
+    desc: '알바비',
+    amount: 100000,
+    balance: 600000,
+    date: '2025.07.16 14:22',
+  },
+  {
+    transferType: '입금',
+    desc: '알바비',
+    amount: 100000,
+    balance: 600000,
     date: '2025.07.16 14:22',
   },
   {
