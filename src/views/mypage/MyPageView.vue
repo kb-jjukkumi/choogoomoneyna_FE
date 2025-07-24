@@ -58,8 +58,8 @@
       <div class="px-2">
         <div class="flex flex-col gap-3">
           <MyPageBtn text="자산 관리 분석 리포트" to="home" />
-          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
-          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
+          <MyPageBtn text="역대 랭킹 기록" to="home" />
+          <MyPageBtn text="회원 정보 수정" to="home" />
         </div>
         <div class="mt-7">
           <button
