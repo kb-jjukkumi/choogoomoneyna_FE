@@ -87,7 +87,7 @@
 <script setup>
 import { ref } from 'vue';
 
-import character_savings from '@/assets/img/characters/savings.png';
+import character_savings from '@/assets/img/characters/character_savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
