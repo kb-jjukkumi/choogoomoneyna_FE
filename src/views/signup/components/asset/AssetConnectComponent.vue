@@ -76,7 +76,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-import axiosInstance from '@/api/axiosInstance';
+import axiosInstance from '@/api/axios';
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
