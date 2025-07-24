@@ -8,6 +8,7 @@ import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
+import CharacterSelectView from '@/views/signup/character/CharacterSelectView.vue';
 import SignupView from '@/views/signup/SignupView.vue';
 import SurveyView1 from '@/views/signup/SurveyView1.vue';
 import SurveyView2 from '@/views/signup/SurveyView2.vue';
@@ -70,13 +71,24 @@ const router = createRouter({
       name: 'assetSelect',
       component: AssetSelectView,
     },
+    {
+      path: '/character-select',
+      name: 'characterSelect',
+      component: CharacterSelectView,
+    },
   ],
 });
 
 // 라우터 가드
 router.beforeEach((to, from, next) => {
   const accessToken = localStorage.getItem('accessToken');
-  const publicPages = ['/login', '/signup', '/survey1', '/survey2'];
+  const publicPages = [
+    '/login',
+    '/signup',
+    '/survey1',
+    '/survey2',
+    '/character-select',
+  ];
   const authRequired = !publicPages.includes(to.path);
 
   // localStorage에 accessToken이 없으면 로그인 페이지로 이동
