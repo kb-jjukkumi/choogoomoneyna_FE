@@ -4,7 +4,7 @@
       class="bg-ivory flex min-h-screen w-[390px] justify-center rounded-[10px] shadow-lg"
     >
       <!-- 메인 콘텐츠 영역에 상단 패딩 추가 -->
-      <div class="w-full pt-16 pb-20">
+      <div class="w-full">
         <router-view />
       </div>
     </div>
