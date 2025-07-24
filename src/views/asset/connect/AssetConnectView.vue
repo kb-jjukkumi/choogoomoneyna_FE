@@ -73,7 +73,7 @@
   />
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -81,6 +81,10 @@ import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '../constants/bankList';
 import BankIcon from './components/BankIcon.vue';
 import ConnectModal from './components/ConnectModal.vue';
+
+onMounted(() => {
+  console.log(bankId.value);
+});
 
 const route = useRoute();
 const id = ref('');
@@ -90,10 +94,10 @@ const isInputEmpty = computed(() => !id.value || !password.value);
 // 은행 아이콘 관련 데이터
 const bankId = computed(() => route.query.bankId);
 const bankImg = computed(
-  () => BANK_LIST.find(bank => bank.id === bankId.value).icon
+  () => BANK_LIST.find(bank => bank.bankId === bankId.value).icon
 );
 const bankName = computed(
-  () => BANK_LIST.find(bank => bank.id === bankId.value).name
+  () => BANK_LIST.find(bank => bank.bankId === bankId.value).name
 );
 
 // 모달 관련 데이터
