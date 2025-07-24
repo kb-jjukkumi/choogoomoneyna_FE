@@ -46,14 +46,15 @@ import { ref } from 'vue';
 import { BANK_LIST } from '../../asset/constants/bankList';
 
 // Props 정의
-defineProps({
-  signupData: { type: Object, required: true },
-  survey1Data: { type: Object, required: true },
-  survey2Data: { type: Array, required: true },
+const props = defineProps({
+  allData: { type: Object, required: true },
 });
 
 // Emit 정의
 const emit = defineEmits(['next']);
+
+// 전달받은 누적 데이터 확인
+console.log('🏦 AssetSelect에서 받은 누적 데이터:', props.allData);
 
 const selectedBank = ref(null);
 const isProcessing = ref(false);

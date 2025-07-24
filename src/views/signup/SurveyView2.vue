@@ -76,7 +76,7 @@ import { useRouter } from 'vue-router';
 import AlertModal from '@/components/AlertModal.vue';
 
 import QuestionCard from './components/QuestionCard.vue';
-import { questionList } from './question';
+import { INITIAL_QUESTION_LIST } from './constants/question';
 
 const router = useRouter();
 

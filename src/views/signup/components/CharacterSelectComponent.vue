@@ -70,18 +70,19 @@ import AlertModal from '@/components/AlertModal.vue';
 
 import CharacterCard from '../character/components/CharacterCard.vue';
 import CharacterDetailModal from '../character/components/CharacterDetailModal.vue';
-import { CHOOGOOMI_CHARACTERS } from '../constants/ChoogoomiList';
+import { CHOOGOOMI_CHARACTERS } from '../constants/choogoomiList';
 
 // Props 정의
 const props = defineProps({
-  signupData: { type: Object, required: true },
-  survey1Data: { type: Object, required: true },
-  survey2Data: { type: Array, required: true },
+  allData: { type: Object, required: true },
   assetSkipped: { type: Boolean, default: false },
 });
 
 // Emit 정의
 const emit = defineEmits(['complete', 'error']);
+
+// 전달받은 누적 데이터 확인
+console.log('🎭 CharacterSelect에서 받은 누적 데이터:', props.allData);
 
 const selected = ref(null);
 const isModalOpen = ref(false);
@@ -111,12 +112,17 @@ const confirmSelection = async () => {
       char => char.choogoomiId === selected.value
     );
 
-    // 최종 회원가입 데이터 구성 (설문조사 데이터 포함)
+    // 최종 회원가입 데이터 구성 (누적된 모든 데이터 포함)
     const finalSignupData = {
-      ...props.signupData,
+      ...props.allData.signupData,
       choogooMi: selectedChar.choogoomiId,
+      profileImage: profileImageFile,
+      survey1Data: props.allData.survey1Data,
+      survey2Data: props.allData.survey2Data,
+      assetData: props.allData.assetData,
+      assetSkipped: props.assetSkipped,
     };
-    console.log('최종 회원가입 데이터:', finalSignupData);
+    console.log('✅ 최종 회원가입 데이터 (누적):', finalSignupData);
     // 회원가입 API 호출
     await authApi.signup(finalSignupData);
 
@@ -146,6 +152,16 @@ const handleError = () => {
 
 const handleSuccess = () => {
   isSuccessModalOpen.value = false;
-  emit('complete');
+
+  // 최종 선택된 캐릭터 정보 전달
+  const selectedCharacterData = {
+    choogooMi: selected.value,
+    profileImage: profileImage.value,
+  };
+
+  console.log('✅ 캐릭터 선택 완료 - 회원가입 성공!');
+  console.log('선택된 캐릭터 데이터:', selectedCharacterData);
+
+  emit('complete', selectedCharacterData);
 };
 </script>

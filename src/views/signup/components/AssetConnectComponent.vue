@@ -80,14 +80,15 @@ import ConnectModal from '../../asset/connect/components/ConnectModal.vue';
 
 // Props 정의
 const props = defineProps({
-  signupData: { type: Object, required: true },
-  survey1Data: { type: Object, required: true },
-  survey2Data: { type: Array, required: true },
+  allData: { type: Object, required: true },
   selectedBankId: { type: String, required: true },
 });
 
 // Emit 정의
 const emit = defineEmits(['next']);
+
+// 전달받은 누적 데이터 확인
+console.log('🔗 AssetConnect에서 받은 누적 데이터:', props.allData);
 
 // 폼 데이터
 const userBankId = ref('');
