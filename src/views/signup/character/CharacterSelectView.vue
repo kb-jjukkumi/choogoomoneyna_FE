@@ -80,7 +80,6 @@ const isSuccessModalOpen = ref(false);
 
 // SignupView에서 전달받은 회원가입 데이터
 const signupData = ref(null);
-const profileImage = ref(null);
 
 onMounted(() => {
   // 전달받은 state 데이터 확인
@@ -89,8 +88,6 @@ onMounted(() => {
     console.log('전달받은 회원가입 데이터:', signupData.value);
   } else {
     isErrorModalOpen.value = true;
-    // 데이터가 없으면 회원가입 페이지로 리다이렉트
-    router.push('/signup');
   }
 });
 
@@ -103,41 +100,16 @@ const select = idx => {
   // 전달받은 회원가입 데이터에 선택한 캐릭터 정보 추가
   if (signupData.value) {
     signupData.value.choogooMi = selectedChar.choogoomiId;
-    profileImage.value = selectedChar.img;
     console.log('최종 회원가입 데이터:', signupData.value);
   }
 
   isModalOpen.value = true;
 };
 
-// 이미지 경로를 File 객체로 변환하는 함수
-const imagePathToFile = async imagePath => {
-  try {
-    // 이미지 fetch
-    const response = await fetch(imagePath);
-    const blob = await response.blob();
-
-    // 파일명 추출 (예: A.png)
-    const filename = imagePath.split('/').pop();
-
-    // File 객체 생성
-    const file = new File([blob], filename, { type: blob.type });
-    return file;
-  } catch (error) {
-    console.error('이미지 파일 변환 실패:', error);
-    return null;
-  }
-};
-
 // 캐릭터 선택 확정 및 회원가입 API 호출
 const confirmSelection = async () => {
   try {
     if (signupData.value) {
-      const profileImageFile = await imagePathToFile(profileImage.value);
-      signupData.value.profileImage = profileImageFile;
-      if (!signupData.value.profileImage) {
-        return;
-      }
       await authApi.signup(signupData.value);
       // 회원가입 성공 시 성공 모달 표시
       isSuccessModalOpen.value = true;
