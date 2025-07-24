@@ -74,8 +74,8 @@ import { computed, ref } from 'vue';
 
 import AlertModal from '@/components/AlertModal.vue';
 
-import QuestionCard from '../components/QuestionCard.vue';
-import { QUESTION_LIST } from '../constants/question';
+import { QUESTION_LIST } from '../../constants/question';
+import QuestionCard from './QuestionCard.vue';
 
 // Emit 정의
 const emit = defineEmits(['next', 'skip']);

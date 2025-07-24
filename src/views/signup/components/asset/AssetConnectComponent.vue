@@ -76,6 +76,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+import axiosInstance from '@/api/axiosInstance';
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
@@ -113,17 +114,17 @@ const isInputEmpty = computed(() => {
 });
 
 // 자산 연결 함수
-const connectAsset = () => {
+const connectAsset = async () => {
   if (isConnecting.value) return; // 중복 요청 방지
 
   isConnecting.value = true;
   try {
-    // API 호출 (임시로 주석 처리)
-    // await axiosInstance.post('/api/codef/account/add', {
-    //   bankId: props.selectedBankId,
-    //   userBankId: userBankId.value,
-    //   userBankPassword: userBankPassword.value,
-    // });
+    // API 호출
+    await axiosInstance.post('/api/codef/account/add', {
+      bankId: props.selectedBankId,
+      userBankId: userBankId.value,
+      userBankPassword: userBankPassword.value,
+    });
 
     // 임시로 성공으로 처리
     modalType.value = true;

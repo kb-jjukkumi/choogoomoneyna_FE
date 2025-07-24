@@ -95,7 +95,7 @@ import { reactive, ref } from 'vue';
 
 import AlertModal from '@/components/AlertModal.vue';
 
-import { INITIAL_QUESTION_LIST } from '../constants/question';
+import { INITIAL_QUESTION_LIST } from '../../constants/question';
 
 const emit = defineEmits(['next']);
 

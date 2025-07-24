@@ -48,12 +48,12 @@
 <script setup>
 import { ref } from 'vue';
 
-import AssetConnectComponent from './components/AssetConnectComponent.vue';
-import AssetSelectComponent from './components/AssetSelectComponent.vue';
-import CharacterSelectComponent from './components/CharacterSelectComponent.vue';
-import SignupFormComponent from './components/SignupFormComponent.vue';
-import SurveyOneComponent from './components/SurveyOneComponent.vue';
-import SurveyTwoComponent from './components/SurveyTwoComponent.vue';
+import AssetConnectComponent from './components/asset/AssetConnectComponent.vue';
+import AssetSelectComponent from './components/asset/AssetSelectComponent.vue';
+import CharacterSelectComponent from './components/character/CharacterSelectComponent.vue';
+import SignupFormComponent from './components/signup/SignupFormComponent.vue';
+import SurveyOneComponent from './components/survey/SurveyOneComponent.vue';
+import SurveyTwoComponent from './components/survey/SurveyTwoComponent.vue';
 
 // 현재 단계 관리
 const currentStep = ref('signup');
