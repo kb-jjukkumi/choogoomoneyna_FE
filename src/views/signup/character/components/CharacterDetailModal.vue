@@ -29,7 +29,7 @@
         {{ selectedCharacter.summary }}
       </div>
       <div
-        class="text-gray-400 mb-6 text-center whitespace-pre-line break-words word-break"
+        class="text-limegreen-800 mb-6 text-center whitespace-pre-line leading-relaxed max-w-full px-2 break-keep"
       >
         {{ selectedCharacter.explain }}
       </div>
