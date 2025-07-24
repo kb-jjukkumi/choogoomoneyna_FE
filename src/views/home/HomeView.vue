@@ -1,20 +1,22 @@
 <template>
   <TopNavigation />
+
+  <!-- 전체 페이지 wrapper -->
   <div class="relative flex flex-col main_wrapper bg-ivory min-h-screen mt-20">
     <!-- 프로필 박스 -->
     <div class="flex flex-col items-center">
       <!-- 프로필 캐릭터 -->
       <img
-        :src="character_savings"
-        alt="저축실천형 캐릭터"
-        class="w-[120px] mx-auto mt-8"
+        :src="img_character"
+        alt="지출제로형 캐릭터"
+        class="w-[100px] mx-auto mt-8 mb-2"
       />
 
       <!-- 추구미 유형명 -->
       <span
-        class="bg-green text-white px-2.5 py-[2px] rounded-full text-xs my-1 text-center tracking-wide"
+        class="bg-green text-white px-2.5 py-[2px] rounded-full text-xs text-center tracking-wide"
       >
-        저축실천형
+        지출제로형
       </span>
 
       <!-- 닉네임 -->
@@ -23,7 +25,7 @@
       </p>
 
       <!-- 레벨 박스 -->
-      <div class="p-2 w-70 max-w-[400px] mx-auto">
+      <div class="p-1 w-70 max-w-[400px] mx-auto">
         <!-- 레벨 표시 바 - 전체 -->
         <div class="bg-limegreen-100 h-[9px] rounded-xl mb-[2px]">
           <!-- 레벨 표시 바 - 현재 레벨 -->
@@ -55,7 +57,7 @@
       <!-- 연동 계좌 목록 -->
       <!-- 계좌 목록의 길이가 '430px'을 넘어가면 스크롤 처리 -->
       <div
-        class="max-h-[calc(100vh-520px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
+        class="max-h-[calc(100vh-550px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
       >
         <div
           v-for="(account, i) in ACCOUNTS"
@@ -65,7 +67,7 @@
         >
           <!-- 은행 로고 -->
           <img
-            :src="account.logo"
+            :src="account.bankLogo"
             alt="은행 로고"
             class="size-12 object-contain"
           />
@@ -74,13 +76,13 @@
             <p
               class="bg-limegreen-100 text-limegreen-600 text-[10px] px-2 py-[2px] rounded-[5px] w-fit"
             >
-              입출금
+              {{ account.accountName }}
             </p>
             <p class="text-limegreen-900 text-[11px] my-[1px]">
-              {{ account.bankName }} {{ account.accountNumber }}
+              {{ account.bankName }} {{ account.accountNum }}
             </p>
             <p class="text-limegreen-800 text-[14px]">
-              {{ account.balance.toLocaleString() }}원
+              {{ Number(account.accountBalance).toLocaleString() }}원
             </p>
           </div>
 
@@ -110,65 +112,54 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import bank_kakao from '@/assets/img/banks/bank_kakao.png';
-import bank_kb from '@/assets/img/banks/bank_kb.png';
-import bank_shinhan from '@/assets/img/banks/bank_shinhan.png';
-import bank_woori from '@/assets/img/banks/bank_woori.png';
-import character_savings from '@/assets/img/characters/savings.png';
+import { fetchAccounts } from '@/api/accountApi';
+import img_character from '@/assets/img/characters/character_zero_1.png';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LIST } from '@/views/asset/constants/bankList';
 
 const router = useRouter();
 
-const ACCOUNTS = [
-  {
-    logo: bank_kb,
-    type: '입출금',
-    bankName: '국민',
-    accountNumber: '2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_shinhan,
-    type: '입출금',
-    bankName: '신한',
-    accountNumber: '2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_kakao,
-    type: '입출금',
-    bankName: '카카오',
-    accountNumber: '2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    logo: bank_woori,
-    type: '입출금',
-    bankName: '우리',
-    accountNumber: '2452-12-24521',
-    balance: 500000,
-    date: '2025.07.16 14:22',
-  },
-];
+// 계좌목록 데이터
+const ACCOUNTS = ref([]);
+
+const getBankInfo = bankId =>
+  BANK_LIST.find(bank => bank.bankId === bankId || bank.id === bankId);
+
+onMounted(async () => {
+  try {
+    const data = await fetchAccounts();
+
+    // 계좌 목록에 은행 이름과 로고 추가
+    ACCOUNTS.value = data.map(account => {
+      const bankInfo = getBankInfo(account.bankId);
+      return {
+        ...account,
+        bankLogo: bankInfo?.icon || '', // 은행 로고
+        bankName: bankInfo?.name || '알 수 없음', // 은행 이름
+      };
+    });
+  } catch (err) {
+    console.error('계좌 가져오기 실패:', err);
+  }
+});
 
 const goToTransaction = account => {
   router.push({
     name: 'transaction',
     params: {
-      bankName: account.bankName,
-      accountNumber: account.accountNumber,
-      type: account.type,
+      accountNum: account.accountNum,
+      accountName: account.accountName,
+      bankId: account.bankId, // 여기만 params
     },
     query: {
-      balance: account.balance,
+      accountBalance: account.accountBalance,
+      bankName: account.bankName,
     },
   });
 };

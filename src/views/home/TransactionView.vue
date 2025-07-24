@@ -8,14 +8,14 @@
       class="flex flex-col bg-limegreen-500 h-[110px] rounded-xl text-center justify-center p-4 mb-6"
     >
       <p
-        class="bg-limegreen-100 text-limegreen-600 text-center text-xs px-[6px] py-[1px] mx-auto my-0.5 rounded-[5px] w-fit"
+        class="bg-limegreen-100 text-limegreen-600 text-center text-[11px] px-[6px] py-[1px] mx-auto my-1 rounded-[5px] w-fit"
       >
         {{ accountName }}
       </p>
       <p class="text-limegreen-900 text-lg leading-tight mb-1">
-        {{ bankId }} {{ accountNum }}
+        {{ bankName }} {{ accountNum }}
       </p>
-      <p class="text-green text-xl leading-none">{{ totalBalance }}원</p>
+      <p class="text-green text-[19px] leading-none">{{ totalBalance }}원</p>
     </div>
 
     <!-- 거래 내역 -->
@@ -83,7 +83,8 @@ const route = useRoute();
 const bankId = route.params.bankId;
 const accountNum = route.params.accountNum;
 const accountName = route.params.accountName;
-const accountBalance = Number(route.query.accountBalance || 0);
+const accountBalance = Number(route.query.accountBalance);
+const bankName = route.query.bankName;
 
 // 잔액 숫자로 포맷
 const totalBalance = computed(() => accountBalance.toLocaleString());

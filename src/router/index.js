@@ -22,7 +22,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/transaction/:bankName/:accountNumber/:type',
+      path: '/transaction/:accountNum/:accountName/:bankId',
       name: 'transaction',
       component: TransactionView,
     },
