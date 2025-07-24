@@ -4,19 +4,19 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import icon_toggle from '@/assets/img/icons/feature/icon_toggle.png';
 
 // 영어 - 한글 매핑
-const TRANSFER_TYPE_MAP = {
-  all: '전체',
-  income: '입금',
-  expense: '출금',
+const TRANSACTION_TYPE_MAP = {
+  All: '전체',
+  Input: '입금',
+  Output: '출금',
 };
 
 // 드롭다운 항목 (영문 키 -> 한글로 변환되어 표시 )
-const transferTypeList = ['all', 'income', 'expense'];
+const transactionTypeList = ['All', 'Input', 'Output'];
 
 const emit = defineEmits(['selectedType']);
 
 // 상태값
-const selectedType = ref('all');
+const selectedType = ref('All');
 const isOpen = ref(false);
 const dropdownRef = ref(null);
 
@@ -55,7 +55,7 @@ const selectType = type => {
       @click="toggleDropdown"
     >
       <!-- 선택된 항목 표시 (한글 라벨) -->
-      <span>{{ TRANSFER_TYPE_MAP[selectedType] }}</span>
+      <span>{{ TRANSACTION_TYPE_MAP[selectedType] }}</span>
       <!-- ▼ 아이콘 -->
       <img :src="icon_toggle" alt="토글 아이콘" class="size-2.5" />
     </div>
@@ -66,17 +66,17 @@ const selectType = type => {
       class="absolute top-full mt-0.5 left-0 w-full bg-ivory text-limegreen-700 border-2 border-limegreen-500 rounded-lg shadow z-50 overflow-y-auto"
     >
       <li
-        v-for="transferType in transferTypeList"
-        :key="transferType"
-        @click="selectType(transferType)"
+        v-for="transactionType in transactionTypeList"
+        :key="transactionType"
+        @click="selectType(transactionType)"
         :class="[
           'px-4 py-2 cursor-pointer hover:bg-limegreen-100 transition',
           {
-            ' font-bold text-green': transferType === selectedType,
+            ' font-bold text-green': transactionType === selectedType,
           },
         ]"
       >
-        {{ TRANSFER_TYPE_MAP[transferType] || transferType }}
+        {{ TRANSACTION_TYPE_MAP[transactionType] || transactionType }}
       </li>
     </ul>
   </div>
