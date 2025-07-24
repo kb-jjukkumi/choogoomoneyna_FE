@@ -34,7 +34,7 @@
         </button>
         <button
           class="flex-1 h-12 border-1 border-limegreen-500 text-limegreen-500 rounded-[10px] text-[20px]"
-          @click="$emit('close')"
+          @click="handleConfirm"
         >
           확인
         </button>
@@ -59,8 +59,18 @@ const router = useRouter();
 defineProps({
   title: { type: String, default: '자산 연동 성공!' },
   message: { type: String, required: true },
-  modalType: { type: String, default: 'success' },
+  modalType: { type: Boolean, default: true },
 });
+
+const handleConfirm = () => {
+  if (modalType.value) {
+    router.push({
+      name: 'characterSelect',
+      state: { allData: allData.value },
+    });
+  }
+  return;
+};
 
 const handleAddtionalConnect = () => {
   router.push('/asset/select');

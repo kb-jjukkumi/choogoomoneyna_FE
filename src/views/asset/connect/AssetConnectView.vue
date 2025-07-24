@@ -51,10 +51,10 @@
       <div class="w-full mt-10">
         <button
           type="submit"
-          :disabled="isInputEmpty"
+          :disabled="isInputEmpty || isConnecting"
           class="w-full bg-limegreen-500! h-14! text-limegreen-900! rounded-[10px] py-3 mt-4 text-2xl! disabled:opacity-50"
         >
-          자산 연결
+          {{ isConnecting ? '연결 중...' : '자산 연결' }}
         </button>
       </div>
     </form>
@@ -62,18 +62,17 @@
   <!-- 조건에 따라서 자산 연동 결과 모달 표시 -->
   <ConnectModal
     v-if="isModalOpen"
-    :modal-type="modalType"
     :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
     :message="
       modalType === false
         ? '다시 연동을 시도해 주세요.'
         : `${bankName} 자산 연동에 성공했습니다!`
     "
-    @close="modalType ? handleModalClose : (isModalOpen = false)"
+    @close="handleModalClose"
   />
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
@@ -91,6 +90,9 @@ const isInputEmpty = computed(
   () => !userBankId.value || !userBankPassword.value
 );
 
+// AssetSelectView에서 전달받은 모든 데이터
+const allData = ref(null);
+
 // 은행 아이콘 관련 데이터
 const bankId = computed(() => route.query.bankId);
 const bankImg = computed(
@@ -104,18 +106,34 @@ const bankName = computed(
 const isModalOpen = ref(false);
 const modalType = ref(true);
 
-const connectAsset = async () => {
+// 로딩 상태 관리
+const isConnecting = ref(false);
+
+onMounted(() => {
+  // AssetSelectView에서 전달받은 데이터 확인
+  if (history.state && history.state.allData) {
+    allData.value = history.state.allData;
+    console.log('AssetConnect에서 받은 모든 데이터:', allData.value);
+  }
+});
+
+const connectAsset = () => {
+  if (isConnecting.value) return; // 중복 요청 방지
+
+  isConnecting.value = true;
   try {
-    await axiosInstance.post('/api/codef/account/add', {
-      bankId: bankId.value,
-      userBankId: userBankId.value,
-      userBankPassword: userBankPassword.value,
-    });
+    // await axiosInstance.post('/api/codef/account/add', {
+    //   bankId: bankId.value,
+    //   userBankId: userBankId.value,
+    //   userBankPassword: userBankPassword.value,
+    // });
     modalType.value = true;
     isModalOpen.value = true;
   } catch {
     modalType.value = false;
     isModalOpen.value = true;
+  } finally {
+    isConnecting.value = false;
   }
 };
 
@@ -124,24 +142,15 @@ const handleSubmit = () => {
   connectAsset();
 };
 
-// 로그인 상태이면 home으로 이동하고 회원가입 상태이면 캐릭터 선택 페이지로 이동
-const navigateToHome = () => {
-  router.push('/');
-};
-
-const navigateToCharacterSelect = () => {
-  router.push('/character-select');
-};
+// 회원가입 플로우 전용 - 자산 연동 후 캐릭터 선택으로 이동
 
 const handleModalClose = () => {
-  isModalOpen.value = false;
-  // 토큰이 있으면 로그인 상태 → home으로 이동
-  // 토큰이 없으면 회원가입 상태 → 캐릭터 선택 페이지로 이동
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken) {
-    navigateToHome();
-  } else {
-    navigateToCharacterSelect();
-  }
+  console.log('handleModalClose');
+  // 회원가입 플로우에서는 자산 연동 완료 후 캐릭터 선택으로 이동
+  // 모든 데이터를 CharacterSelectView로 전달
+  router.push({
+    name: 'characterSelect',
+    state: { allData: allData.value },
+  });
 };
 </script>

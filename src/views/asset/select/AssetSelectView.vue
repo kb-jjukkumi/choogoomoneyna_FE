@@ -35,17 +35,17 @@
     <div class="w-[332px] bottom-10 fixed">
       <button
         class="w-full bg-limegreen-500 text-limegreen-900 rounded-[10px] h-12 text-[22px]! disabled:opacity-50"
-        :disabled="!selectedBank"
+        :disabled="!selectedBank || isProcessing"
         @click="confirmSelection"
       >
-        선택
+        {{ isProcessing ? '처리 중...' : '선택' }}
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -56,6 +56,20 @@ import { BANK_LIST } from '../constants/bankList';
 const selectedBank = ref(null);
 const router = useRouter();
 
+// 로딩 상태 관리
+const isProcessing = ref(false);
+
+// SurveyView2에서 전달받은 모든 데이터
+const allData = ref(null);
+
+onMounted(() => {
+  // SurveyView2에서 전달받은 데이터 확인
+  if (history.state && history.state.allData) {
+    allData.value = history.state.allData;
+    console.log('AssetSelect에서 받은 모든 데이터:', allData.value);
+  }
+});
+
 const toggleBankSelection = bankId => {
   if (selectedBank.value === bankId) {
     selectedBank.value = null;
@@ -65,9 +79,16 @@ const toggleBankSelection = bankId => {
 };
 
 const goToConnect = bankId => {
-  if (!bankId) return;
+  if (!bankId || isProcessing.value) return; // 중복 클릭 방지
 
-  router.push({ name: 'assetConnect', query: { bankId } });
+  isProcessing.value = true;
+
+  // 모든 데이터와 선택한 은행 정보를 AssetConnect로 전달
+  router.push({
+    name: 'assetConnect',
+    query: { bankId },
+    state: { allData: allData.value },
+  });
 };
 
 const confirmSelection = () => {

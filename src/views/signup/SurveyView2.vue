@@ -37,9 +37,24 @@
       <!-- 다음 버튼 -->
       <button
         @click="handleNext"
-        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg"
+        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
+        :disabled="isProcessing"
       >
-        {{ currentIndex === questionList.length - 1 ? '완료' : '다음' }}
+        {{
+          isProcessing
+            ? '처리 중...'
+            : currentIndex === questionList.length - 1
+              ? '자산 연동'
+              : '다음'
+        }}
+      </button>
+
+      <button
+        v-if="currentIndex === questionList.length - 1"
+        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
+        @click="handleSkip"
+      >
+        자산 연동 스킵
       </button>
 
       <!--선택하지 않은 항목이 있을 때 모달 -->
@@ -55,20 +70,45 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import AlertModal from '@/components/AlertModal.vue';
 
 import QuestionCard from './components/QuestionCard.vue';
 import { questionList } from './question';
 
+const router = useRouter();
+
+// 이전 페이지에서 전달받은 데이터
+const signupData = ref(null);
+const survey1Data = ref(null);
+
 const currentIndex = ref(0);
 const selectedOption = ref(null);
 const showModal = ref(false);
 
+// 로딩 상태 관리
+const isProcessing = ref(false);
+
+// survey2 답변들을 저장할 배열
+const survey2Answers = ref([]);
+
 const currentQuestion = computed(() => questionList[currentIndex.value]);
 
+onMounted(() => {
+  // SurveyView1에서 전달받은 데이터 확인
+  if (history.state && history.state.signupData && history.state.survey1Data) {
+    signupData.value = history.state.signupData;
+    survey1Data.value = history.state.survey1Data;
+    console.log('전달받은 회원가입 데이터:', signupData.value);
+    console.log('전달받은 Survey1 데이터:', survey1Data.value);
+  }
+});
+
 const handleNext = () => {
+  if (isProcessing.value) return; // 중복 클릭 방지
+
   if (!selectedOption.value) {
     showModal.value = true;
     return;
@@ -76,11 +116,37 @@ const handleNext = () => {
 
   console.log('선택:', selectedOption.value);
 
+  // 현재 질문의 답변을 저장
+  survey2Answers.value[currentIndex.value] = selectedOption.value;
+
   if (currentIndex.value < questionList.length - 1) {
     currentIndex.value++;
     selectedOption.value = null;
   } else {
+    isProcessing.value = true;
     console.log('설문 완료');
+    console.log('Survey2 답변:', survey2Answers.value);
+
+    // 모든 데이터를 합쳐서 AssetSelectView로 전달
+    const allData = {
+      signupData: signupData.value,
+      survey1Data: survey1Data.value,
+      survey2Data: survey2Answers.value,
+    };
+
+    router.push({
+      name: 'assetSelect',
+      state: { allData },
+    });
   }
+};
+
+const handleSkip = () => {
+  const allData = {
+    signupData: signupData.value,
+    survey1Data: survey1Data.value,
+    survey2Data: survey2Answers.value,
+  };
+  console.log('자산 연동 스킵 데이터:', allData);
 };
 </script>

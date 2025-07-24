@@ -5,7 +5,7 @@
       <div class="flex font-bold text-xl justify-center">회원가입</div>
 
       <!-- 입력 폼 -->
-      <form class="flex flex-col gap-6" @submit.prevent="join">
+      <form class="flex flex-col gap-6" @submit.prevent="handleSubmit">
         <div class="flex flex-col gap-2">
           <div class="flex flex-col">
             <label for="nickname" class="block mb-1 font-bold">닉네임</label>
@@ -132,25 +132,16 @@
       "
       @close="isSendEmailSuccess = false"
     />
-    <!-- <AlertModal
-      v-if="isSignupSuccess"
-      title="회원가입"
-      :message="
-        isSignupSuccess ? '회원가입이 완료되었습니다.' : '다시 시도해주세요!'
-      "
-      @close="goToLogin"
-    /> -->
   </div>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
-const router = useRouter();
+const emit = defineEmits(['next']);
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -165,7 +156,6 @@ const isEmailChecked = ref(false);
 const isPwdChecked = ref(false);
 
 const isSendEmailSuccess = ref(false);
-const isSignupSuccess = ref(false);
 
 // 로딩 상태 관리
 const isNameChecking = ref(false);
@@ -292,7 +282,7 @@ const validatePassword = () => {
 };
 
 //회원가입 처리
-const join = async () => {
+const handleSubmit = async () => {
   if (isSubmitting.value) return; // 중복 요청 방지
 
   let hasError = false;
@@ -319,7 +309,7 @@ const join = async () => {
     // 이메일 필드에 인증된 이메일 넣기
     member.email = email.email;
 
-    // 회원가입 데이터를 가지고 캐릭터 선택 페이지로 이동
+    // 회원가입 데이터를 부모로 전달
     const signupData = {
       profileImage: null,
       email: member.email,
@@ -328,17 +318,9 @@ const join = async () => {
       choogooMi: member.choogooMi,
     };
 
-    // SurveyView1로 이동하면서 회원가입 데이터 전달
-    router.push({
-      name: 'survey1',
-      state: { signupData },
-    });
+    emit('next', signupData);
   } finally {
     isSubmitting.value = false;
   }
 };
-
-// const goToLogin = () => {
-//   router.push('/login');
-// };
 </script>

@@ -73,9 +73,10 @@
       <!-- 다음 버튼 -->
       <button
         @click="handleNext"
-        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg"
+        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
+        :disabled="isProcessing"
       >
-        다음
+        {{ isProcessing ? '처리 중...' : '다음' }}
       </button>
 
       <!--선택하지 않은 항목이 있을 때 모달 -->
@@ -91,10 +92,15 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import AlertModal from '@/components/AlertModal.vue';
-import router from '@/router';
+
+const router = useRouter();
+
+// 회원가입 데이터
+const signupData = ref(null);
 
 // 답변
 const answers = reactive({
@@ -107,6 +113,17 @@ const answers = reactive({
 // 모달 상태
 const showModal = ref(false);
 
+// 로딩 상태 관리
+const isProcessing = ref(false);
+
+onMounted(() => {
+  // SignupView에서 전달받은 회원가입 데이터 확인
+  if (history.state && history.state.signupData) {
+    signupData.value = history.state.signupData;
+    console.log('전달받은 회원가입 데이터:', signupData.value);
+  }
+});
+
 // 응답 선택
 function selectOption(questionId, value) {
   answers[questionId] = value;
@@ -114,6 +131,8 @@ function selectOption(questionId, value) {
 
 // 다음 버튼 클릭 시
 function handleNext() {
+  if (isProcessing.value) return; // 중복 클릭 방지
+
   //answers의 value들을 배열에 담아 값이 null이 아닌지(모든 항목이 선택되었는지) 확인
   const isAllAnswered = Object.values(answers).every(value => value !== null);
   if (!isAllAnswered) {
@@ -121,8 +140,17 @@ function handleNext() {
     return;
   }
 
-  console.log('답변:', answers);
-  router.push({ name: 'survey2' });
+  isProcessing.value = true;
+  console.log('Survey1 답변:', answers);
+
+  // 회원가입 데이터와 survey1 답변을 함께 survey2로 전달
+  router.push({
+    name: 'survey2',
+    state: {
+      signupData: signupData.value,
+      survey1Data: { ...answers },
+    },
+  });
 }
 
 // 질문 데이터
