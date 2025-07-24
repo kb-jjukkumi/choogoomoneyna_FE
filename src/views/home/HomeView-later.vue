@@ -112,8 +112,10 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { fetchAccountsFromCodef } from '@/api/bankApi';
 import bank_kakao from '@/assets/img/banks/bank_kakao.png';
 import bank_kb from '@/assets/img/banks/bank_kb.png';
 import bank_shinhan from '@/assets/img/banks/bank_shinhan.png';
@@ -123,43 +125,36 @@ import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LOGOS } from '@/utils/BankLogoMap';
 
+// API로 받아온 계좌 데이터 저장
+const ACCOUNTS = ref([]);
 const router = useRouter();
+const userInfo = ref(null);
+onMounted(() => {
+  const storedUserInfo = localStorage.getItem('userInfo');
+  if (storedUserInfo) {
+    userInfo.value = JSON.parse(storedUserInfo);
+    fetchAccounts();
+  }
+});
 
-const ACCOUNTS = [
-  {
-    accountNum: '2452-12-24521',
-    bankId: '국민',
-    bankLogo: bank_kb,
-    accountName: 'KB마이핏통장',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '신한',
-    bankLogo: bank_shinhan,
-    accountName: '신한 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '카카오',
-    bankLogo: bank_kakao,
-    accountName: '카카오 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '우리',
-    bankLogo: bank_woori,
-    accountName: '우리 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-];
+async function fetchAccounts() {
+  if (!userInfo.value) return;
+
+  const data = await fetchAccountsFromCodef({
+    bankId: userInfo.value.bankId,
+    userBankId: userInfo.value.userBankId,
+    userBankPassword: userInfo.value.userBankPassword,
+  });
+
+  accounts.value = data.map(account => ({
+    ...account,
+    accountBalance: Number(account.accountBalance),
+    bankLogo: BANK_LOGOS[account.bankId],
+    date: new Date().toLocaleString(),
+  }));
+}
 
 const goToTransaction = account => {
   router.push({
@@ -173,5 +168,9 @@ const goToTransaction = account => {
       accountBalance: account.accountBalance,
     },
   });
+};
+
+const goToAddAccount = () => {
+  router.push('');
 };
 </script>
