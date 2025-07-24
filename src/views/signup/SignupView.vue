@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center w-full">
     <div class="bg-ivory flex flex-col gap-7 w-full px-4">
       <!-- 타이틀 -->
       <div class="flex font-bold text-xl justify-center">회원가입</div>
