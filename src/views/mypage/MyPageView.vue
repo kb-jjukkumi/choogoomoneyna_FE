@@ -1,9 +1,9 @@
 <template>
   <TopNavigation />
   <div class="flex justify-center w-full">
-    <div class="bg-ivory flex w-full flex-col gap-8 px-6">
+    <div class="bg-ivory flex w-full flex-col gap-6 px-6">
       <!-- 프로필-->
-      <div class="flex flex-col items-center gap-3">
+      <div class="flex flex-col items-center gap-2">
         <!-- 캐릭터 -->
         <div
           class="relative flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
@@ -54,6 +54,21 @@
           </div>
         </div>
       </div>
+      <!--버튼 영역-->
+      <div class="px-2">
+        <div class="flex flex-col gap-3">
+          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
+          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
+          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
+        </div>
+        <div class="mt-7">
+          <button
+            class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
+          >
+            로그아웃
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <BottomNavigation />
@@ -64,4 +79,6 @@ import character_savings from '@/assets/img/characters/savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+
+import MyPageBtn from './components/MyPageBtn.vue';
 </script>
