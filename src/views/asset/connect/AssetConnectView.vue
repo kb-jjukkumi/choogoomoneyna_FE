@@ -24,7 +24,7 @@
           />
           <input
             type="text"
-            v-model="id"
+            v-model="userBankId"
             placeholder="아이디를 입력해주세요."
             class="w-full bg-limegreen-100 rounded-[10px] px-16 h-11 text-limegreen-900 placeholder:text-gray-200 placeholder:font-jua font-spoqa! outline-none"
           />
@@ -41,7 +41,7 @@
           />
           <input
             type="password"
-            v-model="password"
+            v-model="userBankPassword"
             placeholder="비밀번호를 입력해주세요."
             class="w-full bg-limegreen-100 rounded-[10px] px-16 h-11 text-limegreen-900 placeholder:text-gray-200 placeholder:font-jua font-spoqa! outline-none"
           />
@@ -60,36 +60,38 @@
     </form>
   </div>
   <!-- 조건에 따라서 자산 연동 결과 모달 표시 -->
-  <ConnectModal
-    v-if="showModal"
+  <AlertModal
+    v-if="isModalOpen"
     :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
     :message="
       modalType === false
         ? '다시 연동을 시도해 주세요.'
         : `${bankName} 자산 연동에 성공했습니다!`
     "
-    :modal-type="modalType"
-    @close="showModal = false"
+    @close="isModalOpen = false"
   />
 </template>
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
+import axiosInstance from '@/api/axios';
+import AlertModal from '@/components/AlertModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 import { BANK_LIST } from '../constants/bankList';
 import BankIcon from './components/BankIcon.vue';
-import ConnectModal from './components/ConnectModal.vue';
 
 onMounted(() => {
   console.log(bankId.value);
 });
 
 const route = useRoute();
-const id = ref('');
-const password = ref('');
-const isInputEmpty = computed(() => !id.value || !password.value);
+const userBankId = ref('');
+const userBankPassword = ref('');
+const isInputEmpty = computed(
+  () => !userBankId.value || !userBankPassword.value
+);
 
 // 은행 아이콘 관련 데이터
 const bankId = computed(() => route.query.bankId);
@@ -101,13 +103,26 @@ const bankName = computed(
 );
 
 // 모달 관련 데이터
-const showModal = ref(false);
+const isModalOpen = ref(false);
 const modalType = ref(true);
+
+const connectAsset = async () => {
+  try {
+    const response = await axiosInstance.post('/api/codef/account/add', {
+      bankId: bankId.value,
+      userBankId: userBankId.value,
+      userBankPassword: userBankPassword.value,
+    });
+    modalType.value = true;
+    isModalOpen.value = true;
+  } catch {
+    modalType.value = false;
+    isModalOpen.value = true;
+  }
+};
 
 // 자산 연동 버튼 클릭 시 모달 표시
 const handleSubmit = () => {
-  // [TODO] 자산 연동 로직 추가 예정
-  modalType.value = true;
-  showModal.value = true;
+  connectAsset();
 };
 </script>
