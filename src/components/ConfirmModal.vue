@@ -25,13 +25,13 @@
       <!-- 버튼 영역 -->
       <div class="flex gap-4">
         <button
-          class="w-28 h-11 bg-limegreen-100 text-limegreen-900 rounded-lg text-base font-bold border border-limegreen-500"
+          class="w-28 h-12 bg-limegreen-100 text-limegreen-900 rounded-lg py-2 text-lg font-bold"
           @click="$emit('cancel')"
         >
           {{ cancelBtn }}
         </button>
         <button
-          class="w-28 h-11 bg-limegreen-500 text-ivory rounded-lg text-base font-bold"
+          class="w-28 h-12 bg-limegreen-500 text-limegreen-900 rounded-lg py-2 text-lg font-bold"
           @click="$emit('confirm')"
         >
           {{ confirmBtn }}

@@ -64,23 +64,33 @@
         <div class="mt-7">
           <button
             class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
-            @click="logout"
+            @click="showModal = true"
           >
             로그아웃
           </button>
         </div>
       </div>
-      <AlertModal title="로그아웃" message="정말 로그아웃하시겠습니까?" />
+      <ConfirmModal
+        v-if="showModal"
+        title="로그아웃"
+        message="정말 로그아웃하시겠습니까?"
+        :cancelBtn="'취소'"
+        :confirmBtn="'로그아웃'"
+        @cancel="showModal = false"
+        @confirm="logout"
+      />
     </div>
   </div>
   <BottomNavigation />
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 import character_savings from '@/assets/img/characters/savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
-import AlertModal from '@/components/AlertModal.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
+import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import router from '@/router';
 
@@ -89,7 +99,6 @@ import MyPageBtn from './components/MyPageBtn.vue';
 const showModal = ref(false);
 
 const logout = () => {
-  showModal.value = true;
   localStorage.clear();
   router.push('/login');
 };
