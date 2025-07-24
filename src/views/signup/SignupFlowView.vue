@@ -36,6 +36,7 @@
       :all-data="allData"
       :selected-bank-id="selectedBankId"
       @next="handleAssetConnectComplete"
+      @additional-connect="handleAddtionalConnect"
     />
 
     <!-- 캐릭터 선택 -->
@@ -126,6 +127,10 @@ const handleAssetSkip = data => {
 const handleBankSelect = bankId => {
   selectedBankId.value = bankId;
   currentStep.value = 'asset-connect';
+};
+
+const handleAddtionalConnect = () => {
+  currentStep.value = 'asset-select';
 };
 
 const handleAssetConnectComplete = () => {

@@ -52,9 +52,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+const emit = defineEmits(['next', 'additional-connect']);
 
 defineProps({
   title: { type: String, default: '자산 연동 성공!' },
@@ -63,16 +61,11 @@ defineProps({
 });
 
 const handleConfirm = () => {
-  if (modalType.value) {
-    router.push({
-      name: 'characterSelect',
-      state: { allData: allData.value },
-    });
-  }
+  emit('next');
   return;
 };
 
 const handleAddtionalConnect = () => {
-  router.push('/asset/select');
+  emit('additional-connect');
 };
 </script>

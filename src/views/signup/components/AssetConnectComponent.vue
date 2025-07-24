@@ -12,7 +12,7 @@
     <!-- 은행 아이콘 -->
     <BankIcon :assets="bankIcon" :alt="bankName" :size="20" class="mb-4" />
     <!-- 자산 연동 폼 -->
-    <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form class="w-full flex flex-col gap-4" @submit.prevent="connectAsset">
       <!-- 아이디 입력 -->
       <div class="flex flex-col gap-2">
         <label class="text-limegreen-900 text-[16px]">아이디</label>
@@ -68,7 +68,8 @@
         ? '다시 연동을 시도해 주세요.'
         : `${bankName} 자산 연동에 성공했습니다!`
     "
-    @close="handleModalClose"
+    @next="handleModalClose"
+    @additional-connect="handleAdditionalConnect"
   />
 </template>
 
@@ -88,7 +89,7 @@ const props = defineProps({
 });
 
 // Emit 정의
-const emit = defineEmits(['next']);
+const emit = defineEmits(['next', 'additional-connect']);
 
 // 전달받은 누적 데이터 확인
 console.log('🔗 AssetConnect에서 받은 누적 데이터:', props.allData);
@@ -142,10 +143,12 @@ const connectAsset = () => {
 
 // 모달 닫기 핸들러
 const handleModalClose = () => {
+  connectAsset();
   isModalOpen.value = false;
-
-  // 회원가입 플로우에서는 자산 연동 완료 후 캐릭터 선택으로 이동
-  console.log('자산 연동 완료 - 캐릭터 선택으로 이동');
   emit('next');
+};
+
+const handleAdditionalConnect = () => {
+  emit('additional-connect');
 };
 </script>
