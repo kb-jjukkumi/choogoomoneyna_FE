@@ -1,8 +1,8 @@
 <template>
   <div
     :class="[
-      'flex flex-col items-center justify-center bg-limegreen-100 rounded-2xl border-3 cursor-pointer transition-all shadow-lg',
-      selected ? 'border-limegreen-500' : 'border-limegreen-100',
+      'flex flex-col items-center justify-center bg-limegreen-100 rounded-2xl border-3 cursor-pointer transition-all shadow-xl border-limegreen-500',
+      ,
       'w-32 h-40',
       'hover:shadow-md',
     ]"
@@ -19,7 +19,6 @@
 defineProps({
   img: { type: String, required: true },
   label: { type: String, required: true },
-  selected: { type: Boolean, default: false },
 });
 
 defineEmits(['click']);

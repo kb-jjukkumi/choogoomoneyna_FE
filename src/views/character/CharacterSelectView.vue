@@ -1,7 +1,11 @@
 <template>
-  <div class="min-h-screen bg-ivory flex flex-col items-center py-8">
-    <div class="text-2xl font-bold text-limegreen-900 mb-8">추구미 선택</div>
-    <div class="w-full max-w-xs">
+  <div class="bg-ivory flex flex-col items-center">
+    <p
+      class="w-full h-20 flex items-center justify-center text-2xl text-limegreen-900"
+    >
+      추구미 선택
+    </p>
+    <div class="min-w-xs mt-10">
       <!-- 첫 번째 행: 2개 -->
       <div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-8">
         <CharacterCard
