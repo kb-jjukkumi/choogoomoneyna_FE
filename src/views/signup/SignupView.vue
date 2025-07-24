@@ -86,7 +86,7 @@
               type="password"
               placeholder="비밀번호 입력"
               style="font-family: Arial, sans-serif"
-              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
             />
           </div>
           <div>
@@ -99,7 +99,7 @@
               type="password"
               placeholder="비밀번호 확인"
               style="font-family: Arial, sans-serif"
-              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+              class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
               @input="validatePassword"
             />
           </div>
@@ -128,14 +128,14 @@
       "
       @close="isSendEmailSuccess = false"
     />
-    <AlertModal
+    <!-- <AlertModal
       v-if="isSignupSuccess"
       title="회원가입"
       :message="
         isSignupSuccess ? '회원가입이 완료되었습니다.' : '다시 시도해주세요!'
       "
       @close="goToLogin"
-    />
+    /> -->
   </div>
 </template>
 
@@ -169,7 +169,7 @@ const member = reactive({
   email: '',
   password: '',
   nickname: '',
-  choogooMi: 'A',
+  choogooMi: '',
 });
 
 //이메일 전송용
@@ -282,26 +282,23 @@ const join = async () => {
   // 이메일 필드에 인증된 이메일 넣기
   member.email = email.email;
 
-  try {
-    // 실제 회원가입 API 호출
-    const signupData = {
-      profileImage: null,
-      email: member.email,
-      password: member.password,
-      nickname: member.nickname,
-      choogooMi: member.choogooMi,
-    };
+  // 회원가입 데이터를 가지고 캐릭터 선택 페이지로 이동
+  const signupData = {
+    profileImage: null,
+    email: member.email,
+    password: member.password,
+    nickname: member.nickname,
+    choogooMi: member.choogooMi,
+  };
 
-    await authApi.signup(signupData);
-
-    // 회원가입 성공 시 로그인 페이지로 이동
-    isSignupSuccess.value = true;
-  } catch (error) {
-    isSignupSuccess.value = false;
-  }
+  // CharacterSelectView로 이동하면서 회원가입 데이터 전달
+  router.push({
+    name: 'characterSelect',
+    state: { signupData },
+  });
 };
 
-const goToLogin = () => {
-  router.push('/login');
-};
+// const goToLogin = () => {
+//   router.push('/login');
+// };
 </script>
