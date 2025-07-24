@@ -6,49 +6,51 @@
       <div class="flex flex-col items-center gap-3">
         <!-- 캐릭터 -->
         <div
-          class="relative flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[180px] h-[180px]"
+          class="relative flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
         >
           <img
             :src="character_savings"
             alt="저축실천형 캐릭터"
-            class="w-[120px] mt-8 mb-1.5"
+            class="w-[120px] mt-7 mb-1.5"
           />
           <!-- 추구미 유형명 -->
-          <div
-            class="bg-green text-white px-4 py-1 rounded-full text-xs text-center"
+          <p
+            class="bg-green text-white px-4 py-1 rounded-full text-xs text-center tracking-widest"
           >
             저축실천형
-          </div>
-          <div
-            class="absolute bottom-3 right-0.5 bg-limegreen-500 w-9 h-9 rounded-full border-3 border-ivory p-2"
+          </p>
+          <!-- 추구미 수정 아이콘 -->
+          <button
+            class="absolute bottom-2 right-0 bg-limegreen-500 w-9 h-9 rounded-full border-3 border-ivory p-2"
           >
             <img :src="edit" alt="수정 아이콘" class="" />
-          </div>
+          </button>
         </div>
 
         <!-- 닉네임 -->
-        <p class="text-limegreen-800 text-lg text-center mt-1">
+        <p class="text-limegreen-800 text-lg text-center mt-2">
           카카오대학교라이언
         </p>
 
         <!-- 레벨 -->
-        <div class="flex flex-col gap-1">
-          <div class="bg-limegreen-100 h-2.5 rounded-xl">
-            <div class="bg-green h-full w-1/2 rounded-xl"></div>
+        <div class="flex flex-col gap-1 w-[70%]">
+          <div class="bg-limegreen-100 h-2.5 rounded-full">
+            <div class="bg-green h-full w-1/2 rounded-full"></div>
           </div>
           <div class="text-center text-limegreen-700 text-xs">Lv.2 / 410점</div>
         </div>
 
         <!-- 현재 순위 & 최근 성적 -->
-        <div class="flex justify-between text-center items-center">
+        <div class="flex justify-between text-center items-center text-sm">
           <div class="flex flex-col gap-1">
-            <div class="text-[14px] text-limegreen-700">현재 순위</div>
-            <div class="text-[17px] text-green">5위</div>
+            <div class="text-limegreen-700">현재 순위</div>
+            <div class="text-green">5위</div>
           </div>
+          <!-- 현재 순위와 최근 성적 구별선 -->
           <div class="h-[70%] bg-limegreen-100 w-0.5 mx-8"></div>
           <div class="flex flex-col gap-1">
-            <div class="text-[14px] text-limegreen-700">최근 성적</div>
-            <div class="text-[17px] text-green">3승 2패</div>
+            <div class="text-limegreen-700">최근 성적</div>
+            <div class="text-green">3승 2패</div>
           </div>
         </div>
       </div>
