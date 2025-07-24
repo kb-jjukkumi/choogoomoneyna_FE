@@ -1,5 +1,5 @@
 <template>
-  <TopNavigation />
+  <TopNavigation :showBack="true" :showLogoText="false" />
 
   <!-- 전체 페이지 wrapper -->
   <div class="relative pt-3 px-6 bg-ivory">

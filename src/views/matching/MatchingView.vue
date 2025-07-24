@@ -83,7 +83,7 @@
     <div
       class="flex-1 bg-limegreen-500 rounded-t-[30px] px-6 py-2 w-full h-full mx-auto flex flex-col"
     >
-      <p class="text-lg text-limegreen-900 mt-5 mb-0.5 pb-3 px-2">미션 목록</p>
+      <p class="text-lg text-limegreen-900 mt-4 pb-3 px-2">미션 목록</p>
 
       <!-- 나 -->
       <div class="bg-ivory p-3 rounded-xl">
@@ -96,7 +96,11 @@
         >
           <div class="flex items-center mt-2">
             <div
-              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-1.5 text-limegreen-900"
+              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
+              :class="{
+                'cursor-pointer hover:bg-limegreen-500 ': i === 1,
+              }"
+              @click="() => i === 1 && goToQuiz()"
             >
               <div>
                 <span class="text-green">{{
@@ -104,7 +108,7 @@
                 }}</span>
                 <span class="text-limegreen-900">
                   {{
-                    (i === 0 ? '공통 미션: ' : '저축실천형 미션: ') +
+                    (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
                     mission.missionTitle
                   }}
                 </span>
@@ -116,7 +120,7 @@
       </div>
 
       <!-- 상대 -->
-      <div class="bg-ivory p-3 mt-4 rounded-xl">
+      <div class="bg-ivory p-3 mt-2 rounded-xl">
         <span class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs">
           {{ MATCHING_DATA.user2.nickname }}
         </span>
@@ -126,7 +130,7 @@
         >
           <div class="flex items-center mt-2">
             <div
-              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-1.5 text-limegreen-900"
+              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
             >
               <div>
                 <span class="text-green">{{
@@ -134,7 +138,7 @@
                 }}</span>
                 <span class="text-limegreen-900">
                   {{
-                    (i === 0 ? '공통 미션: ' : '저축실천형 미션: ') +
+                    (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
                     mission.missionTitle
                   }}
                 </span>
@@ -188,21 +192,26 @@ const MATCHING_DATA = ref({
     },
     {
       missionId: 502,
-      missionTitle: '이번주 저축 계획 세우기',
+      missionTitle: '투자 관련 퀴즈',
       missionContent:
         '이번주, 얼마나 모아볼까요? \n 이번주에 모을 금액과 방법을 직접 정해보세요!',
-      missionScore: 10,
+      missionScore: 20,
     },
     {
       missionId: 503,
-      missionTitle: '일주일간 10만원 모으기',
+      missionTitle: '투자 관련 컨텐츠 요약',
       missionContent:
         '일주일 동안 10만원, 직접 모아볼래요? \n 하루하루 채워가는 재미, 목표 금액을 완성해보세요!',
-      missionScore: 30,
+      missionScore: 20,
     },
   ],
   matchingStatus: 'PROGRESS',
   matchingStart: '2025-07-14',
   matchingFinish: '2025-07-21',
 });
+
+const goToQuiz = () => {
+  console.log('클릭됨');
+  router.push({ name: 'missionQuiz' });
+};
 </script>
