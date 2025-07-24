@@ -68,7 +68,7 @@ import SurveyTwoComponent from './components/SurveyTwoComponent.vue';
 const router = useRouter();
 
 // 현재 단계 관리
-const currentStep = ref('signup');
+const currentStep = ref('survey1');
 
 // 회원가입 데이터
 const signupData = ref({

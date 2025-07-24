@@ -1,4 +1,4 @@
-export const questionList = [
+const QUESTION_LIST = [
   {
     id: 1,
     type: 4,
@@ -120,3 +120,56 @@ export const questionList = [
     ],
   },
 ];
+
+// 질문 데이터
+const INITIAL_QUESTION_LIST = [
+  {
+    id: 'age',
+    title: '현재 직업 상태가 어떻게 되나요?',
+    options: [
+      { value: 1, label: '학생' },
+      { value: 2, label: '취업\n준비중' },
+      { value: 3, label: '직장인' },
+      { value: 4, label: '프리랜서\n자영업' },
+      { value: 5, label: '기타' },
+    ],
+  },
+  {
+    id: 'income',
+    title: '월 평균 소득이 얼마인가요?',
+    subtitle: '(세후 기준)',
+    priceUnit: '(단위: 10,000원)',
+    options: [
+      { value: 1, label: '~200' },
+      { value: 2, label: '200\n~300' },
+      { value: 3, label: '300\n~400' },
+      { value: 4, label: '400\n~500' },
+      { value: 5, label: '500~' },
+    ],
+  },
+  {
+    id: 'save',
+    title: '매월 저축을 얼마나 하나요?',
+    priceUnit: '(단위: 10,000원)',
+    options: [
+      { value: 1, label: '~5' },
+      { value: 2, label: '5~15' },
+      { value: 3, label: '15~30' },
+      { value: 4, label: '30~50' },
+      { value: 5, label: '50~' },
+    ],
+  },
+  {
+    id: 'habit',
+    title: '평소 소비 습관은 어떤 편인가요?',
+    options: [
+      { value: 1, label: '절약적\n소비' },
+      { value: 2, label: '타협적\n소비' },
+      { value: 3, label: '합리적\n소비' },
+      { value: 4, label: '감정적\n소비' },
+      { value: 5, label: '즉흥적\n소비' },
+    ],
+  },
+];
+
+export { QUESTION_LIST, INITIAL_QUESTION_LIST };
