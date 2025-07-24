@@ -27,6 +27,7 @@
       v-else-if="currentStep === 'asset-select'"
       :all-data="allData"
       @next="handleBankSelect"
+      :selected-bank-id="selectedBankId"
     />
 
     <!-- 자산 연동 -->
@@ -59,7 +60,7 @@ import SurveyOneComponent from './components/SurveyOneComponent.vue';
 import SurveyTwoComponent from './components/SurveyTwoComponent.vue';
 
 // 현재 단계 관리
-const currentStep = ref('signup');
+const currentStep = ref('asset-select');
 const isSignupSuccess = ref(false);
 
 // 누적 데이터 관리 - 모든 데이터를 하나의 객체에 저장

@@ -1,52 +1,54 @@
 <template>
-  <div class="min-h-screen bg-ivory flex flex-col">
-    <!-- 상단 타이틀 -->
-    <div class="w-full h-20 flex items-center justify-center">
-      <p class="text-2xl text-limegreen-900 font-bold">자산 연동</p>
-    </div>
-
-    <!-- 은행 정보 -->
-    <div class="px-6 mb-6">
-      <div class="bg-white rounded-lg p-4 border-2 border-limegreen-500">
-        <div class="flex items-center gap-4">
-          <img :src="bankIcon" :alt="bankName" class="w-12 h-12" />
-          <div>
-            <p class="text-lg font-bold text-limegreen-900">{{ bankName }}</p>
-            <p class="text-sm text-gray-600">선택된 은행</p>
-          </div>
+  <!-- 화면 전체 배경 -->
+  <div
+    class="min-h-screen bg-ivory flex flex-col items-center justify-center px-4 relative"
+  >
+    <!-- 상단 네비게이션 -->
+    <TopNavigation
+      :show-back="true"
+      :show-logo-text="true"
+      :logo-text="'자산 연동'"
+    />
+    <!-- 은행 아이콘 -->
+    <BankIcon :assets="bankIcon" :alt="bankName" :size="20" class="mb-4" />
+    <!-- 자산 연동 폼 -->
+    <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
+      <!-- 아이디 입력 -->
+      <div class="flex flex-col gap-2">
+        <label class="text-limegreen-900 text-[16px]">아이디</label>
+        <div class="relative">
+          <img
+            src="@/assets/img/icons/feature/icon_id.png"
+            alt="아이디 입력"
+            class="absolute left-7 top-1/2 -translate-y-1/2 size-5"
+          />
+          <input
+            type="text"
+            v-model="userBankId"
+            placeholder="아이디를 입력해주세요."
+            class="w-full bg-limegreen-100 rounded-[10px] px-16 h-11 text-limegreen-900 placeholder:text-gray-200 placeholder:font-jua font-spoqa! outline-none"
+          />
         </div>
       </div>
-    </div>
-
-    <!-- 연동 폼 -->
-    <div class="flex-1 px-6">
-      <form @submit.prevent="connectAsset" class="space-y-6">
-        <div>
-          <label class="block text-lg font-bold text-limegreen-900 mb-2">
-            아이디
-          </label>
-          <input
-            v-model="userBankId"
-            type="text"
-            placeholder="은행 아이디를 입력해주세요"
-            class="w-full h-14 px-4 border-2 border-limegreen-500 rounded-lg bg-white"
-            required
+      <!-- 비밀번호 입력 -->
+      <div class="flex flex-col gap-2">
+        <label class="text-limegreen-900 text-[16px]">비밀번호</label>
+        <div class="relative">
+          <img
+            src="@/assets/img/icons/feature/icon_password.png"
+            alt="비밀번호 입력"
+            class="absolute left-7 top-1/2 -translate-y-1/2 size-5"
           />
-        </div>
-
-        <div>
-          <label class="block text-lg font-bold text-limegreen-900 mb-2">
-            비밀번호
-          </label>
           <input
-            v-model="userBankPassword"
             type="password"
-            placeholder="은행 비밀번호를 입력해주세요"
-            class="w-full h-14 px-4 border-2 border-limegreen-500 rounded-lg bg-white"
-            required
+            v-model="userBankPassword"
+            placeholder="비밀번호를 입력해주세요."
+            class="w-full bg-limegreen-100 rounded-[10px] px-16 h-11 text-limegreen-900 placeholder:text-gray-200 placeholder:font-jua font-spoqa! outline-none"
           />
         </div>
-
+      </div>
+      <!-- 자산 연동 버튼 -->
+      <div class="w-full mt-10">
         <button
           type="submit"
           :disabled="isInputEmpty || isConnecting"
@@ -54,34 +56,35 @@
         >
           {{ isConnecting ? '연결 중...' : '자산 연결' }}
         </button>
-      </form>
-    </div>
-
-    <!-- 연결 결과 모달 -->
-    <ConnectModal
-      v-if="isModalOpen"
-      :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
-      :message="
-        modalType === false
-          ? `${bankName} 자산 연동에 실패했습니다. 다시 시도해주세요.`
-          : `${bankName} 자산 연동에 성공했습니다!`
-      "
-      @close="handleModalClose"
-    />
+      </div>
+    </form>
   </div>
+  <!-- 조건에 따라서 자산 연동 결과 모달 표시 -->
+  <ConnectModal
+    v-if="isModalOpen"
+    :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
+    :message="
+      modalType === false
+        ? '다시 연동을 시도해 주세요.'
+        : `${bankName} 자산 연동에 성공했습니다!`
+    "
+    @close="handleModalClose"
+  />
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 
-import axiosInstance from '@/api/axios';
+import BankIcon from '@/components/BankIcon.vue';
+import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LIST } from '@/constants/bankList';
 
-import ConnectModal from '../../asset/connect/components/ConnectModal.vue';
+import ConnectModal from './ConnectModal.vue';
 
 // Props 정의
 const props = defineProps({
   allData: { type: Object, required: true },
-  selectedBankId: { type: String, required: true },
+  selectedBankId: { type: String, required: true, default: null },
 });
 
 // Emit 정의
@@ -99,27 +102,13 @@ const isConnecting = ref(false);
 const isModalOpen = ref(false);
 const modalType = ref(true); // true: 성공, false: 실패
 
-// 은행 정보 매핑
-const bankInfo = {
-  kb: { name: 'KB국민은행', icon: '/src/assets/img/icons/banks/bank_kb.png' },
-  shinhan: {
-    name: '신한은행',
-    icon: '/src/assets/img/icons/banks/bank_shinhan.png',
-  },
-  woori: {
-    name: '우리은행',
-    icon: '/src/assets/img/icons/banks/bank_woori.png',
-  },
-  hana: { name: '하나은행', icon: '/src/assets/img/icons/banks/bank_hana.png' },
-};
-
 // Computed
 const bankName = computed(() => {
-  return bankInfo[props.selectedBankId]?.name || '선택된 은행';
+  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.name;
 });
 
 const bankIcon = computed(() => {
-  return bankInfo[props.selectedBankId]?.icon || '';
+  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.icon;
 });
 
 const isInputEmpty = computed(() => {
@@ -127,7 +116,7 @@ const isInputEmpty = computed(() => {
 });
 
 // 자산 연결 함수
-const connectAsset = async () => {
+const connectAsset = () => {
   if (isConnecting.value) return; // 중복 요청 방지
 
   isConnecting.value = true;
