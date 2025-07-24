@@ -35,7 +35,7 @@
       </div>
       <button
         class="w-36 h-12 bg-limegreen-500 text-ivory rounded-lg py-2 text-xl!"
-        @click="$emit('close')"
+        @click="$emit('select')"
       >
         선택
       </button>
@@ -47,4 +47,6 @@
 defineProps({
   selectedCharacter: { type: Object, required: true },
 });
+
+defineEmits(['close', 'select']);
 </script>
