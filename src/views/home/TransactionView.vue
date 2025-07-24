@@ -1,5 +1,7 @@
 <template>
-  <TopNavigation />
+  <TopNavigation :showBack="true" :showLogoText="false" />
+
+  <!-- 전체 페이지 wrapper -->
   <div class="relative pt-3 px-6 bg-ivory">
     <!-- 계좌 정보 -->
     <div
@@ -8,12 +10,12 @@
       <p
         class="bg-limegreen-100 text-limegreen-600 text-center text-xs px-[6px] py-[1px] mx-auto my-0.5 rounded-[5px] w-fit"
       >
-        {{ type }}
+        {{ accountName }}
       </p>
       <p class="text-limegreen-900 text-lg leading-tight mb-1">
-        {{ bankName }} {{ accountNumber }}
+        {{ bankId }} {{ accountNum }}
       </p>
-      <p class="text-green text-xl leading-none">{{ formattedBalance }}원</p>
+      <p class="text-green text-xl leading-none">{{ totalBalance }}원</p>
     </div>
 
     <!-- 거래 내역 -->
@@ -22,32 +24,39 @@
         <!-- 왼쪽: 제목 -->
         <p class="text-limegreen-900 text-xl">거래 내역</p>
 
-        <!-- 오른쪽: 필터 -->
-        <FilterTransferType />
+        <!-- 오른쪽: 거래유형 필터 - 전체/입금/출금 -->
+        <FilterTransferType @selectedType="onSelectedType" />
       </div>
 
+      <!-- 거래 목록 - 스크롤 영역 -->
       <div
         class="max-h-[calc(100vh-320px)] overflow-scroll [&::-webkit-scrollbar]:hidden font-spoqa"
       >
         <div
           class="bg-limegreen-100 px-4 py-3 rounded-xl mb-3 flex justify-between items-start"
-          v-for="(transaction, i) in transactions"
+          v-for="(transaction, i) in filteredTransactions"
           :key="i"
         >
           <!-- 왼쪽: 날짜, 설명 -->
           <div class="text-left">
             <p class="text-xs text-limegreen-900 mb-1">
-              {{ transaction.date }}
+              {{ transaction.trDate }} {{ transaction.trTime }}
             </p>
             <p class="text-sm text-limegreen-800 text-medium">
-              {{ transaction.desc }}
+              {{ transaction.trDesc2 }}
             </p>
           </div>
+
           <!-- 오른쪽: 금액, 잔액 -->
           <div class="text-right">
-            <p class="text-limegreen-800 text-sm font-medium mt-5">
+            <p class="text-limegreen-800 text-sm font-medium mt-5"></p>
+            <p class="text-sm text-limegreen-800">
               {{ transaction.transferType }}
-              {{ transaction.amount.toLocaleString() }}원
+              {{
+                transaction.transferType === '출금'
+                  ? transaction.trAccountOut?.toLocaleString()
+                  : transaction.trAccountIn?.toLocaleString()
+              }}원
             </p>
             <p class="text-gray-300 text-xs">
               잔액 {{ transaction.balance.toLocaleString() }}원
@@ -69,72 +78,97 @@ import TopNavigation from '@/components/TopNavigation.vue';
 
 import FilterTransferType from './components/FilterTransferType.vue';
 
+// 현재 URL의 파라미터로부터 계좌 정보 추출
 const route = useRoute();
-const bankName = route.params.bankName;
-const accountNumber = route.params.accountNumber;
-const type = route.params.type;
-const totalBalance = Number(route.query.balance || 0);
+const bankId = route.params.bankId;
+const accountNum = route.params.accountNum;
+const accountName = route.params.accountName;
+const accountBalance = Number(route.query.accountBalance || 0);
 
-const formattedBalance = computed(() => totalBalance.toLocaleString());
+// 잔액 숫자로 포맷
+const totalBalance = computed(() => accountBalance.toLocaleString());
 
-const selectedType = ref('전체');
+// 필터에서 선택된 거래유형 - 거래 유형: all / imcome / expense
+const selectedType = ref('all');
 
-const transactions = ref([
-  {
-    transferType: '출금',
-    desc: '메머드 커피',
-    amount: 1500,
-    balance: 597000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '출금',
-    desc: '메머드 커피',
-    amount: 1500,
-    balance: 598500,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    transferType: '입금',
-    desc: '알바비',
-    amount: 100000,
-    balance: 600000,
-    date: '2025.07.16 14:22',
-  },
-]);
+// 필터링 시 실행되는 함수
+const onSelectedType = transferType => {
+  selectedType.value = transferType; // all, income, expense
+};
+
+// 전체 거래 내역 - 입/출금 판단해서 'transferType' 필드 추가
+const TRANSACTIONS = ref(
+  [
+    {
+      trDesc2: '메머드 커피',
+      trAccountOut: 1500,
+      balance: 597000,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '알바비',
+      trAccountIn: 100000,
+      balance: 600000,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '메머드 커피',
+      trAccountOut: 1500,
+      balance: 598500,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '알바비',
+      trAccountIn: 100000,
+      balance: 600000,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '메머드 커피',
+      trAccountOut: 1500,
+      balance: 598500,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '알바비',
+      trAccountIn: 100000,
+      balance: 600000,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '메머드 커피',
+      trAccountOut: 1500,
+      balance: 598500,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+    {
+      trDesc2: '알바비',
+      trAccountIn: 100000,
+      balance: 600000,
+      trDate: '2025.07.16',
+      trTime: '14:22',
+    },
+  ].map(transaction => ({
+    ...transaction,
+    // 조건에 따라 '입/출금' 문자열 필드 자동 생성
+    transferType: transaction.trAccountOut ? '출금' : '입금',
+  }))
+);
+
+// 필터 선택 결과에 따라 거래 내역 필터링
+const filteredTransactions = computed(() => {
+  if (selectedType.value === 'all') return TRANSACTIONS.value;
+  return TRANSACTIONS.value.filter(transaction =>
+    selectedType.value === 'income'
+      ? transaction.transferType === '입금'
+      : transaction.transferType === '출금'
+  );
+});
 </script>

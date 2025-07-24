@@ -6,6 +6,7 @@ import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
+import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
 import CharacterSelectView from '@/views/signup/character/CharacterSelectView.vue';
@@ -22,7 +23,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/transaction/:bankName/:accountNumber/:type',
+      path: '/transaction/:bankId/:accountNum/:accountName',
       name: 'transaction',
       component: TransactionView,
     },
@@ -55,6 +56,11 @@ const router = createRouter({
       path: '/matching',
       name: 'matching',
       component: MatchingView,
+    },
+    {
+      path: '/mission-quiz',
+      name: 'missionQuiz',
+      component: MissionQuizView,
     },
     {
       path: '/mypage',
