@@ -64,6 +64,7 @@
         <div class="mt-7">
           <button
             class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
+            @click="logout"
           >
             로그아웃
           </button>
@@ -79,6 +80,12 @@ import character_savings from '@/assets/img/characters/savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import router from '@/router';
 
 import MyPageBtn from './components/MyPageBtn.vue';
+
+const logout = () => {
+  localStorage.clear();
+  router.push('/login');
+};
 </script>
