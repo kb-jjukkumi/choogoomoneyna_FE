@@ -95,15 +95,20 @@ router.beforeEach((to, from, next) => {
     '/survey2',
     '/character-select',
   ];
-  const authRequired = !publicPages.includes(to.path);
+  const assetPages = ['/asset/select', '/asset/connect'];
+  const authRequired =
+    !publicPages.includes(to.path) && !assetPages.includes(to.path);
 
-  // localStorage에 accessToken이 없으면 로그인 페이지로 이동
-  if (authRequired && !accessToken) {
-    return next('/login');
-  }
-  // localStorage에 accessToken이 있으면 메인 페이지로 이동
-  if (to.path === '/login' && accessToken) {
-    return next('/home');
+  if (accessToken) {
+    // 로그인 후: publicPages (asset 페이지 제외)에 접근 못하도록
+    if (publicPages.includes(to.path)) {
+      return next('/');
+    }
+  } else {
+    // 로그인 전: 인증이 필요한 페이지에 접근하면 로그인 페이지로 이동
+    if (authRequired) {
+      return next('/login');
+    }
   }
   next();
 });

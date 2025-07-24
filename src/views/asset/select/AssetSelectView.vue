@@ -13,17 +13,19 @@
     >
       <div
         v-for="bank in BANK_LIST"
-        :key="bank.id"
+        :key="bank.bankId"
         class="flex items-center p-4 bg-white rounded-[10px] cursor-pointer transition-all duration-200 border-2 border-transparent hover:-translate-y-0.5 hover:shadow-md"
         :class="{
-          'bg-limegreen-500!': selectedBank === bank.id,
+          'bg-limegreen-500!': selectedBank === bank.bankId,
         }"
-        @click="toggleBankSelection(bank.id)"
+        @click="toggleBankSelection(bank.bankId)"
       >
         <div class="flex items-center justify-center mr-4">
           <BankIcon :assets="bank.icon" :alt="bank.name" :size="10" />
         </div>
-        <div :class="selectedBank === bank.id ? 'text-white' : 'text-black'">
+        <div
+          :class="selectedBank === bank.bankId ? 'text-white' : 'text-black'"
+        >
           {{ bank.name }}
         </div>
       </div>
