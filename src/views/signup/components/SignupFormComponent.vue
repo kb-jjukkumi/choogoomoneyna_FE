@@ -141,15 +141,7 @@ import { reactive, ref } from 'vue';
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
-// Props 정의
-const props = defineProps({
-  allData: { type: Object, required: true },
-});
-
 const emit = defineEmits(['next']);
-
-// 전달받은 누적 데이터 확인
-console.log('📝 SignupForm에서 받은 누적 데이터:', props.allData);
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');

@@ -77,11 +77,6 @@ import AlertModal from '@/components/AlertModal.vue';
 import QuestionCard from '../components/QuestionCard.vue';
 import { QUESTION_LIST } from '../constants/question';
 
-// Props 정의
-const props = defineProps({
-  allData: { type: Object, required: true },
-});
-
 // Emit 정의
 const emit = defineEmits(['next', 'skip']);
 

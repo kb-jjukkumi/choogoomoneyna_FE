@@ -97,15 +97,7 @@ import AlertModal from '@/components/AlertModal.vue';
 
 import { INITIAL_QUESTION_LIST } from '../constants/question';
 
-// Props 정의
-const props = defineProps({
-  allData: { type: Object, required: true },
-});
-
 const emit = defineEmits(['next']);
-
-// 전달받은 누적 데이터 확인
-console.log('📋 Survey1에서 받은 누적 데이터:', props.allData);
 
 // 답변
 const answers = reactive({

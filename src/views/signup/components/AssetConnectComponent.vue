@@ -84,15 +84,11 @@ import ConnectModal from './ConnectModal.vue';
 
 // Props 정의
 const props = defineProps({
-  allData: { type: Object, required: true },
   selectedBankId: { type: String, required: true, default: null },
 });
 
 // Emit 정의
 const emit = defineEmits(['next', 'additional-connect']);
-
-// 전달받은 누적 데이터 확인
-console.log('🔗 AssetConnect에서 받은 누적 데이터:', props.allData);
 
 // 폼 데이터
 const userBankId = ref('');

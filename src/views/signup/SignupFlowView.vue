@@ -3,21 +3,18 @@
     <!-- 회원가입 기본 정보 입력 -->
     <SignupFormComponent
       v-if="currentStep === 'signup'"
-      :all-data="allData"
       @next="handleSignupFormComplete"
     />
 
     <!-- 설문조사 1 -->
     <SurveyOneComponent
       v-else-if="currentStep === 'survey1'"
-      :all-data="allData"
       @next="handleSurvey1Complete"
     />
 
     <!-- 설문조사 2 -->
     <SurveyTwoComponent
       v-else-if="currentStep === 'survey2'"
-      :all-data="allData"
       @next="handleSurvey2Complete"
       @skip="handleAssetSkip"
     />
@@ -25,16 +22,14 @@
     <!-- 자산 선택 -->
     <AssetSelectComponent
       v-else-if="currentStep === 'asset-select'"
-      :all-data="allData"
       @next="handleBankSelect"
-      :selected-bank-id="selectedBankId"
+      :selected-bank-id="allData.assetData.selectedBankId"
     />
 
     <!-- 자산 연동 -->
     <AssetConnectComponent
       v-else-if="currentStep === 'asset-connect'"
-      :all-data="allData"
-      :selected-bank-id="selectedBankId"
+      :selected-bank-id="allData.assetData.selectedBankId"
       @next="handleAssetConnectComplete"
       @additional-connect="handleAddtionalConnect"
     />
@@ -61,7 +56,7 @@ import SurveyOneComponent from './components/SurveyOneComponent.vue';
 import SurveyTwoComponent from './components/SurveyTwoComponent.vue';
 
 // 현재 단계 관리
-const currentStep = ref('asset-select');
+const currentStep = ref('signup');
 const isSignupSuccess = ref(false);
 
 // 누적 데이터 관리 - 모든 데이터를 하나의 객체에 저장
@@ -85,11 +80,12 @@ const allData = ref({
 
   // 설문조사 2 답변
   survey2Data: [],
-});
 
-// 자산 관련 데이터 (개별 관리용)
-const selectedBankId = ref(null);
-const selectedChoogooMi = ref('');
+  // 자산 관련 데이터
+  assetData: {
+    selectedBankId: null,
+  },
+});
 
 // 단계별 완료 핸들러
 const handleSignupFormComplete = data => {
@@ -125,7 +121,7 @@ const handleAssetSkip = data => {
 };
 
 const handleBankSelect = bankId => {
-  selectedBankId.value = bankId;
+  allData.value.assetData.selectedBankId = bankId;
   currentStep.value = 'asset-connect';
 };
 
@@ -166,10 +162,9 @@ const handleSignupError = () => {
       habit: null,
     },
     survey2Data: [],
+    assetData: {
+      selectedBankId: null,
+    },
   };
-
-  // 개별 데이터도 초기화
-  selectedBankId.value = null;
-  selectedChoogooMi.value = '';
 };
 </script>
