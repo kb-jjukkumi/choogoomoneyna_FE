@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import AssetConnectView from '@/views/asset/connect/AssetConnectView.vue';
-import AssetSelectView from '@/views/asset/select/AssetSelectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
@@ -9,7 +7,6 @@ import MatchingView from '@/views/matching/MatchingView.vue';
 import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
-import CharacterSelectView from '@/views/signup/character/CharacterSelectView.vue';
 import SignupFlowView from '@/views/signup/SignupFlowView.vue';
 
 const router = createRouter({
@@ -54,21 +51,6 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
-    },
-    {
-      path: '/asset/connect',
-      name: 'assetConnect',
-      component: AssetConnectView,
-    },
-    {
-      path: '/asset/select',
-      name: 'assetSelect',
-      component: AssetSelectView,
-    },
-    {
-      path: '/character-select',
-      name: 'characterSelect',
-      component: CharacterSelectView,
     },
   ],
 });

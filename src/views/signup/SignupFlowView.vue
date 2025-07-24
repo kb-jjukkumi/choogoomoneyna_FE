@@ -43,12 +43,13 @@
       :all-data="allData"
       @complete="handleCharacterSelect"
       @error="handleSignupError"
+      @success="handleSignupSuccess"
     />
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 import AssetConnectComponent from './components/AssetConnectComponent.vue';
 import AssetSelectComponent from './components/AssetSelectComponent.vue';
@@ -58,7 +59,8 @@ import SurveyOneComponent from './components/SurveyOneComponent.vue';
 import SurveyTwoComponent from './components/SurveyTwoComponent.vue';
 
 // 현재 단계 관리
-const currentStep = ref('survey1');
+const currentStep = ref('signup');
+const isSignupSuccess = ref(false);
 
 // 누적 데이터 관리 - 모든 데이터를 하나의 객체에 저장
 const allData = ref({
@@ -81,11 +83,6 @@ const allData = ref({
 
   // 설문조사 2 답변
   survey2Data: [],
-
-  // 선택된 캐릭터 정보
-  characterData: {
-    choogooMi: '',
-  },
 });
 
 // 자산 관련 데이터 (개별 관리용)
@@ -136,12 +133,14 @@ const handleAssetConnectComplete = () => {
 
 const handleCharacterSelect = data => {
   // 캐릭터 선택 정보를 allData에 저장
-  allData.value.characterData = { ...data };
-  selectedChoogooMi.value = data;
+  allData.value.signupData.choogooMi = data.choogooMi;
+};
+
+const handleSignupSuccess = () => {
+  isSignupSuccess.value = true;
 };
 
 const handleSignupError = () => {
-  console.log('❌ 회원가입 중 오류가 발생했습니다. 처음부터 다시 시작합니다.');
   // 오류 시 처음부터 다시 시작
   currentStep.value = 'signup';
 
@@ -161,22 +160,10 @@ const handleSignupError = () => {
       habit: null,
     },
     survey2Data: [],
-    characterData: {
-      choogooMi: '',
-    },
   };
 
   // 개별 데이터도 초기화
   selectedBankId.value = null;
   selectedChoogooMi.value = '';
 };
-
-// allData 변경 감시
-watch(
-  allData,
-  newData => {
-    console.log('📊 allData 변경:', newData);
-  },
-  { deep: true }
-);
 </script>
