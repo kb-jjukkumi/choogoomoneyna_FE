@@ -60,8 +60,9 @@
     </form>
   </div>
   <!-- 조건에 따라서 자산 연동 결과 모달 표시 -->
-  <AlertModal
+  <ConnectModal
     v-if="isModalOpen"
+    :modal-type="modalType"
     :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
     :message="
       modalType === false
@@ -76,11 +77,11 @@ import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
-import AlertModal from '@/components/AlertModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 import { BANK_LIST } from '../constants/bankList';
 import BankIcon from './components/BankIcon.vue';
+import ConnectModal from './components/ConnectModal.vue';
 
 onMounted(() => {
   console.log(bankId.value);
