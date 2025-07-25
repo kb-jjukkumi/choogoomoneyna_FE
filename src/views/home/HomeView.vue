@@ -79,10 +79,10 @@
               {{ account.accountName }}
             </p>
             <p class="text-limegreen-900 text-[11px] my-[1px]">
-              {{ account.bankId }} {{ account.accountNum }}
+              {{ account.bankName }} {{ account.accountNum }}
             </p>
             <p class="text-limegreen-800 text-[14px]">
-              {{ account.accountBalance.toLocaleString() }}원
+              {{ Number(account.accountBalance).toLocaleString() }}원
             </p>
           </div>
 
@@ -102,7 +102,8 @@
 
       <!-- 계좌 추가 버튼 -->
       <div
-        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center"
+        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center pointer-cursor"
+        @click="addAccount()"
       >
         <img :src="icon_plus" alt="추가하기 아이콘" class="size-7 m-1" />
       </div>
@@ -112,66 +113,61 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import bank_kakao from '@/assets/img/banks/bank_kakao.png';
-import bank_kb from '@/assets/img/banks/bank_kb.png';
-import bank_shinhan from '@/assets/img/banks/bank_shinhan.png';
-import bank_woori from '@/assets/img/banks/bank_woori.png';
+import { fetchAccounts } from '@/api/accountApi';
 import img_character from '@/assets/img/characters/character_zero_1.png';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LIST } from '@/constants/bankList';
+
+import AssetSelectComponent from '../signup/components/asset/AssetSelectComponent.vue';
 
 const router = useRouter();
 
-const ACCOUNTS = [
-  {
-    accountNum: '2452-12-24521',
-    bankId: '국민',
-    bankLogo: bank_kb,
-    accountName: 'KB마이핏통장',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '신한',
-    bankLogo: bank_shinhan,
-    accountName: '신한 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '카카오',
-    bankLogo: bank_kakao,
-    accountName: '카카오 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-  {
-    bankId: '우리',
-    bankLogo: bank_woori,
-    accountName: '우리 통장',
-    accountNum: '2452-12-24521',
-    accountBalance: 500000,
-    date: '2025.07.16 14:22',
-  },
-];
+const showAssetSelect = ref(false);
+
+// 계좌목록 데이터
+const ACCOUNTS = ref([]);
+
+const getBankInfo = bankId =>
+  BANK_LIST.find(bank => bank.bankId === bankId || bank.id === bankId);
+
+onMounted(async () => {
+  try {
+    const data = await fetchAccounts();
+
+    // 계좌 목록에 은행 이름과 로고 추가
+    ACCOUNTS.value = data.map(account => {
+      const bankInfo = getBankInfo(account.bankId);
+      return {
+        ...account,
+        bankLogo: bankInfo?.icon || '', // 은행 로고
+        bankName: bankInfo?.name || '알 수 없음', // 은행 이름
+      };
+    });
+  } catch (err) {
+    console.error('계좌 가져오기 실패:', err);
+  }
+});
 
 const goToTransaction = account => {
   router.push({
     name: 'transaction',
     params: {
-      bankId: account.bankId,
       accountNum: account.accountNum,
       accountName: account.accountName,
+      bankId: account.bankId, // 여기만 params
     },
     query: {
       accountBalance: account.accountBalance,
+      bankName: account.bankName,
     },
   });
 };
+
+const addAccount = () => {};
 </script>
