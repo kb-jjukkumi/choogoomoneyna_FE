@@ -48,6 +48,8 @@
 <script setup>
 import { ref } from 'vue';
 
+import authApi from '@/api/authApi';
+
 import AssetConnectComponent from './components/asset/AssetConnectComponent.vue';
 import AssetSelectComponent from './components/asset/AssetSelectComponent.vue';
 import CharacterSelectComponent from './components/character/CharacterSelectComponent.vue';
@@ -103,12 +105,17 @@ const handleSurvey1Complete = data => {
   currentStep.value = 'survey2';
 };
 
-const handleSurvey2Complete = data => {
+const handleSurvey2Complete = async data => {
   // 설문조사 2 데이터를 allData에 누적
   allData.value.survey2Data = {
     ...allData.value.survey2Data,
     ...data,
   };
+  const loginData = {
+    email: allData.value.signupData.email,
+    password: allData.value.signupData.password,
+  };
+  await authApi.login(loginData);
 
   currentStep.value = 'asset-select';
 };
@@ -137,10 +144,7 @@ const handleAssetConnectComplete = () => {
 const handleCharacterSelect = data => {
   // 캐릭터 선택 정보를 allData에 저장
   allData.value.signupData.choogooMi = data.choogooMi;
-};
-
-const handleSignupSuccess = () => {
-  isSignupSuccess.value = true;
+  router.push('/login');
 };
 
 const handleSignupError = () => {
