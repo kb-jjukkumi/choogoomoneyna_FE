@@ -188,7 +188,7 @@ const onNicknameInput = () => {
 const checkName = async () => {
   if (isNameChecking.value) return; // 중복 요청 방지
 
-  if (!member.nickname.trim()) {
+  if (!newNickname.value.trim()) {
     nameErrorMessage.value = '닉네임을 입력하세요.';
     isNameChecked.value = false;
     return;
@@ -202,7 +202,7 @@ const checkName = async () => {
 
   isNameChecking.value = true;
   try {
-    const result = await authApi.checkName(member.nickname);
+    const result = await authApi.checkName(newNickname.value);
 
     if (result) {
       nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
