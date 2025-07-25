@@ -148,7 +148,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import axiosInstance from '@/api/axios';
+import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
 const router = useRouter();
@@ -173,17 +173,14 @@ const handleLogin = async () => {
     return;
   }
   try {
-    const response = await axiosInstance.post('/api/users/login', {
+    await authApi.login({
       email: email.value,
       password: password.value,
     });
-    // accessToken, refreshToken 저장
-    window.localStorage.setItem('accessToken', response.data.accessToken);
-    window.localStorage.setItem('refreshToken', response.data.refreshToken);
     // 로그인 성공 시 모달 창 띄우기
     showModal.value = true;
     modalType.value = 'success';
-  } catch (error) {
+  } catch {
     showModal.value = true;
     modalType.value = 'fail';
   }

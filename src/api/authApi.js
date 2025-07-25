@@ -51,4 +51,18 @@ const signup = async signupData => {
   }
 };
 
-export default { checkName, sendCode, verifyCode, signup };
+const login = async loginData => {
+  try {
+    const response = await axiosInstance.post('/api/users/login', {
+      email: loginData.email,
+      password: loginData.password,
+    });
+    // accessToken, refreshToken 저장
+    window.localStorage.setItem('accessToken', response.data.accessToken);
+    window.localStorage.setItem('refreshToken', response.data.refreshToken);
+  } catch {
+    throw new Error('로그인 실패');
+  }
+};
+
+export default { checkName, sendCode, verifyCode, signup, login };
