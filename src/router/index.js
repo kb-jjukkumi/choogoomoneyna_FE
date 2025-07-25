@@ -8,7 +8,7 @@ import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
-import SignupFlowView from '@/views/signup/SignupFlowView.vue';
+import SignupView from '@/views/signup/SignupView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignupFlowView,
+      component: SignupView,
     },
     {
       path: '/ranking',
