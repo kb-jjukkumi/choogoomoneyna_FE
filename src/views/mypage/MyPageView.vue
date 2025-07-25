@@ -59,7 +59,7 @@
         <div class="flex flex-col gap-3">
           <MyPageBtn text="자산 관리 분석 리포트" to="home" />
           <MyPageBtn text="역대 랭킹 기록" to="home" />
-          <MyPageBtn text="회원 정보 수정" to="home" />
+          <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
         </div>
         <div class="mt-7">
           <button
@@ -87,7 +87,7 @@
 <script setup>
 import { ref } from 'vue';
 
-import character_savings from '@/assets/img/characters/savings.png';
+import character_savings from '@/assets/img/characters/character_savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';

@@ -7,6 +7,7 @@ import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MissionQuizView from '@/views/matching/MissionQuizView.vue';
+import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
 import CharacterSelectView from '@/views/signup/character/CharacterSelectView.vue';
@@ -66,6 +67,11 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MyPageView,
+    },
+    {
+      path: '/mypage/editInfo',
+      name: 'mypageEditInfo',
+      component: MyPageEditInfoView,
     },
     {
       path: '/asset/connect',
