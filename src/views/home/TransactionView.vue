@@ -80,6 +80,7 @@ import TopNavigation from '@/components/TopNavigation.vue';
 
 import FilterTransactionType from './components/FilterTransactionType.vue';
 
+// 현재 URL의 파라미터로부터 계좌 정보 추출
 const route = useRoute();
 const bankId = route.params.bankId;
 const accountNum = route.params.accountNum;
