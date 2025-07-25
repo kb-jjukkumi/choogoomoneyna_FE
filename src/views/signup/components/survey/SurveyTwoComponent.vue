@@ -15,7 +15,7 @@
           <div
             class="h-full bg-green rounded-full transition-all"
             :style="{
-              width: `${((currentIndex + 1) / questionList.length) * 100}%`,
+              width: `${((currentIndex + 1) / QUESTION_LIST.length) * 100}%`,
             }"
           ></div>
         </div>
@@ -23,7 +23,7 @@
           <div class="text-sm text-green">
             {{ currentIndex + 1 }}
           </div>
-          <div class="px-1">/ {{ questionList.length }}</div>
+          <div class="px-1">/ {{ QUESTION_LIST.length }}</div>
         </div>
       </div>
 
@@ -37,9 +37,24 @@
       <!-- 다음 버튼 -->
       <button
         @click="handleNext"
-        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg"
+        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
+        :disabled="isProcessing"
       >
-        {{ currentIndex === questionList.length - 1 ? '완료' : '다음' }}
+        {{
+          isProcessing
+            ? '처리 중...'
+            : currentIndex === QUESTION_LIST.length - 1
+              ? '자산 연동'
+              : '다음'
+        }}
+      </button>
+
+      <button
+        v-if="currentIndex === QUESTION_LIST.length - 1"
+        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
+        @click="handleSkip"
+      >
+        자산 연동 스킵
       </button>
 
       <!--선택하지 않은 항목이 있을 때 모달 -->
@@ -59,14 +74,23 @@ import { computed, ref } from 'vue';
 
 import AlertModal from '@/components/AlertModal.vue';
 
-import QuestionCard from './components/QuestionCard.vue';
-import { questionList } from './question';
+import { QUESTION_LIST } from '../../constants/question';
+import QuestionCard from './QuestionCard.vue';
+
+// Emit 정의
+const emit = defineEmits(['next', 'skip']);
 
 const currentIndex = ref(0);
 const selectedOption = ref(null);
 const showModal = ref(false);
 
-const currentQuestion = computed(() => questionList[currentIndex.value]);
+// 로딩 상태 관리
+const isProcessing = ref(false);
+
+// survey2 답변들을 저장할 배열
+const survey2Answers = ref([]);
+
+const currentQuestion = computed(() => QUESTION_LIST[currentIndex.value]);
 
 const handleNext = () => {
   if (!selectedOption.value) {
@@ -74,13 +98,22 @@ const handleNext = () => {
     return;
   }
 
-  console.log('선택:', selectedOption.value);
+  // 현재 질문의 답변을 저장
+  survey2Answers.value[currentIndex.value] = selectedOption.value;
 
-  if (currentIndex.value < questionList.length - 1) {
+  if (currentIndex.value < QUESTION_LIST.length - 1) {
     currentIndex.value++;
     selectedOption.value = null;
   } else {
-    console.log('설문 완료');
+    console.log('Survey2 답변:', survey2Answers.value);
+
+    // survey2 답변만 전달 (allData는 부모에서 관리)
+    emit('next', survey2Answers.value);
   }
+};
+
+const handleSkip = () => {
+  console.log('⏭️ 자산 연동 스킵 - Survey2 답변:', survey2Answers.value);
+  emit('skip', survey2Answers.value);
 };
 </script>

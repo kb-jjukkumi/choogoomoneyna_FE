@@ -34,10 +34,11 @@
         {{ selectedCharacter.explain }}
       </div>
       <button
-        class="w-36 h-12 bg-limegreen-500 text-ivory rounded-lg py-2 text-xl!"
+        class="w-36 h-12 bg-limegreen-500 text-ivory rounded-lg py-2 text-xl! disabled:opacity-50"
         @click="$emit('select')"
+        :disabled="isSigningUp"
       >
-        선택
+        {{ isSigningUp ? '가입 중...' : '선택' }}
       </button>
     </div>
   </div>
@@ -46,6 +47,7 @@
 <script setup>
 defineProps({
   selectedCharacter: { type: Object, required: true },
+  isSigningUp: { type: Boolean, default: false },
 });
 
 defineEmits(['close', 'select']);

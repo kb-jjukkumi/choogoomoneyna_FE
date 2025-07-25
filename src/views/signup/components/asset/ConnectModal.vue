@@ -34,7 +34,7 @@
         </button>
         <button
           class="flex-1 h-12 border-1 border-limegreen-500 text-limegreen-500 rounded-[10px] text-[20px]"
-          @click="$emit('close')"
+          @click="handleConfirm"
         >
           확인
         </button>
@@ -52,17 +52,20 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+const emit = defineEmits(['next', 'additional-connect']);
 
 defineProps({
   title: { type: String, default: '자산 연동 성공!' },
   message: { type: String, required: true },
-  modalType: { type: String, default: 'success' },
+  modalType: { type: Boolean, default: true },
 });
 
+const handleConfirm = () => {
+  emit('next');
+  return;
+};
+
 const handleAddtionalConnect = () => {
-  router.push('/asset/select');
+  emit('additional-connect');
 };
 </script>

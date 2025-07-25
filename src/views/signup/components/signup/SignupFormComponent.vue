@@ -5,7 +5,7 @@
       <div class="flex font-bold text-xl justify-center">회원가입</div>
 
       <!-- 입력 폼 -->
-      <form class="flex flex-col gap-6" @submit.prevent="join">
+      <form class="flex flex-col gap-6" @submit.prevent="handleSubmit">
         <div class="flex flex-col gap-2">
           <div class="flex flex-col">
             <label for="nickname" class="block mb-1 font-bold">닉네임</label>
@@ -18,11 +18,12 @@
                 class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg disabled:opacity-50"
                 @click="checkName"
                 type="button"
+                :disabled="isNameChecking"
               >
-                중복 확인
+                {{ isNameChecking ? '확인 중...' : '중복 확인' }}
               </button>
             </div>
           </div>
@@ -46,11 +47,12 @@
                 class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
                 @click="send"
                 type="button"
+                :disabled="isSendingEmail"
               >
-                인증 요청
+                {{ isSendingEmail ? '전송 중...' : '인증 요청' }}
               </button>
             </div>
             <div class="flex gap-3">
@@ -62,11 +64,12 @@
                 class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
               />
               <button
-                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg"
+                class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
                 @click="verify"
                 type="button"
+                :disabled="isVerifyingEmail"
               >
-                확인
+                {{ isVerifyingEmail ? '확인 중...' : '확인' }}
               </button>
             </div>
             <p
@@ -112,9 +115,10 @@
         </div>
         <button
           type="submit"
-          class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal"
+          class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal disabled:opacity-50"
+          :disabled="isSubmitting"
         >
-          다음
+          {{ isSubmitting ? '처리 중...' : '다음' }}
         </button>
       </form>
     </div>
@@ -128,25 +132,16 @@
       "
       @close="isSendEmailSuccess = false"
     />
-    <!-- <AlertModal
-      v-if="isSignupSuccess"
-      title="회원가입"
-      :message="
-        isSignupSuccess ? '회원가입이 완료되었습니다.' : '다시 시도해주세요!'
-      "
-      @close="goToLogin"
-    /> -->
   </div>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
-const router = useRouter();
+const emit = defineEmits(['next']);
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -161,7 +156,12 @@ const isEmailChecked = ref(false);
 const isPwdChecked = ref(false);
 
 const isSendEmailSuccess = ref(false);
-const isSignupSuccess = ref(false);
+
+// 로딩 상태 관리
+const isNameChecking = ref(false);
+const isSendingEmail = ref(false);
+const isVerifyingEmail = ref(false);
+const isSubmitting = ref(false);
 
 //회원가입 dto 항목
 const member = reactive({
@@ -185,37 +185,57 @@ const verifyEmail = reactive({
 
 //닉네임 중복 체크
 const checkName = async () => {
+  if (isNameChecking.value) return; // 중복 요청 방지
+
   if (!member.nickname.trim()) {
     nameErrorMessage.value = '닉네임을 입력하세요.';
     isNameChecked.value = false;
     return;
   }
 
-  const result = await authApi.checkName(member.nickname);
+  isNameChecking.value = true;
+  try {
+    const result = await authApi.checkName(member.nickname);
 
-  if (result) {
-    nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
+    if (result) {
+      nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
+      isNameChecked.value = false;
+    } else {
+      nameErrorMessage.value = '사용 가능한 닉네임 입니다.';
+      isNameChecked.value = true;
+    }
+  } catch (error) {
+    nameErrorMessage.value = '중복 확인 중 오류가 발생했습니다.';
     isNameChecked.value = false;
-  } else {
-    nameErrorMessage.value = '사용 가능한 닉네임 입니다.';
-    isNameChecked.value = true;
+  } finally {
+    isNameChecking.value = false;
   }
 };
 
 //이메일 인증번호 전송
 const send = async () => {
+  if (isSendingEmail.value) return; // 중복 요청 방지
+
   if (!email.email.trim()) {
     emailErrorMessage.value = '이메일을 입력해주세요.';
     return;
-  } else {
+  }
+
+  isSendingEmail.value = true;
+  try {
     await authApi.sendCode(email);
     isSendEmailSuccess.value = true;
-    return;
+  } catch (error) {
+    emailErrorMessage.value = '이메일 전송 중 오류가 발생했습니다.';
+  } finally {
+    isSendingEmail.value = false;
   }
 };
 
 //이메일 인증번호 확인
 const verify = async () => {
+  if (isVerifyingEmail.value) return; // 중복 요청 방지
+
   if (!verifyEmail.code.trim()) {
     emailErrorMessage.value = '인증번호를 입력해주세요.';
     return;
@@ -226,6 +246,7 @@ const verify = async () => {
     code: verifyEmail.code,
   };
 
+  isVerifyingEmail.value = true;
   try {
     const result = await authApi.verifyCode(verifyPayload);
 
@@ -234,12 +255,14 @@ const verify = async () => {
       isEmailChecked.value = true;
     } else {
       emailErrorMessage.value = '인증번호가 올바르지 않습니다.';
-      isNameChecked.value = false;
+      isEmailChecked.value = false;
     }
   } catch (e) {
     console.error(e);
     isEmailChecked.value = false;
     emailErrorMessage.value = '인증번호가 올바르지 않습니다.';
+  } finally {
+    isVerifyingEmail.value = false;
   }
 };
 
@@ -259,7 +282,9 @@ const validatePassword = () => {
 };
 
 //회원가입 처리
-const join = async () => {
+const handleSubmit = async () => {
+  if (isSubmitting.value) return; // 중복 요청 방지
+
   let hasError = false;
 
   if (!isNameChecked.value) {
@@ -279,26 +304,23 @@ const join = async () => {
 
   if (hasError) return;
 
-  // 이메일 필드에 인증된 이메일 넣기
-  member.email = email.email;
+  isSubmitting.value = true;
+  try {
+    // 이메일 필드에 인증된 이메일 넣기
+    member.email = email.email;
 
-  // 회원가입 데이터를 가지고 캐릭터 선택 페이지로 이동
-  const signupData = {
-    profileImage: null,
-    email: member.email,
-    password: member.password,
-    nickname: member.nickname,
-    choogooMi: member.choogooMi,
-  };
+    // 회원가입 데이터를 부모로 전달
+    const signupData = {
+      profileImage: null,
+      email: member.email,
+      password: member.password,
+      nickname: member.nickname,
+      choogooMi: member.choogooMi,
+    };
 
-  // CharacterSelectView로 이동하면서 회원가입 데이터 전달
-  router.push({
-    name: 'characterSelect',
-    state: { signupData },
-  });
+    emit('next', signupData);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
-
-// const goToLogin = () => {
-//   router.push('/login');
-// };
 </script>
