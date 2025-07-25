@@ -102,7 +102,8 @@
 
       <!-- 계좌 추가 버튼 -->
       <div
-        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center"
+        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center pointer-cursor"
+        @click="addAccount()"
       >
         <img :src="icon_plus" alt="추가하기 아이콘" class="size-7 m-1" />
       </div>
@@ -121,9 +122,13 @@ import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
-import { BANK_LIST } from '@/views/asset/constants/bankList';
+import { BANK_LIST } from '@/constants/bankList';
+
+import AssetSelectComponent from '../signup/components/asset/AssetSelectComponent.vue';
 
 const router = useRouter();
+
+const showAssetSelect = ref(false);
 
 // 계좌목록 데이터
 const ACCOUNTS = ref([]);
@@ -163,4 +168,6 @@ const goToTransaction = account => {
     },
   });
 };
+
+const addAccount = () => {};
 </script>

@@ -78,7 +78,7 @@ import { fetchTransactions } from '@/api/transactionApi';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
-import FilterTransactionType from './components/FilterTransactionType.vue';
+import FilterTransactionType from './components/filter/FilterTransactionType.vue';
 
 // 현재 URL의 파라미터로부터 계좌 정보 추출
 const route = useRoute();
