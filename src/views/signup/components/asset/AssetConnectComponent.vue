@@ -10,9 +10,9 @@
       :logo-text="'자산 연동'"
     />
     <!-- 은행 아이콘 -->
-    <BankIcon :assets="bankImg" :alt="bankName" :size="20" class="mb-4" />
+    <BankIcon :assets="bankIcon" :alt="bankName" :size="20" class="mb-4" />
     <!-- 자산 연동 폼 -->
-    <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form class="w-full flex flex-col gap-4" @submit.prevent="connectAsset">
       <!-- 아이디 입력 -->
       <div class="flex flex-col gap-2">
         <label class="text-limegreen-900 text-[16px]">아이디</label>
@@ -51,10 +51,10 @@
       <div class="w-full mt-10">
         <button
           type="submit"
-          :disabled="isInputEmpty"
+          :disabled="isInputEmpty || isConnecting"
           class="w-full bg-limegreen-500! h-14! text-limegreen-900! rounded-[10px] py-3 mt-4 text-2xl! disabled:opacity-50"
         >
-          자산 연결
+          {{ isConnecting ? '연결 중...' : '자산 연결' }}
         </button>
       </div>
     </form>
@@ -62,86 +62,90 @@
   <!-- 조건에 따라서 자산 연동 결과 모달 표시 -->
   <ConnectModal
     v-if="isModalOpen"
-    :modal-type="modalType"
     :title="modalType === false ? '자산 연동 실패' : '자산 연동 성공!'"
     :message="
       modalType === false
         ? '다시 연동을 시도해 주세요.'
         : `${bankName} 자산 연동에 성공했습니다!`
     "
-    @close="modalType ? handleModalClose : (isModalOpen = false)"
+    @next="handleModalClose"
+    @additional-connect="handleAdditionalConnect"
   />
 </template>
+
 <script setup>
 import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
+import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LIST } from '@/constants/bankList';
 
-import { BANK_LIST } from '../constants/bankList';
-import BankIcon from './components/BankIcon.vue';
-import ConnectModal from './components/ConnectModal.vue';
+import ConnectModal from './ConnectModal.vue';
 
-const route = useRoute();
-const router = useRouter();
+// Props 정의
+const props = defineProps({
+  selectedBankId: { type: String, required: true, default: null },
+});
+
+// Emit 정의
+const emit = defineEmits(['next', 'additional-connect']);
+
+// 폼 데이터
 const userBankId = ref('');
 const userBankPassword = ref('');
-const isInputEmpty = computed(
-  () => !userBankId.value || !userBankPassword.value
-);
 
-// 은행 아이콘 관련 데이터
-const bankId = computed(() => route.query.bankId);
-const bankImg = computed(
-  () => BANK_LIST.find(bank => bank.bankId === bankId.value).icon
-);
-const bankName = computed(
-  () => BANK_LIST.find(bank => bank.bankId === bankId.value).name
-);
-
-// 모달 관련 데이터
+// 상태 관리
+const isConnecting = ref(false);
 const isModalOpen = ref(false);
-const modalType = ref(true);
+const modalType = ref(true); // true: 성공, false: 실패
 
+// Computed
+const bankName = computed(() => {
+  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.name;
+});
+
+const bankIcon = computed(() => {
+  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.icon;
+});
+
+const isInputEmpty = computed(() => {
+  return !userBankId.value.trim() || !userBankPassword.value.trim();
+});
+
+// 자산 연결 함수
 const connectAsset = async () => {
+  if (isConnecting.value) return; // 중복 요청 방지
+
+  isConnecting.value = true;
   try {
+    // API 호출
     await axiosInstance.post('/api/codef/account/add', {
-      bankId: bankId.value,
+      bankId: props.selectedBankId,
       userBankId: userBankId.value,
       userBankPassword: userBankPassword.value,
     });
+
+    // 임시로 성공으로 처리
     modalType.value = true;
     isModalOpen.value = true;
-  } catch {
+  } catch (error) {
+    console.error('자산 연동 실패:', error);
     modalType.value = false;
     isModalOpen.value = true;
+  } finally {
+    isConnecting.value = false;
   }
 };
 
-// 자산 연동 버튼 클릭 시 모달 표시
-const handleSubmit = () => {
-  connectAsset();
-};
-
-// 로그인 상태이면 home으로 이동하고 회원가입 상태이면 캐릭터 선택 페이지로 이동
-const navigateToHome = () => {
-  router.push('/');
-};
-
-const navigateToCharacterSelect = () => {
-  router.push('/character-select');
-};
-
+// 모달 닫기 핸들러
 const handleModalClose = () => {
+  connectAsset();
   isModalOpen.value = false;
-  // 토큰이 있으면 로그인 상태 → home으로 이동
-  // 토큰이 없으면 회원가입 상태 → 캐릭터 선택 페이지로 이동
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken) {
-    navigateToHome();
-  } else {
-    navigateToCharacterSelect();
-  }
+  emit('next');
+};
+
+const handleAdditionalConnect = () => {
+  emit('additional-connect');
 };
 </script>

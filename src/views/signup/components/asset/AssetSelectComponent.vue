@@ -16,15 +16,15 @@
         :key="bank.bankId"
         class="flex items-center p-4 bg-white rounded-[10px] cursor-pointer transition-all duration-200 border-2 border-transparent hover:-translate-y-0.5 hover:shadow-md"
         :class="{
-          'bg-limegreen-500!': selectedBank === bank.bankId,
+          'bg-limegreen-500!': selectedBankId === bank.bankId,
         }"
-        @click="toggleBankSelection(bank.bankId)"
+        @click="selectedBankId = bank.bankId"
       >
         <div class="flex items-center justify-center mr-4">
           <BankIcon :assets="bank.icon" :alt="bank.name" :size="10" />
         </div>
         <div
-          :class="selectedBank === bank.bankId ? 'text-white' : 'text-black'"
+          :class="selectedBankId === bank.bankId ? 'text-white' : 'text-black'"
         >
           {{ bank.name }}
         </div>
@@ -35,10 +35,10 @@
     <div class="w-[332px] bottom-10 fixed">
       <button
         class="w-full bg-limegreen-500 text-limegreen-900 rounded-[10px] h-12 text-[22px]! disabled:opacity-50"
-        :disabled="!selectedBank"
+        :disabled="!selectedBankId || isProcessing"
         @click="confirmSelection"
       >
-        선택
+        {{ isProcessing ? '처리 중...' : '선택' }}
       </button>
     </div>
   </div>
@@ -46,35 +46,29 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
+import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { BANK_LIST } from '@/constants/bankList';
 
-import BankIcon from '../connect/components/BankIcon.vue';
-import { BANK_LIST } from '../constants/bankList';
+// Emit 정의
+const emit = defineEmits(['next']);
 
-const selectedBank = ref(null);
-const router = useRouter();
+const props = defineProps({
+  selectedBankId: { type: String, default: null },
+});
 
-const toggleBankSelection = bankId => {
-  if (selectedBank.value === bankId) {
-    selectedBank.value = null;
-  } else {
-    selectedBank.value = bankId;
-  }
-};
-
-const goToConnect = bankId => {
-  if (!bankId) return;
-
-  router.push({ name: 'assetConnect', query: { bankId } });
-};
+const selectedBankId = ref(props.selectedBankId);
+const isProcessing = ref(false);
 
 const confirmSelection = () => {
-  goToConnect(selectedBank.value);
+  if (!selectedBankId.value || isProcessing.value) return;
+
+  isProcessing.value = true;
+
+  // 선택된 은행 ID를 부모로 전달
+  emit('next', selectedBankId.value);
+
+  // 처리 상태는 네비게이션으로 인해 자동으로 리셋됨
 };
 </script>
-
-<style scoped>
-/* Tailwind CSS로 대체되었으므로 스타일 섹션 제거 */
-</style>
