@@ -15,8 +15,10 @@
     <!-- 설문조사 2 -->
     <SurveyTwoComponent
       v-else-if="currentStep === 'survey2'"
+      :signup-data="allData.signupData"
       @next="handleSurvey2Complete"
       @skip="handleAssetSkip"
+      @error="handleSignupError"
     />
 
     <!-- 자산 선택 -->
@@ -39,8 +41,6 @@
       v-else-if="currentStep === 'character-select'"
       :all-data="allData"
       @complete="handleCharacterSelect"
-      @error="handleSignupError"
-      @success="handleSignupSuccess"
     />
   </div>
 </template>
@@ -67,7 +67,7 @@ const allData = ref({
     email: '',
     password: '',
     nickname: '',
-    choogooMi: '',
+    choogooMi: 'A',
   },
 
   // 설문조사 1 답변
@@ -109,6 +109,7 @@ const handleSurvey2Complete = data => {
     ...allData.value.survey2Data,
     ...data,
   };
+
   currentStep.value = 'asset-select';
 };
 
@@ -153,7 +154,7 @@ const handleSignupError = () => {
       email: '',
       password: '',
       nickname: '',
-      choogooMi: '',
+      choogooMi: 'A',
     },
     survey1Data: {
       age: null,

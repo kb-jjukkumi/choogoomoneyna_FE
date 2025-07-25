@@ -169,7 +169,7 @@ const member = reactive({
   email: '',
   password: '',
   nickname: '',
-  choogooMi: '',
+  choogooMi: 'A',
 });
 
 //이메일 전송용

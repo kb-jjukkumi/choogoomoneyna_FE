@@ -47,33 +47,15 @@
       @close="isModalOpen = false"
       @select="confirmSelection"
     />
-    <AlertModal
-      v-if="isErrorModalOpen"
-      title="오류"
-      message="회원가입 중 문제가 발생했습니다. 다시 시도해주세요."
-      @close="handleError"
-    />
-    <AlertModal
-      v-if="isSuccessModalOpen"
-      title="회원가입"
-      message="회원가입이 완료되었습니다."
-      @close="handleSuccess"
-    />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-import authApi from '@/api/authApi';
-import AlertModal from '@/components/AlertModal.vue';
 
 import { CHOOGOOMI_CHARACTERS } from '../../constants/choogoomiList';
 import CharacterCard from './CharacterCard.vue';
 import CharacterDetailModal from './CharacterDetailModal.vue';
-
-const router = useRouter();
 
 // Props 정의
 const props = defineProps({
@@ -82,12 +64,10 @@ const props = defineProps({
 });
 
 // Emit 정의
-const emit = defineEmits(['complete', 'error']);
+const emit = defineEmits(['complete']);
 
 const selected = ref(null);
 const isModalOpen = ref(false);
-const isErrorModalOpen = ref(false);
-const isSuccessModalOpen = ref(false);
 const isSigningUp = ref(false);
 
 const profileImage = ref(null);
@@ -106,46 +86,25 @@ const confirmSelection = async () => {
   if (isSigningUp.value) return; // 중복 요청 방지
 
   isSigningUp.value = true;
-  try {
-    const selectedChar = CHOOGOOMI_CHARACTERS.find(
-      char => char.choogoomiId === selected.value
-    );
 
-    // 최종 회원가입 데이터 구성 (누적된 모든 데이터 포함)
-    const finalSignupData = {
-      ...props.allData.signupData,
-      profileImage: profileImage.value,
-      choogooMi: selectedChar.choogoomiId,
-    };
-    // 회원가입 API 호출
-    await authApi.signup(finalSignupData);
+  const selectedChar = CHOOGOOMI_CHARACTERS.find(
+    char => char.choogoomiId === selected.value
+  );
 
-    // 회원가입 성공 시 성공 모달 표시
-    isSuccessModalOpen.value = true;
-  } catch (error) {
-    console.error('회원가입 실패:', error);
-    // 에러 처리 - 에러 모달 표시
-    isErrorModalOpen.value = true;
-  } finally {
-    isModalOpen.value = false;
-    isSigningUp.value = false;
-  }
-};
+  // 최종 회원가입 데이터 구성 (누적된 모든 데이터 포함)
+  const finalSignupData = {
+    ...props.allData.signupData,
+    profileImage: profileImage.value,
+    choogooMi: selectedChar.choogoomiId,
+  };
 
-// 선택된 캐릭터 정보
-const selectedCharacter = computed(() => {
-  return selected.value !== null
-    ? CHOOGOOMI_CHARACTERS.find(char => char.choogoomiId === selected.value)
-    : null;
-});
+  // 기존 회원가입 API 호출 대신 console.log로 변경
+  console.log('캐릭터 선택 완료 - 회원가입 데이터:', finalSignupData);
+  console.log('선택된 캐릭터:', selectedChar);
 
-const handleError = () => {
-  isErrorModalOpen.value = false;
-  emit('error');
-};
-
-const handleSuccess = () => {
-  isSuccessModalOpen.value = false;
+  // 캐릭터 선택 완료 시 부모에게 알림
+  isModalOpen.value = false;
+  isSigningUp.value = false;
 
   // 최종 선택된 캐릭터 정보 전달
   const selectedCharacterData = {
@@ -154,7 +113,12 @@ const handleSuccess = () => {
   };
 
   emit('complete', selectedCharacterData);
-
-  router.push('/login');
 };
+
+// 선택된 캐릭터 정보
+const selectedCharacter = computed(() => {
+  return selected.value !== null
+    ? CHOOGOOMI_CHARACTERS.find(char => char.choogoomiId === selected.value)
+    : null;
+});
 </script>

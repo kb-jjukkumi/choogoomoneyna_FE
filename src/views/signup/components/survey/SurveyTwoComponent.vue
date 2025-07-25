@@ -53,6 +53,7 @@
         v-if="currentIndex === QUESTION_LIST.length - 1"
         class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
         @click="handleSkip"
+        :disabled="isProcessing"
       >
         자산 연동 스킵
       </button>
@@ -65,24 +66,53 @@
         buttonText="확인"
         @close="showModal = false"
       />
+
+      <!-- 회원가입 에러 모달 -->
+      <AlertModal
+        v-if="showErrorModal"
+        title="오류"
+        message="회원가입 중 문제가 발생했습니다. 다시 시도해주세요."
+        buttonText="확인"
+        @close="handleErrorClose"
+      />
+
+      <!-- 회원가입 성공 모달 -->
+      <AlertModal
+        v-if="showSuccessModal"
+        title="회원가입 완료"
+        message="회원가입이 완료되었습니다."
+        buttonText="확인"
+        @close="handleSuccessClose"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
 import { QUESTION_LIST } from '../../constants/question';
 import QuestionCard from './QuestionCard.vue';
 
+const router = useRouter();
+
+// Props 정의
+const props = defineProps({
+  signupData: { type: Object, required: true },
+});
+
 // Emit 정의
-const emit = defineEmits(['next', 'skip']);
+const emit = defineEmits(['next', 'skip', 'error']);
 
 const currentIndex = ref(0);
 const selectedOption = ref(null);
 const showModal = ref(false);
+const showErrorModal = ref(false);
+const showSuccessModal = ref(false);
 
 // 로딩 상태 관리
 const isProcessing = ref(false);
@@ -92,7 +122,7 @@ const survey2Answers = ref([]);
 
 const currentQuestion = computed(() => QUESTION_LIST[currentIndex.value]);
 
-const handleNext = () => {
+const handleNext = async () => {
   if (!selectedOption.value) {
     showModal.value = true;
     return;
@@ -107,13 +137,65 @@ const handleNext = () => {
   } else {
     console.log('Survey2 답변:', survey2Answers.value);
 
-    // survey2 답변만 전달 (allData는 부모에서 관리)
-    emit('next', survey2Answers.value);
+    console.log('props.signupData', props.signupData);
+
+    // 마지막 질문에서 회원가입 API 호출
+    isProcessing.value = true;
+    try {
+      // 회원가입 API 호출
+      console.log('props.signupData', props.signupData);
+      await authApi.signup(props.signupData);
+
+      // 회원가입 성공 시 성공 모달 표시
+      showSuccessModal.value = true;
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      // 에러 처리 - 에러 모달 표시
+      showErrorModal.value = true;
+    } finally {
+      isProcessing.value = false;
+    }
   }
 };
 
-const handleSkip = () => {
+const handleSkip = async () => {
   console.log('⏭️ 자산 연동 스킵 - Survey2 답변:', survey2Answers.value);
-  emit('skip', survey2Answers.value);
+
+  // 자산 연동 스킵 시에도 회원가입 API 호출
+  isProcessing.value = true;
+
+  try {
+    // 최종 회원가입 데이터 구성 (누적된 모든 데이터 포함)
+    const finalSignupData = {
+      ...props.signupData,
+      // survey 데이터도 필요하면 추가
+      // survey1: props.allData.survey1Data,
+      // survey2: survey2Answers.value,
+    };
+
+    console.log('회원가입 데이터 (스킵):', finalSignupData);
+
+    // 회원가입 API 호출
+    await authApi.signup(finalSignupData);
+
+    // 회원가입 성공 시 성공 모달 표시
+    showSuccessModal.value = true;
+  } catch (error) {
+    console.error('회원가입 실패:', error);
+    // 에러 처리 - 에러 모달 표시
+    showErrorModal.value = true;
+  } finally {
+    isProcessing.value = false;
+  }
+};
+
+const handleErrorClose = () => {
+  showErrorModal.value = false;
+  emit('error');
+};
+
+const handleSuccessClose = () => {
+  showSuccessModal.value = false;
+  emit('next');
 };
 </script>
