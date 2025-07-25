@@ -4,19 +4,25 @@
       <router-link
         to="/"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
-        :class="{ 'text-limegreen-500!': $route.path === '/' }"
+        :class="{
+          'text-limegreen-500!': isActive('home'),
+        }"
       >
         <div class="flex justify-center items-center mb-1">
           <img
             :src="isActive('home') ? homeSelected : homeBasic"
             alt="home"
             class="size-5 transition-transform duration-200 object-contain hover:scale-110"
-            :class="{ 'scale-110': $route.path === '/' }"
+            :class="{
+              'scale-110': isActive('home'),
+            }"
           />
         </div>
         <span
           class="text-[10px] font-spoqa text-center"
-          :class="{ 'font-semibold': $route.path === '/' }"
+          :class="{
+            'font-semibold': isActive('home'),
+          }"
         >
           Home
         </span>
@@ -25,19 +31,19 @@
       <router-link
         to="/ranking"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
-        :class="{ 'text-limegreen-500!': $route.path === '/ranking' }"
+        :class="{ 'text-limegreen-500!': isActive('ranking') }"
       >
         <div class="flex justify-center items-center mb-1">
           <img
             :src="isActive('ranking') ? rankingSelected : rankingBasic"
             alt="ranking"
             class="size-5 transition-transform duration-200 object-contain hover:scale-110"
-            :class="{ 'scale-110': $route.path === '/ranking' }"
+            :class="{ 'scale-110': isActive('ranking') }"
           />
         </div>
         <span
           class="text-[10px] font-spoqa text-center"
-          :class="{ 'font-semibold': $route.path === '/ranking' }"
+          :class="{ 'font-semibold': isActive('ranking') }"
         >
           Ranking
         </span>
@@ -46,19 +52,19 @@
       <router-link
         to="/matching"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
-        :class="{ 'text-limegreen-500!': $route.path === '/matching' }"
+        :class="{ 'text-limegreen-500!': isActive('matching') }"
       >
         <div class="flex justify-center items-center mb-1">
           <img
             :src="isActive('matching') ? matchingSelected : matchingBasic"
             alt="matching"
             class="size-5 transition-transform duration-200 object-contain hover:scale-110"
-            :class="{ 'scale-110': $route.path === '/matching' }"
+            :class="{ 'scale-110': isActive('matching') }"
           />
         </div>
         <span
           class="text-[10px] font-spoqa text-center"
-          :class="{ 'font-semibold': $route.path === '/matching' }"
+          :class="{ 'font-semibold': isActive('matching') }"
         >
           Matching
         </span>
@@ -67,19 +73,19 @@
       <router-link
         to="/mypage"
         class="flex flex-col items-center no-underline! text-gray-300! transition-all duration-300 flex-1 px-1 py-2"
-        :class="{ 'text-limegreen-500!': $route.path === '/mypage' }"
+        :class="{ 'text-limegreen-500!': isActive('mypage') }"
       >
         <div class="flex justify-center items-center mb-1">
           <img
             :src="isActive('mypage') ? mypageSelected : mypageBasic"
             alt="mypage"
             class="size-5 transition-transform duration-200 object-contain hover:scale-110"
-            :class="{ 'scale-110': $route.path === '/mypage' }"
+            :class="{ 'scale-110': isActive('mypage') }"
           />
         </div>
         <span
           class="text-[10px] font-spoqa text-center"
-          :class="{ 'font-semibold': $route.path === '/mypage' }"
+          :class="{ 'font-semibold': isActive('mypage') }"
         >
           MyPage
         </span>
@@ -106,12 +112,14 @@ const route = useRoute();
 // 현재 경로가 해당 네비게이션과 일치하는지 확인
 const isActive = navType => {
   const paths = {
-    home: '/',
-    ranking: '/ranking',
-    matching: '/matching',
-    mypage: '/mypage',
+    home: ['/', '/transaction'],
+    ranking: ['/ranking'],
+    matching: ['/matching', '/mission-quiz'],
+    mypage: ['/mypage'],
   };
-  return route.path === paths[navType];
+  return paths[navType].some(path => {
+    return path === '/' ? route.path === '/' : route.path.startsWith(path);
+  });
 };
 </script>
 
