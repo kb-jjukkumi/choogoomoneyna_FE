@@ -8,6 +8,7 @@ import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
+import SurveyView from '@/views/signup/components/survey/SurveyView.vue';
 import SignupView from '@/views/signup/SignupView.vue';
 
 const router = createRouter({
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignupView,
+    },
+    {
+      path: '/survey',
+      name: 'survey',
+      component: SurveyView,
     },
     {
       path: '/ranking',
