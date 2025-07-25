@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import AssetConnectView from '@/views/asset/AssetConnectView.vue';
+import AssetSelectView from '@/views/asset/AssetSelectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
@@ -38,6 +40,16 @@ const router = createRouter({
       path: '/survey',
       name: 'survey',
       component: SurveyView,
+    },
+    {
+      path: '/asset/select',
+      name: 'assetSelect',
+      component: AssetSelectView,
+    },
+    {
+      path: '/asset/select/:bankId',
+      name: 'assetConnect',
+      component: AssetConnectView,
     },
     {
       path: '/ranking',

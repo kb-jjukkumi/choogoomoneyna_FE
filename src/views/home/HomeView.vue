@@ -124,11 +124,7 @@ import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 
-import AssetSelectComponent from '../signup/components/asset/AssetSelectComponent.vue';
-
 const router = useRouter();
-
-const showAssetSelect = ref(false);
 
 // 계좌목록 데이터
 const ACCOUNTS = ref([]);

@@ -19,3 +19,13 @@ export const fetchAccountsFromCodef = async ({
     throw new Error('계좌 연동 실패');
   }
 };
+
+export const getAccountList = async () => {
+  try {
+    const { data } = await axiosInstance.get('/account/db');
+    return data;
+  } catch (e) {
+    console.error('계좌 목록 조회 실패: ', e);
+    throw new Error('계좌 목록 조회 실패');
+  }
+};
