@@ -1,8 +1,7 @@
 <template>
-  <TopNavigation :showBack="true" :showLogoText="false" />
-
   <!-- 전체 페이지 wrapper -->
-  <div class="relative pt-3 px-6 bg-ivory">
+  <div class="relative pt-17 px-6 bg-ivory">
+    <TopNavigation :showBack="true" :showLogoText="false" />
     <!-- 계좌 정보 -->
     <div
       class="flex flex-col bg-limegreen-500 h-[110px] rounded-xl text-center justify-center p-4 mb-6"
@@ -30,7 +29,7 @@
 
       <!-- 거래 목록 - 스크롤 영역 -->
       <div
-        class="max-h-[calc(100vh-320px)] overflow-scroll [&::-webkit-scrollbar]:hidden font-spoqa"
+        class="max-h-[calc(100vh-300px)] overflow-scroll [&::-webkit-scrollbar]:hidden font-spoqa"
       >
         <div
           class="bg-limegreen-100 px-4 py-3 rounded-xl mb-3 flex justify-between items-start"
@@ -78,7 +77,7 @@ import { fetchTransactions } from '@/api/transactionApi';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
-import FilterTransactionType from './components/FilterTransactionType.vue';
+import FilterTransactionType from './components/filter/FilterTransactionType.vue';
 
 // 현재 URL의 파라미터로부터 계좌 정보 추출
 const route = useRoute();

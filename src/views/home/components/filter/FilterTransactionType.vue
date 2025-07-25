@@ -42,19 +42,19 @@ import icon_toggle from '@/assets/img/icons/feature/icon_toggle.png';
 
 // 드롭다운 옵션 영문key - 한글라벨 매핑
 const TRANSFER_TYPE_MAP = {
-  all: '전체',
-  income: '입금',
-  expense: '출금',
+  All: '전체',
+  Input: '입금',
+  Output: '출금',
 };
 
 // 드롭다운 항목 (영문 key)
-const transferTypeList = ['all', 'income', 'expense'];
+const transferTypeList = ['All', 'Input', 'Output'];
 
 // 선택된 거래유형을 부모 컴포넌트로 전달할 emit 선언
 const emit = defineEmits(['selectedType']);
 
-// 현재 선택된 거래유형 상태값 - 기본값: 'all'
-const selectedType = ref('all');
+// 현재 선택된 거래유형 상태값 - 기본값: 'All'
+const selectedType = ref('All');
 
 // 드롭다운 열림 여부 상태값 - 기본값: 'false'
 const isOpen = ref(false);
@@ -89,7 +89,7 @@ onBeforeUnmount(() => {
 const selectType = type => {
   // 선택된 항목으로 상태 변경
   selectedType.value = type;
-  // 부모 컴포넌트에 영문 key로 emit - all / imcome / expense
+  // 부모 컴포넌트에 영문 key로 emit - All / imput / Output
   emit('selectedType', type);
   // 드롭다운 닫기
   isOpen.value = false;
