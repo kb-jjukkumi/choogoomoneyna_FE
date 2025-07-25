@@ -23,7 +23,7 @@
                 @input="onNicknameInput"
               />
               <button
-                class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-[10px]"
+                class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-[10px] disabled:opacity-50"
                 type="button"
                 @click="checkName"
                 :disabled="isNameChecking"
@@ -195,7 +195,7 @@ const checkName = async () => {
   }
 
   if (newNickname.value === member.nickname) {
-    nameErrorMessage.value = '현재 사용 중인 닉네임입니다.';
+    nameErrorMessage.value = '사용 가능한 닉네임입니다.';
     isNameChecked.value = true; // 확인된 걸로 간주
     return;
   }
