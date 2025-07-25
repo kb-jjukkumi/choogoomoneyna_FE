@@ -1,6 +1,6 @@
 <template>
   <TopNavigation />
-  <div class="relative flex flex-col min-h-[calc(100vh-120px)] bg-ivory mt-10">
+  <div class="relative flex flex-col min-h-[calc(100vh-120px)] bg-ivory mt-18">
     <!-- 매칭 참가자 프로필 -->
     <div class="flex justify-around px-10 items-center mb-2">
       <!-- 나 -->
