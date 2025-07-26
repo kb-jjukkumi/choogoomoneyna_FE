@@ -49,14 +49,6 @@
         }}
       </button>
 
-      <button
-        v-if="currentIndex === QUESTION_LIST.length - 1"
-        class="w-full bg-limegreen-500 text-white text-lg py-4 rounded-lg disabled:opacity-50"
-        @click="handleSkip"
-      >
-        자산 연동 스킵
-      </button>
-
       <!--선택하지 않은 항목이 있을 때 모달 -->
       <AlertModal
         v-if="showModal"
@@ -78,7 +70,7 @@ import { QUESTION_LIST } from '../../constants/question';
 import QuestionCard from './QuestionCard.vue';
 
 // Emit 정의
-const emit = defineEmits(['next', 'skip']);
+const emit = defineEmits(['next']);
 
 const currentIndex = ref(0);
 const selectedOption = ref(null);
@@ -110,10 +102,5 @@ const handleNext = () => {
     // survey2 답변만 전달 (allData는 부모에서 관리)
     emit('next', survey2Answers.value);
   }
-};
-
-const handleSkip = () => {
-  console.log('⏭️ 자산 연동 스킵 - Survey2 답변:', survey2Answers.value);
-  emit('skip', survey2Answers.value);
 };
 </script>
