@@ -102,7 +102,7 @@
 
       <!-- 계좌 추가 버튼 -->
       <div
-        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center pointer-cursor"
+        class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center cursor-pointer"
         @click="addAccount()"
       >
         <img :src="icon_plus" alt="추가하기 아이콘" class="size-7 m-1" />
@@ -165,5 +165,9 @@ const goToTransaction = account => {
   });
 };
 
-const addAccount = () => {};
+const addAccount = () => {
+  router.push({
+    name: 'assetSelect',
+  });
+};
 </script>
