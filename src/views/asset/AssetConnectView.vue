@@ -75,21 +75,20 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
+import { fetchAccounts } from '@/api/bankApi';
+import { fetchTransactions } from '@/api/bankApi';
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 
 import ConnectModal from './ConnectModal.vue';
 
-// Props 정의
-const props = defineProps({
-  selectedBankId: { type: String, required: true, default: null },
-});
-
-// Emit 정의
-const emit = defineEmits(['next', 'additional-connect']);
+const router = useRouter();
+const route = useRoute();
+const selectedBankId = computed(() => route.params.bankId);
 
 // 폼 데이터
 const userBankId = ref('');
@@ -102,11 +101,11 @@ const modalType = ref(true); // true: 성공, false: 실패
 
 // Computed
 const bankName = computed(() => {
-  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.name;
+  return BANK_LIST.find(bank => bank.bankId === selectedBankId.value)?.name;
 });
 
 const bankIcon = computed(() => {
-  return BANK_LIST.find(bank => bank.bankId === props.selectedBankId)?.icon;
+  return BANK_LIST.find(bank => bank.bankId === selectedBankId.value)?.icon;
 });
 
 const isInputEmpty = computed(() => {
@@ -121,14 +120,24 @@ const connectAsset = async () => {
   try {
     // API 호출
     await axiosInstance.post('/api/codef/account/add', {
-      bankId: props.selectedBankId,
+      bankId: selectedBankId.value,
       userBankId: userBankId.value,
       userBankPassword: userBankPassword.value,
     });
 
+    const accountNumberList = await fetchAccounts();
+
+    const accountNumList = accountNumberList.map(account => account.accountNum);
+
+    const transactionList = await Promise.all(
+      accountNumList.map(accountNum => fetchTransactions(accountNum))
+    );
+    console.log('transactionList', transactionList);
+
     // 임시로 성공으로 처리
     modalType.value = true;
     isModalOpen.value = true;
+    router.push({ name: 'home' });
   } catch (error) {
     console.error('자산 연동 실패:', error);
     modalType.value = false;
@@ -142,10 +151,9 @@ const connectAsset = async () => {
 const handleModalClose = () => {
   connectAsset();
   isModalOpen.value = false;
-  emit('next');
 };
 
 const handleAdditionalConnect = () => {
-  emit('additional-connect');
+  router.push({ name: 'assetSelect' });
 };
 </script>

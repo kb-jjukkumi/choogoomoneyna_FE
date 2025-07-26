@@ -46,29 +46,26 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 
-// Emit 정의
-const emit = defineEmits(['next']);
-
-const props = defineProps({
-  selectedBankId: { type: String, default: null },
-});
-
-const selectedBankId = ref(props.selectedBankId);
+const selectedBankId = ref(null);
 const isProcessing = ref(false);
+const router = useRouter();
 
 const confirmSelection = () => {
   if (!selectedBankId.value || isProcessing.value) return;
 
+  console.log('selectedBankId', selectedBankId.value);
+
   isProcessing.value = true;
 
-  // 선택된 은행 ID를 부모로 전달
-  emit('next', selectedBankId.value);
-
-  // 처리 상태는 네비게이션으로 인해 자동으로 리셋됨
+  router.push({
+    name: 'assetConnect',
+    params: { bankId: selectedBankId.value },
+  });
 };
 </script>

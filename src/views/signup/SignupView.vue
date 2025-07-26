@@ -133,15 +133,22 @@
       @close="isSendEmailSuccess = false"
     />
   </div>
+  <AlertModal
+    v-if="isSignupSuccess"
+    title="회원가입"
+    message="회원가입이 완료되었습니다."
+    @close="handleSignupModalClose"
+  />
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
-const emit = defineEmits(['next']);
+const router = useRouter();
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -156,7 +163,7 @@ const isEmailChecked = ref(false);
 const isPwdChecked = ref(false);
 
 const isSendEmailSuccess = ref(false);
-
+const isSignupSuccess = ref(false);
 // 로딩 상태 관리
 const isNameChecking = ref(false);
 const isSendingEmail = ref(false);
@@ -165,11 +172,12 @@ const isSubmitting = ref(false);
 
 //회원가입 dto 항목
 const member = reactive({
-  profileImage: null,
+  nickname: '',
   email: '',
   password: '',
-  nickname: '',
-  choogooMi: '',
+  // 추후 '' 값으로 수정 필요 - api에서 필수값이라서 지정
+  choogooMi: 'A',
+  profileImage: null,
 });
 
 //이메일 전송용
@@ -311,16 +319,23 @@ const handleSubmit = async () => {
 
     // 회원가입 데이터를 부모로 전달
     const signupData = {
-      profileImage: null,
+      nickname: member.nickname,
       email: member.email,
       password: member.password,
-      nickname: member.nickname,
       choogooMi: member.choogooMi,
+      profileImage: member.profileImage,
     };
 
-    emit('next', signupData);
+    await authApi.signup(signupData);
+
+    isSignupSuccess.value = true;
   } finally {
     isSubmitting.value = false;
   }
+};
+
+const handleSignupModalClose = () => {
+  isSignupSuccess.value = false;
+  router.push('/login');
 };
 </script>

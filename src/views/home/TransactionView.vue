@@ -73,7 +73,7 @@ import { computed, ref } from 'vue';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { fetchTransactions } from '@/api/transactionApi';
+import { fetchTransactions } from '@/api/bankApi';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 

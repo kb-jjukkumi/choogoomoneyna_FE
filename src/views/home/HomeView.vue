@@ -116,7 +116,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { fetchAccounts } from '@/api/accountApi';
+import { fetchAccounts } from '@/api/bankApi';
 import img_character from '@/assets/img/characters/character_zero_1.png';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
@@ -124,11 +124,7 @@ import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 
-import AssetSelectComponent from '../signup/components/asset/AssetSelectComponent.vue';
-
 const router = useRouter();
-
-const showAssetSelect = ref(false);
 
 // 계좌목록 데이터
 const ACCOUNTS = ref([]);
