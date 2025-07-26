@@ -18,7 +18,7 @@
             >
               <img :src="back" alt="" />
             </button>
-            <div>{{ year }}</div>
+            <div class="w-12 text-center">{{ year }}</div>
             <button
               class="bg-limegreen-100 w-7 h-7 rounded-[10px] disabled:opacity-50"
               @click="future"
@@ -33,7 +33,9 @@
           </div>
         </div>
         <!--월별 기록-->
-        <div></div>
+        <div class="grid grid-cols-3">
+          <RecordCard />
+        </div>
       </div>
     </div>
   </div>
@@ -44,6 +46,8 @@ import { ref } from 'vue';
 
 import back from '@/assets/img/icons/system/system_back.png';
 import TopNavigation from '@/components/TopNavigation.vue';
+
+import RecordCard from './components/RecordCard.vue';
 
 const year = ref(2025);
 const currentYear = ref(new Date().getFullYear());
