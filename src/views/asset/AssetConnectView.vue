@@ -78,8 +78,8 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import axiosInstance from '@/api/axios';
-import { getAccountList } from '@/api/bankApi';
-import { fetchTransactions } from '@/api/transactionApi';
+import { fetchAccounts } from '@/api/bankApi';
+import { fetchTransactions } from '@/api/bankApi';
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
@@ -125,7 +125,7 @@ const connectAsset = async () => {
       userBankPassword: userBankPassword.value,
     });
 
-    const accountNumberList = await getAccountList();
+    const accountNumberList = await fetchAccounts();
 
     const accountNumList = accountNumberList.map(account => account.accountNum);
 
