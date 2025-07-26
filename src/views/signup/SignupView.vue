@@ -175,9 +175,7 @@ const member = reactive({
   nickname: '',
   email: '',
   password: '',
-  // 추후 '' 값으로 수정 필요 - api에서 필수값이라서 지정
-  choogooMi: 'A',
-  profileImage: null,
+  choogooMi: '',
 });
 
 //이메일 전송용
@@ -323,7 +321,6 @@ const handleSubmit = async () => {
       email: member.email,
       password: member.password,
       choogooMi: member.choogooMi,
-      profileImage: member.profileImage,
     };
 
     await authApi.signup(signupData);
