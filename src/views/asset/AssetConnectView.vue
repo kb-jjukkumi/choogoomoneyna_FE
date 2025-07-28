@@ -70,6 +70,7 @@
     "
     @next="handleModalClose"
     @additional-connect="handleAdditionalConnect"
+    @close="handleModalClose"
   />
 </template>
 
@@ -77,9 +78,7 @@
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import axiosInstance from '@/api/axios';
-import { fetchAccounts } from '@/api/bankApi';
-import { fetchTransactions } from '@/api/bankApi';
+import { fetchBankFromCodef, fetchTransactionsFromCodef } from '@/api/bankApi';
 import BankIcon from '@/components/BankIcon.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
@@ -114,30 +113,37 @@ const isInputEmpty = computed(() => {
 
 // 자산 연결 함수
 const connectAsset = async () => {
-  if (isConnecting.value) return; // 중복 요청 방지
-
+  if (isConnecting.value) return;
   isConnecting.value = true;
+
   try {
-    // API 호출
-    await axiosInstance.post('/api/codef/account/add', {
-      bankId: selectedBankId.value,
+    // 계좌 연동
+    const bankInfo = await fetchBankFromCodef({
+      selectedBankId: selectedBankId.value,
       userBankId: userBankId.value,
       userBankPassword: userBankPassword.value,
     });
 
-    const accountNumberList = await fetchAccounts();
+    // 연동된 계좌의 계좌 번호 리스트 만들기
+    const accountList = bankInfo.map(account => {
+      return { accountNum: account.accountNum, bankId: account.bankId };
+    });
 
-    const accountNumList = accountNumberList.map(account => account.accountNum);
-
+    // 연동된 계좌의 거래 내역 불러오기
     const transactionList = await Promise.all(
-      accountNumList.map(accountNum => fetchTransactions(accountNum))
+      accountList.map(account =>
+        fetchTransactionsFromCodef({
+          account: account.accountNum,
+          organization: account.bankId,
+          startDate: '20250715',
+          endDate: '20250725',
+        })
+      )
     );
-    console.log('transactionList', transactionList);
 
-    // 임시로 성공으로 처리
+    // 성공 시 모달만 표시
     modalType.value = true;
     isModalOpen.value = true;
-    router.push({ name: 'home' });
   } catch (error) {
     console.error('자산 연동 실패:', error);
     modalType.value = false;
@@ -149,8 +155,11 @@ const connectAsset = async () => {
 
 // 모달 닫기 핸들러
 const handleModalClose = () => {
-  connectAsset();
   isModalOpen.value = false;
+  // 성공한 경우에만 홈으로 이동
+  if (modalType.value === true) {
+    router.push({ name: 'home' });
+  }
 };
 
 const handleAdditionalConnect = () => {

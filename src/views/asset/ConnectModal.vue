@@ -41,7 +41,7 @@
       </div>
       <div class="flex justify-center w-full" v-else>
         <button
-          @click="$emit('close')"
+          @click="handleClose"
           class="w-32 h-12 bg-limegreen-500 text-ivory rounded-[10px] text-[20px]"
         >
           재연동 시도
@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['next', 'additional-connect']);
+const emit = defineEmits(['next', 'additional-connect', 'close']);
 
 defineProps({
   title: { type: String, default: '자산 연동 성공!' },
@@ -67,5 +67,9 @@ const handleConfirm = () => {
 
 const handleAddtionalConnect = () => {
   emit('additional-connect');
+};
+
+const handleClose = () => {
+  emit('close');
 };
 </script>
