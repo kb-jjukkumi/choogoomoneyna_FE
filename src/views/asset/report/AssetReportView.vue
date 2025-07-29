@@ -1,68 +1,73 @@
 <template>
   <!-- 전체 배경 -->
   <div
-    class="min-h-screen bg-ivory flex flex-col relative items-center justify-center px-4 gap-y-6"
+    class="min-h-screen bg-ivory flex flex-col items-center justify-between px-4"
   >
-    <!-- 상단 네비게이션 -->
-    <TopNavigation
-      :show-back="false"
-      :show-logo-text="true"
-      :logo-text="'분석 리포트'"
-    />
-    <!-- 순자산 박스 -->
-    <div class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6">
-      <span class="text-limegreen-900 text-lg mb-1">
-        '{{ userData.nickname }}' 님의 순자산
-      </span>
-      <span class="text-green text-xl">
-        {{ userData.asset.toLocaleString() }}원
-      </span>
-      <span class="text-gray-300 text-sm">
-        {{ userData.summary }}
-      </span>
+    <!-- 헤더 -->
+    <div class="text-black text-3xl h-20 flex items-center">
+      자산 분석 리포트
     </div>
-    <!-- 메인 컨테이너 -->
-    <div
-      class="w-full flex h-110 flex-col bg-limegreen-500 rounded-lg p-6 gap-y-4"
-    >
-      <Carousel v-bind="carouselConfig">
-        <Slide>
-          <!-- 지출 분석 차트 박스 -->
-          <AnalysisCard
-            mode="chart"
-            title="전체 수입 대비 지출이 많아요!"
-            :chart-data="chartAnalysisData"
-          />
-        </Slide>
-        <!-- 캐릭터 분석 예제 -->
-        <Slide>
-          <AnalysisCard
-            mode="character"
-            :character-data="characterAnalysisData"
-          />
-        </Slide>
-      </Carousel>
 
-      <!-- 분석 내용 박스 -->
-      <div class="bg-limegreen-200 rounded-lg overflow-hidden">
-        <div
-          class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
-        >
-          <div class="text-gray-600">{{ reportData.title }}</div>
-          <div class="text-gray-600 leading-relaxed whitespace-pre-line">
-            {{ reportData.content }}
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="w-full flex flex-col gap-y-6 pb-6">
+      <!-- 순자산 박스 -->
+      <div class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6">
+        <span class="text-limegreen-900 text-lg mb-1">
+          '{{ userData.nickname }}' 님의 순자산
+        </span>
+        <span class="text-green text-xl">
+          {{ userData.asset.toLocaleString() }}원
+        </span>
+        <span class="text-gray-300 text-sm">
+          {{ userData.summary }}
+        </span>
+      </div>
+
+      <!-- 메인 컨테이너 -->
+      <div
+        class="w-full flex h-110 flex-col bg-limegreen-500 rounded-lg p-6 gap-y-4"
+      >
+        <Carousel v-bind="carouselConfig">
+          <Slide>
+            <!-- 지출 분석 차트 박스 -->
+            <AnalysisCard
+              mode="chart"
+              title="전체 수입 대비 지출이 많아요!"
+              :chart-data="chartAnalysisData"
+            />
+          </Slide>
+          <!-- 캐릭터 분석 예제 -->
+          <Slide>
+            <AnalysisCard
+              mode="character"
+              :character-data="characterAnalysisData"
+            />
+          </Slide>
+        </Carousel>
+
+        <!-- 분석 내용 박스 -->
+        <div class="bg-limegreen-200 rounded-lg overflow-hidden">
+          <div
+            class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
+          >
+            <div class="text-gray-600">{{ reportData.title }}</div>
+            <div class="text-gray-600 leading-relaxed whitespace-pre-line">
+              {{ reportData.content }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 다음 버튼 -->
 
-    <button
-      class="fixed bottom-10 w-[335px] bg-limegreen-500 text-white text-2xl! py-4 rounded-lg"
-      @click="handleNext"
-    >
-      다음
-    </button>
+    <!-- 다음 버튼 -->
+    <div class="w-full pb-6">
+      <button
+        class="w-full bg-limegreen-500 text-white text-2xl py-4 rounded-lg"
+        @click="handleNext"
+      >
+        다음
+      </button>
+    </div>
   </div>
 </template>
 
@@ -72,7 +77,6 @@ import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
-import TopNavigation from '@/components/TopNavigation.vue';
 import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
 
 const carouselConfig = {
