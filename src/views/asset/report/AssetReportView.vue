@@ -76,10 +76,22 @@ import TopNavigation from '@/components/TopNavigation.vue';
 import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
 
 const carouselConfig = {
+  // 한 번에 보여줄 슬라이드 개수 (1개씩 보여주기)
   itemsToShow: 1,
+  // 마지막 슬라이드에서 첫 번째 슬라이드로 순환 이동 가능
   wrapAround: true,
-  autoplay: 3000,
-  slideEffect: 'fade',
+  // 자동재생 간격 (밀리초) - 2초마다 자동으로 다음 슬라이드
+  autoplay: 2000,
+  // 슬라이드 전환 애니메이션 속도 (밀리초) - 2초 동안 부드럽게 전환
+  transition: 2000,
+  // 슬라이드 간 간격 (픽셀) - 슬라이드 사이 20px 여백
+  gap: 20,
+  // 마우스 드래그로 슬라이드 이동 허용
+  mouseDrag: true,
+  // 터치(모바일)로 슬라이드 이동 허용
+  touchDrag: true,
+  // 마우스 호버 시 자동재생 일시정지 (사용자가 내용을 자세히 볼 수 있도록)
+  pauseAutoplayOnHover: true,
 };
 
 const router = useRouter();
@@ -145,8 +157,7 @@ const fetchReportData = async () => {
 
 // 다음 버튼 클릭 핸들러
 const handleNext = () => {
-  console.log('분석 리포트 완료');
-  // router.push('/next-page'); // 필요시 라우팅
+  router.push('/character');
 };
 
 onMounted(() => {

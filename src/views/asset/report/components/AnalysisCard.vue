@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-ivory rounded-lg p-4">
+  <div class="bg-ivory rounded-lg p-6 w-full h-full">
     <div class="rounded-lg flex flex-col gap-y-1">
       <!-- 제목 -->
       <span class="text-gray-600 text-[14px]">
