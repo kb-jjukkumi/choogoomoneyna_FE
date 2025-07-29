@@ -39,16 +39,6 @@
           :style="{ width: progress + '%' }"
         ></div>
       </div>
-
-      <!-- 점프하는 도트들 -->
-      <div class="flex gap-2">
-        <div
-          v-for="i in 3"
-          :key="i"
-          class="w-3 h-3 bg-limegreen-500 rounded-full animate-bounce"
-          :style="{ animationDelay: (i - 1) * 0.2 + 's' }"
-        ></div>
-      </div>
     </div>
   </div>
 </template>
@@ -89,7 +79,7 @@ let progressInterval;
 // 프로그레스 바 업데이트
 const updateProgress = () => {
   if (progress.value < 100) {
-    progress.value += 1.5; // 조금 더 천천히
+    progress.value += 3; // 조금 더 천천히
   }
 };
 
@@ -112,7 +102,7 @@ onMounted(() => {
     if (progress.value >= 100) {
       setTimeout(() => {
         emit('loading-complete');
-      }, 500);
+      }, 100);
     }
   }, 100);
 });
