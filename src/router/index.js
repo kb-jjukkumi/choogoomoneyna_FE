@@ -8,6 +8,7 @@ import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
+import MyPageRecordView from '@/views/mypage/MyPageRecordView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
 import SurveyView from '@/views/signup/components/survey/SurveyView.vue';
@@ -75,6 +76,11 @@ const router = createRouter({
       path: '/mypage/editInfo',
       name: 'mypageEditInfo',
       component: MyPageEditInfoView,
+    },
+    {
+      path: '/mypage/record',
+      name: 'mypageRecord',
+      component: MyPageRecordView,
     },
   ],
 });
