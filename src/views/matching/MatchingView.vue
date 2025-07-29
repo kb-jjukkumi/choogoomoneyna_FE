@@ -81,11 +81,10 @@
         <div class="flex justify-between items-center mt-4 pb-3 px-2">
           <p class="text-lg text-limegreen-900">미션 목록</p>
           <div class="relative group ml-auto">
-            <p
-              class="text-xs text-limegreen-700 border border-limegreen-700 border-[1.5px] w-4 h-4 flex items-center justify-center rounded-full group cursor-pointer"
-            >
-              i
-            </p>
+            <img
+              :src="icon_info"
+              class="size-4 flex items-center justify-center rounded-full group cursor-pointer"
+            />
             <!-- hover 이벤트 -->
             <div
               class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
@@ -192,6 +191,7 @@ import { useRouter } from 'vue-router';
 
 import img_character_user1 from '@/assets/img/characters/character_zero_1.png';
 import img_character_user2 from '@/assets/img/characters/character_zero_1.png';
+import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
