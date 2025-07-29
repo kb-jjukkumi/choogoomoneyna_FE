@@ -91,6 +91,7 @@
           >
             i
           </p>
+          <!-- hover 이벤트 -->
           <div
             class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
           >

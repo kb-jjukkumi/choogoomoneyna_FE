@@ -18,17 +18,18 @@
         class="flex flex-col gap-5 bg-limegreen-100 px-4 rounded-lg text-center h-100"
       >
         <!-- 사용자 입력 -->
-        <div class="relative w-full justify-start mt-2">
+        <div class="relative w-full justify-start text-[13px] mt-2">
           <textarea
             v-model="inputText"
             placeholder="내용을 입력하세요"
-            class="w-full h-92 p-4 resize-none text-left text-limegreen-800 outline-none border-none focus:outline-none focus:ring-0 placeholder:text-limegreen-500"
+            class="w-full h-92 px-4 pt-4 resize-none text-left text-limegreen-800 outline-none border-none focus:outline-none focus:ring-0 placeholder:text-limegreen-500"
             maxlength="500"
           ></textarea>
           <div class="absolute bottom-0 right-3 text-sm">
             <p
               :class="
-                inputText.length < MISSION_LIST.missionRestrict
+                inputText.length < MISSION_LIST.missionRestrict ||
+                inputText.length == 500
                   ? 'text-red'
                   : 'text-green'
               "
