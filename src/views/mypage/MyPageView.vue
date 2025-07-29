@@ -2,18 +2,18 @@
   <div class="relative flex justify-center min-h-screen w-full">
     <TopNavigation :show-back="false" :show-logo-text="true" />
     <div
-      class="bg-ivory flex flex-grow w-full flex-col items-center justify-center gap-3 px-6"
+      class="bg-ivory flex flex-grow w-full flex-col items-center justify-center gap-1 px-6"
     >
       <!-- 프로필-->
-      <div class="relative flex flex-col items-center gap-2.5 w-full -top-2">
+      <div class="relative flex flex-col items-center gap-2.5 w-full -top-4">
         <!-- 캐릭터 -->
         <div
-          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[140px] h-[140px]"
+          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[150px] h-[150px]"
         >
           <img
             :src="character_savings"
             alt="저축실천형 캐릭터"
-            class="w-[90px] mt-7"
+            class="w-[100px] mt-7"
           />
           <!-- 추구미 유형명 -->
           <div class="relative group">
@@ -70,7 +70,7 @@
       </div>
       <!--버튼 영역-->
       <div class="px-4 w-full">
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-2.5">
           <MyPageBtn text="나의 자산 분석 리포트" to="home" />
           <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
           <MyPageBtn text="사전 조사 다시하기" to="survey" />
