@@ -8,24 +8,23 @@
       <div class="flex flex-col items-center gap-2 w-full">
         <!-- 캐릭터 -->
         <div
-          class="relative flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
+          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
         >
           <img
             :src="character_savings"
             alt="저축실천형 캐릭터"
-            class="w-[120px] mt-7 mb-1.5"
+            class="w-[120px] mt-7"
           />
           <!-- 추구미 유형명 -->
-          <p
-            class="bg-green text-white px-4 py-1 rounded-full text-xs text-center tracking-widest"
-          >
-            저축실천형
-          </p>
-          <!-- 추구미 수정 아이콘 -->
           <button
-            class="absolute bottom-2 right-0 bg-limegreen-500 w-9 h-9 rounded-full border-3 border-ivory p-2"
+            class="flex justify-center items-center gap-1 bg-green text-white px-2.5 py-2 rounded-full text-sm text-center tracking-widest"
           >
-            <img :src="edit" alt="수정 아이콘" class="" />
+            <div class="flex items-center leading-none text-[14px]">
+              저축실천형
+            </div>
+            <div class="flex justify-center items-center">
+              <img :src="edit" alt="수정 아이콘" class="h-3 w-3" />
+            </div>
           </button>
         </div>
 
