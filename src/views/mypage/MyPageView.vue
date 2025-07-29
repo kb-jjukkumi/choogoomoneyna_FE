@@ -2,25 +2,27 @@
   <div class="relative flex justify-center min-h-screen w-full">
     <TopNavigation :show-back="false" :show-logo-text="true" />
     <div
-      class="bg-ivory flex flex-grow w-full flex-col items-center justify-center gap-5 px-6"
+      class="bg-ivory flex flex-grow w-full flex-col items-center justify-center gap-3 px-6"
     >
       <!-- 프로필-->
-      <div class="flex flex-col items-center gap-2 w-full">
+      <div class="relative flex flex-col items-center gap-2.5 w-full -top-2">
         <!-- 캐릭터 -->
         <div
-          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
+          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[140px] h-[140px]"
         >
           <img
             :src="character_savings"
             alt="저축실천형 캐릭터"
-            class="w-[120px] mt-7"
+            class="w-[90px] mt-7"
           />
           <!-- 추구미 유형명 -->
           <div class="relative group">
             <button
-              class="flex justify-center items-center gap-1 bg-green text-white px-2.5 py-1.5 rounded-full text-sm text-center tracking-widest"
+              class="flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full"
             >
-              <div class="flex items-center leading-none text-[14px]">
+              <div
+                class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
+              >
                 저축실천형
               </div>
               <div class="flex justify-center items-center">
@@ -40,13 +42,13 @@
         </div>
 
         <!-- 닉네임 -->
-        <p class="text-limegreen-800 text-lg text-center mt-2">
+        <p class="text-limegreen-800 text-normal text-center mt-1">
           카카오대학교라이언
         </p>
 
         <!-- 레벨 -->
-        <div class="flex flex-col gap-1 w-[70%]">
-          <div class="bg-limegreen-100 h-2.5 rounded-full">
+        <div class="flex flex-col gap-1 w-[60%]">
+          <div class="bg-limegreen-100 h-2 rounded-full">
             <div class="bg-green h-full w-1/2 rounded-full"></div>
           </div>
           <div class="text-center text-limegreen-700 text-xs">Lv.2 / 410점</div>
