@@ -69,7 +69,7 @@ import { useRouter } from 'vue-router';
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
-import { CHOOGOOMI_CHARACTERS } from '../../constants/choogoomiList';
+import { CHOOGOOMI_CHARACTERS } from '../../constants/ChoogoomiList';
 import CharacterCard from './CharacterCard.vue';
 import CharacterDetailModal from './CharacterDetailModal.vue';
 
