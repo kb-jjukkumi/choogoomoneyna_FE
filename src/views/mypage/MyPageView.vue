@@ -69,8 +69,9 @@
       <!--버튼 영역-->
       <div class="px-4 w-full">
         <div class="flex flex-col gap-3">
-          <MyPageBtn text="나의 리포트 기록" to="home" />
+          <MyPageBtn text="나의 자산 분석 리포트" to="home" />
           <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
+          <MyPageBtn text="사전 조사 다시하기" to="survey" />
           <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
           <button
             class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
