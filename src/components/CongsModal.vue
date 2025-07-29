@@ -1,47 +1,39 @@
 <template>
-  <div
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
-  >
-    <div class="w-[85%] bg-white rounded-2xl p-6 text-center relative">
+  <div class="fixed inset-0 flex items-center justify-center bg-black/70 z-20">
+    <div
+      class="bg-ivory rounded-4xl px-7 py-8 w-[40vh] flex flex-col text-center items-center shadow-lg"
+    >
+      <div class="my-4 text-3xl">🎉</div>
+      <div class="text-green text-lg mb-3 whitespace-pre-line leading-tight">
+        {{ title }}
+      </div>
+      <div
+        class="text-limegreen-700 text-sm mb-6 text-center whitespace-pre-line"
+      >
+        {{ message }}
+      </div>
+      <div class="text-gray-300 text-sm mb-6 text-center whitespace-pre-line">
+        {{ caution }}
+      </div>
+      <div class="mb-6 w-full relative">
+        <div class="absolute left-4 top-1/2 -translate-y-1/2">
+          <img :src="icon_phone" alt="전화번호 아이콘" class="size-4" />
+        </div>
+        <input
+          v-model="phoneNumber"
+          type="tel"
+          placeholder="전화번호를 입력해주세요."
+          class="w-full pl-10 pr-4 py-3 rrounded-[10px] bg-limegreen-100 pl-10 pr-4 py-3 focus:outline-none placeholder:text-gray-200 text-limegreen-800"
+        />
+      </div>
       <button
-        @click="$emit('close')"
-        class="absolute top-4 right-4 text-gray-500 text-xl"
-      >
-        ✕
-      </button>
-
-      <!-- 타이틀 -->
-      <h2
-        class="text-green-700 font-bold text-lg flex justify-center items-center gap-1"
-      >
-        <span>{{ title }}</span>
-        <img src="@/assets/party-icon.png" alt="party" class="w-5 h-5" />
-      </h2>
-
-      <!-- 설명 -->
-      <p class="text-sm text-gray-700 mt-2 whitespace-pre-line">
-        {{ description }}
-      </p>
-
-      <!-- 경고 -->
-      <p
-        class="text-xs text-gray-400 mt-2 flex justify-center items-center gap-1"
-      >
-        ⚠️ {{ caution }}
-      </p>
-
-      <!-- 입력 -->
-      <input
-        v-model="phone"
-        type="text"
-        class="mt-4 w-full rounded-lg bg-limegreen-100 text-sm px-4 py-2 placeholder:text-gray-400"
-        :placeholder="inputPlaceholder"
-      />
-
-      <!-- 버튼 -->
-      <button
-        class="mt-4 w-full py-2 rounded-lg text-white bg-limegreen-500 font-bold text-sm"
-        @click="$emit('submit', phone)"
+        class="w-36 h-12 bg-limegreen-500 text-limegreen-900 rounded-lg py-2 text-lg font-bold"
+        @click="
+          () => {
+            emit('submit', phoneNumber);
+            emit('close');
+          }
+        "
       >
         {{ buttonText }}
       </button>
@@ -52,21 +44,19 @@
 <script setup>
 import { ref } from 'vue';
 
-const props = defineProps({
-  title: String,
-  description: String,
-  caution: String,
-  inputPlaceholder: {
+import icon_phone from '@/assets/img/icons/feature/icon_phone.png';
+
+const phoneNumber = ref('');
+
+defineProps({
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  caution: {
     type: String,
-    default: '전화번호를 입력해주세요.',
+    required: true,
   },
-  buttonText: {
-    type: String,
-    default: '확인',
-  },
+  buttonText: { type: String, default: '받기' },
 });
 
-const emit = defineEmits(['close', 'submit']);
-
-const phone = ref('');
+const emit = defineEmits(['submit', 'close']);
 </script>
