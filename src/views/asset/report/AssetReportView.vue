@@ -25,70 +25,23 @@
     <div
       class="w-full flex h-110 flex-col bg-limegreen-500 rounded-lg p-6 gap-y-4"
     >
-      <!-- 지출 분석 차트 박스 -->
-      <div class="bg-ivory rounded-lg p-4">
-        <div class="rounded-lg flex flex-col gap-y-1">
-          <span class="text-gray-600 text-[14px]">
-            전체 수입 대비 지출이 많아요!
-          </span>
-
-          <div class="flex items-center justify-between">
-            <!-- 원형 차트 -->
-            <div class="relative w-22 h-22">
-              <svg class="w-22 h-22 transform -rotate-90" viewBox="0 0 120 120">
-                <!-- 배경 원 -->
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  stroke-width="10"
-                />
-                <!-- 진행률 원 -->
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="#228b22"
-                  stroke-width="10"
-                  stroke-dasharray="314.16"
-                  :stroke-dashoffset="314.16 - (314.16 * expenseRatio) / 100"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <span class="text-sm text-green">{{ expenseRatio }}%</span>
-              </div>
-            </div>
-            <!-- 카테고리별 지출 -->
-            <div class="flex flex-col space-y-2">
-              <div
-                v-for="category in expenseCategories"
-                :key="category.name"
-                class="flex items-center justify-between gap-2"
-              >
-                <!-- 카테고리 이름 -->
-                <span class="text-gray-300 text-sm">{{ category.name }}</span>
-                <div class="flex items-center gap-2">
-                  <!-- 지출 퍼센트 바 -->
-                  <div class="w-20 h-2 rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-green rounded-full"
-                      :style="{ width: `${category.percentage}%` }"
-                    ></div>
-                  </div>
-                  <!-- 퍼센트 표시 -->
-                  <span class="text-[10px] text-gray-300"
-                    >{{ category.percentage }}%</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Carousel v-bind="carouselConfig">
+        <Slide>
+          <!-- 지출 분석 차트 박스 -->
+          <AnalysisCard
+            mode="chart"
+            title="전체 수입 대비 지출이 많아요!"
+            :chart-data="chartAnalysisData"
+          />
+        </Slide>
+        <!-- 캐릭터 분석 예제 -->
+        <Slide>
+          <AnalysisCard
+            mode="character"
+            :character-data="characterAnalysisData"
+          />
+        </Slide>
+      </Carousel>
 
       <!-- 분석 내용 박스 -->
       <div class="bg-limegreen-200 rounded-lg overflow-hidden">
@@ -114,10 +67,20 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { Carousel, Navigation, Pagination, Slide } from 'vue3-carousel';
+import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
 import TopNavigation from '@/components/TopNavigation.vue';
+import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
+
+const carouselConfig = {
+  itemsToShow: 1,
+  wrapAround: true,
+  autoplay: 3000,
+  slideEffect: 'fade',
+};
 
 const router = useRouter();
 const userData = ref({
@@ -153,14 +116,18 @@ const expenseCategories = ref([
   { name: '기타', percentage: 20 },
 ]);
 
-// 날짜 포맷팅 함수
-const formatDate = dateString => {
-  if (!dateString) return '';
-  const year = dateString.substring(0, 4);
-  const month = dateString.substring(4, 6);
-  const day = dateString.substring(6, 8);
-  return `${year}년 ${month}월 ${day}일`;
-};
+// AnalysisCard에서 사용할 차트 데이터
+const chartAnalysisData = computed(() => ({
+  percentage: expenseRatio.value,
+  categories: expenseCategories.value,
+}));
+
+// AnalysisCard에서 사용할 캐릭터 데이터
+const characterAnalysisData = computed(() => ({
+  image: '/src/assets/img/characters/A.png',
+  name: '지출제로형',
+  summary: '작은 실천이 모여 내일을 만든다!',
+}));
 
 // API에서 리포트 데이터 가져오기
 const fetchReportData = async () => {
