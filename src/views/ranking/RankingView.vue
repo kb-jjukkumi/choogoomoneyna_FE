@@ -123,13 +123,27 @@
       </div>
     </div>
     <BottomNavigation />
+    <CongsModal
+      v-if="showModal"
+      title="축하합니다! 
+상위 랭크에 도달했어요."
+      message="보상(기프티콘) 발송을 위해 휴대폰 번호를 입력해주세요.
+입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
+      caution="‼️ 기회는 단 한 번뿐 ‼️
+잘못 입력하면 보상을 받을 수 없어요."
+      @submit="handlePhoneSubmit"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 import profile_savings from '@/assets/img/characters/character_savings_profile.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
+import CongsModal from '@/components/CongsModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 // api 명세서에 맞춰 수정하기
@@ -210,4 +224,11 @@ const secondRankUser = RANKING_LIST.find(user => user.rankingNow === 2);
 const firstRankUser = RANKING_LIST.find(user => user.rankingNow === 1);
 const thirdRankUser = RANKING_LIST.find(user => user.rankingNow === 3);
 const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
+
+const showModal = ref(true);
+
+function handlePhoneSubmit(phoneNumber) {
+  console.log('제출된 전화번호:', phoneNumber);
+  // TODO: API 연동 또는 로직 처리
+}
 </script>
