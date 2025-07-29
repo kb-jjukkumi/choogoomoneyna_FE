@@ -1,192 +1,189 @@
 <template>
-  <TopNavigation />
-  <div class="relative flex flex-col min-h-[calc(100vh-120px)] bg-ivory mt-18">
-    <!-- 매칭 참가자 프로필 -->
-    <div class="flex justify-around px-10 items-center mb-2">
-      <!-- 나 -->
-      <div class="flex flex-col flex-1 items-center justify-center">
-        <div class="text-limegreen-900 text-xs mb-1">
-          {{ user1MatchingScore }}점
+  <div class="relative flex justify-center w-full">
+    <TopNavigation />
+    <div class="flex flex-col min-h-[calc(100vh-120px)] bg-ivory mt-18">
+      <!-- 매칭 참가자 프로필 -->
+      <div class="flex justify-around px-10 items-center mb-2">
+        <!-- 나 -->
+        <div class="flex flex-col flex-1 items-center justify-center">
+          <div class="text-limegreen-900 text-xs mb-1">
+            {{ user1MatchingScore }}점
+          </div>
+          <img :src="MATCHING_DATA.user1.profileImageUrl" class="w-[50px]" />
         </div>
-        <img :src="MATCHING_DATA.user1.profileImageUrl" class="w-[50px]" />
-      </div>
-
-      <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
-
-      <!-- 상대 -->
-      <div class="flex flex-col flex-1 items-center justify-center">
-        <div class="text-limegreen-900 text-xs mb-2">
-          {{ user2MatchingScore }}점
+        <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+        <!-- 상대 -->
+        <div class="flex flex-col flex-1 items-center justify-center">
+          <div class="text-limegreen-900 text-xs mb-2">
+            {{ user2MatchingScore }}점
+          </div>
+          <img :src="MATCHING_DATA.user2.profileImageUrl" class="w-[50px]" />
         </div>
-        <img :src="MATCHING_DATA.user2.profileImageUrl" class="w-[50px]" />
       </div>
-    </div>
-
-    <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
+      <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
+        <div
+          class="h-full bg-red"
+          :style="{
+            width:
+              (MATCHING_DATA.user1.score /
+                (MATCHING_DATA.user1.score + MATCHING_DATA.user2.score)) *
+                100 +
+              '%',
+          }"
+        ></div>
+      </div>
+      <div class="flex justify-around px-10 items-center mt-2 mb-4">
+        <!-- 나 -->
+        <div class="flex flex-col flex-1 justify-center items-center">
+          <span
+            class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
+          >
+            {{ MATCHING_DATA.user1.ranking }}위
+          </span>
+          <div class="text-xs text-limegreen-900 mt-1">
+            {{ MATCHING_DATA.user1.nickname }}
+          </div>
+          <div class="text-[10px] text-gray-300">
+            {{
+              'Lv.' +
+              MATCHING_DATA.user1.level +
+              ' / ' +
+              MATCHING_DATA.user1.score +
+              '점'
+            }}
+          </div>
+        </div>
+        <!-- 상대 -->
+        <div class="flex flex-col flex-1 justify-center items-center">
+          <span
+            class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
+          >
+            {{ MATCHING_DATA.user2.ranking }}위
+          </span>
+          <div class="text-xs text-limegreen-900 mt-1">
+            {{ MATCHING_DATA.user2.nickname }}
+          </div>
+          <div class="text-[10px] text-gray-300">
+            {{
+              'Lv.' +
+              MATCHING_DATA.user2.level +
+              ' / ' +
+              MATCHING_DATA.user2.score +
+              '점'
+            }}
+          </div>
+        </div>
+      </div>
+      <!-- 미션 목록 -->
       <div
-        class="h-full bg-red"
-        :style="{
-          width:
-            (MATCHING_DATA.user1.score /
-              (MATCHING_DATA.user1.score + MATCHING_DATA.user2.score)) *
-              100 +
-            '%',
-        }"
-      ></div>
-    </div>
-
-    <div class="flex justify-around px-10 items-center mt-2 mb-4">
-      <!-- 나 -->
-      <div class="flex flex-col flex-1 justify-center items-center">
-        <span
-          class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
-        >
-          {{ MATCHING_DATA.user1.ranking }}위
-        </span>
-        <div class="text-xs text-limegreen-900 mt-1">
-          {{ MATCHING_DATA.user1.nickname }}
+        class="flex-1 bg-limegreen-500 rounded-t-[30px] px-6 py-2 w-full h-full mx-auto flex flex-col"
+      >
+        <div class="flex justify-between items-center mt-4 pb-3 px-2">
+          <p class="text-lg text-limegreen-900">미션 목록</p>
+          <div class="relative group ml-auto">
+            <p
+              class="text-xs text-limegreen-700 border border-limegreen-700 border-[1.5px] w-4 h-4 flex items-center justify-center rounded-full group cursor-pointer"
+            >
+              i
+            </p>
+            <!-- hover 이벤트 -->
+            <div
+              class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
+            >
+              <div v-for="(info, i) in MISSION_INFORMATION" :key="i">
+                <p class="text-green-700 mb-0.5">{{ info.title }}</p>
+                <p class="text-limegreen-700 leading-tight whitespace-pre-line">
+                  {{ info.description }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="text-[10px] text-gray-300">
-          {{
-            'Lv.' +
-            MATCHING_DATA.user1.level +
-            ' / ' +
-            MATCHING_DATA.user1.score +
-            '점'
-          }}
-        </div>
-      </div>
-
-      <!-- 상대 -->
-      <div class="flex flex-col flex-1 justify-center items-center">
-        <span
-          class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
-        >
-          {{ MATCHING_DATA.user2.ranking }}위
-        </span>
-        <div class="text-xs text-limegreen-900 mt-1">
-          {{ MATCHING_DATA.user2.nickname }}
-        </div>
-        <div class="text-[10px] text-gray-300">
-          {{
-            'Lv.' +
-            MATCHING_DATA.user2.level +
-            ' / ' +
-            MATCHING_DATA.user2.score +
-            '점'
-          }}
-        </div>
-      </div>
-    </div>
-
-    <!-- 미션 목록 -->
-    <div
-      class="flex-1 bg-limegreen-500 rounded-t-[30px] px-6 py-2 w-full h-full mx-auto flex flex-col"
-    >
-      <div class="flex justify-between items-center mt-4 pb-3 px-2">
-        <p class="text-lg text-limegreen-900">미션 목록</p>
-        <div class="relative group ml-auto">
-          <p
-            class="text-xs text-limegreen-700 border border-limegreen-700 border-[1.5px] w-4 h-4 flex items-center justify-center rounded-full group cursor-pointer"
+        <!-- 나 -->
+        <div class="bg-ivory p-3 rounded-xl">
+          <span
+            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
           >
-            i
-          </p>
-          <!-- hover 이벤트 -->
+            {{ MATCHING_DATA.user1.nickname }}
+          </span>
           <div
-            class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
+            v-for="(mission, i) in MISSION_LIST.myMissionProgressList"
+            :key="mission.missionId"
           >
-            <div v-for="(info, i) in MISSION_INFORMATION" :key="i">
-              <p class="text-green-700 mb-0.5">{{ info.title }}</p>
-              <p class="text-limegreen-700 leading-tight whitespace-pre-line">
-                {{ info.description }}
-              </p>
+            <div class="flex items-center mt-2">
+              <div
+                class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
+                :class="{
+                  'cursor-pointer hover:bg-limegreen-500 ': i === 0 || i === 1,
+                }"
+                @click="
+                  () => (i === 0 ? goToWrite() : i === 1 ? confirmQuiz() : null)
+                "
+              >
+                <div>
+                  <span class="text-green">{{
+                    '[' + mission.missionScore + '점] '
+                  }}</span>
+                  <span class="text-limegreen-900">
+                    {{
+                      (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
+                      mission.missionTitle
+                    }}
+                  </span>
+                </div>
+                <span class="pr-2 text-gray-300 text-[10px]">{{
+                  mission.missionDoneCount + '/' + mission.missionTotalCount
+                }}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- 나 -->
-      <div class="bg-ivory p-3 rounded-xl">
-        <span class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs">
-          {{ MATCHING_DATA.user1.nickname }}
-        </span>
-        <div
-          v-for="(mission, i) in MISSION_LIST.myMissionProgressList"
-          :key="mission.missionId"
-        >
-          <div class="flex items-center mt-2">
-            <div
-              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
-              :class="{
-                'cursor-pointer hover:bg-limegreen-500 ': i === 0 || i === 1,
-              }"
-              @click="
-                () => (i === 0 ? goToWrite() : i === 1 ? confirmQuiz() : null)
-              "
-            >
-              <div>
-                <span class="text-green">{{
-                  '[' + mission.missionScore + '점] '
+        <!-- 상대 -->
+        <div class="bg-ivory p-3 mt-2 rounded-xl">
+          <span
+            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
+          >
+            {{ MATCHING_DATA.user2.nickname }}
+          </span>
+          <div
+            v-for="(mission, i) in MISSION_LIST.opponentMissionProgressList"
+            :key="mission.missionId"
+          >
+            <div class="flex items-center mt-2">
+              <div
+                class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
+              >
+                <div>
+                  <span class="text-green">{{
+                    '[' + mission.missionScore + '점] '
+                  }}</span>
+                  <span class="text-limegreen-900">
+                    {{
+                      (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
+                      mission.missionTitle
+                    }}
+                  </span>
+                </div>
+                <span class="pr-2 text-gray-300 text-[10px]">{{
+                  mission.missionDoneCount + '/' + mission.missionTotalCount
                 }}</span>
-                <span class="text-limegreen-900">
-                  {{
-                    (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
-                    mission.missionTitle
-                  }}
-                </span>
               </div>
-              <span class="pr-2 text-gray-300 text-[10px]">{{
-                mission.missionDoneCount + '/' + mission.missionTotalCount
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 상대 -->
-      <div class="bg-ivory p-3 mt-2 rounded-xl">
-        <span class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs">
-          {{ MATCHING_DATA.user2.nickname }}
-        </span>
-        <div
-          v-for="(mission, i) in MISSION_LIST.opponentMissionProgressList"
-          :key="mission.missionId"
-        >
-          <div class="flex items-center mt-2">
-            <div
-              class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
-            >
-              <div>
-                <span class="text-green">{{
-                  '[' + mission.missionScore + '점] '
-                }}</span>
-                <span class="text-limegreen-900">
-                  {{
-                    (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
-                    mission.missionTitle
-                  }}
-                </span>
-              </div>
-              <span class="pr-2 text-gray-300 text-[10px]">{{
-                mission.missionDoneCount + '/' + mission.missionTotalCount
-              }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- 모달 -->
+    <QuizAlertModal
+      v-if="showModal"
+      title="🧠 매칭 미션 퀴즈 안내"
+      message="퀴즈는 매칭 기간(일주일) 동안 단 1번만 응시 가능합니다.<br/>❗️ 제출 후 재응시는 불가능합니다.<br/>준비가 되셨다면 신중하게 시작해 주세요!"
+      button-text="네!"
+      @close="modalClose"
+      @confirm="goToQuiz"
+    />
+    <BottomNavigation />
   </div>
-
-  <!-- 모달 -->
-  <QuizAlertModal
-    v-if="showModal"
-    title="🧠 매칭 미션 퀴즈 안내"
-    message="퀴즈는 매칭 기간(일주일) 동안 단 1번만 응시 가능합니다.<br/>❗️ 제출 후 재응시는 불가능합니다.<br/>준비가 되셨다면 신중하게 시작해 주세요!"
-    button-text="네!"
-    @close="modalClose"
-    @confirm="goToQuiz"
-  />
-  <BottomNavigation />
 </template>
 
 <script setup>

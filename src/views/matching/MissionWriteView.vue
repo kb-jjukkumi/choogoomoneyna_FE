@@ -54,15 +54,15 @@
         제출
       </button>
     </div>
-  </div>
-  <BottomNavigation />
+    <BottomNavigation />
 
-  <SuccessModal
-    v-if="showSuccessModal"
-    title="미션 성공"
-    :message="MISSION_LIST.missionTitle"
-    @close="handleSuccessClose"
-  />
+    <SuccessModal
+      v-if="showSuccessModal"
+      title="미션 성공"
+      :message="MISSION_LIST.missionTitle"
+      @close="handleSuccessClose"
+    />
+  </div>
 </template>
 
 <script setup>
