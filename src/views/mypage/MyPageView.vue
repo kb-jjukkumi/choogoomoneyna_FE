@@ -16,9 +16,9 @@
             class="w-[100px] mt-7"
           />
           <!-- 추구미 유형명 -->
-          <div class="relative group">
+          <div class="relative">
             <button
-              class="flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full"
+              class="group flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full relative"
             >
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
@@ -28,16 +28,15 @@
               <div class="flex justify-center items-center">
                 <img :src="edit" alt="수정 아이콘" class="h-3 w-3" />
               </div>
-            </button>
 
-            <!-- 안내창 -->
-            <div
-              v-if="!isEditableDay"
-              class="absolute w-30 left-full top-1/2 -translate-y-1/2 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_6px_0px] shadow-limegreen-500"
-            >
-              변경 가능 시간<br />
-              매달 첫째 주 일요일
-            </div>
+              <div
+                v-if="!isEditableDay"
+                class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_6px_0px] shadow-limegreen-500 pointer-events-none"
+              >
+                변경 가능 시간<br />
+                : 매달 첫째 주 일요일
+              </div>
+            </button>
           </div>
         </div>
 
