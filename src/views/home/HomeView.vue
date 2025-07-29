@@ -105,10 +105,10 @@
       </div>
     </div>
     <BottomNavigation />
-    <CongsModal
+    <RewardModal
       v-if="showModal"
-      title="축하합니다! 
-상위 랭크에 도달했어요."
+      title="레벨 * 달성
+      축하합니다!"
       message="꾸준한 미션 수행으로 추구미를 향해 멋지게 성장하고 있어요 👏
        기프티콘 발송을 위해 휴대폰 번호를 입력해주세요.
        입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
@@ -129,7 +129,7 @@ import img_character from '@/assets/img/characters/character_zero_1.png';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
-import CongsModal from '@/components/CongsModal.vue';
+import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 

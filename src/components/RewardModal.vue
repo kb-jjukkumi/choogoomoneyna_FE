@@ -23,17 +23,12 @@
           v-model="phoneNumber"
           type="tel"
           placeholder="전화번호를 입력해주세요."
-          class="w-full pl-10 pr-4 py-3 rrounded-[10px] bg-limegreen-100 pl-10 pr-4 py-3 focus:outline-none placeholder:text-gray-200 text-limegreen-800"
+          class="w-full pl-10 pr-4 py-3 rrounded-[10px] bg-limegreen-100 focus:outline-none placeholder:text-gray-200 text-limegreen-800"
         />
       </div>
       <button
         class="w-36 h-12 bg-limegreen-500 text-limegreen-900 rounded-lg py-2 text-lg font-bold"
-        @click="
-          () => {
-            emit('submit', phoneNumber);
-            emit('close');
-          }
-        "
+        @click="handleSubmit"
       >
         {{ buttonText }}
       </button>
@@ -59,4 +54,9 @@ defineProps({
 });
 
 const emit = defineEmits(['submit', 'close']);
+
+const handleSubmit = () => {
+  emit('submit', phoneNumber.value);
+  emit('close');
+};
 </script>

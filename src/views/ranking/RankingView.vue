@@ -123,7 +123,7 @@
       </div>
     </div>
     <BottomNavigation />
-    <CongsModal
+    <RewardModal
       v-if="showModal"
       title="축하합니다! 
 상위 랭크에 도달했어요."
@@ -143,7 +143,7 @@ import { ref } from 'vue';
 import profile_savings from '@/assets/img/characters/character_savings_profile.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
-import CongsModal from '@/components/CongsModal.vue';
+import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 // api 명세서에 맞춰 수정하기
