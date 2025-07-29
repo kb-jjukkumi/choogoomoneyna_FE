@@ -1,6 +1,6 @@
 <template>
-  <TopNavigation :showBack="true" :showLogoText="false" />
   <div class="relative flex justify-center w-full">
+    <TopNavigation :showBack="true" :showLogoText="false" />
     <div class="bg-ivory flex flex-col gap-6 w-full mt-10 px-6 justify-between">
       <!-- 타이틀 -->
       <div class="flex flex-col text-center gap-2">
