@@ -31,7 +31,7 @@
 
               <div
                 v-if="!isEditableDay"
-                class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-[2px_2px_6px_0px] shadow-limegreen-500 pointer-events-none"
+                class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 hidden group-hover:block shadow-[2px_2px_6px_0px] shadow-limegreen-500"
               >
                 변경 가능 시간<br />
                 : 매달 첫째 주 일요일
