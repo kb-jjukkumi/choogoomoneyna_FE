@@ -175,9 +175,8 @@
     <!-- 모달 -->
     <QuizAlertModal
       v-if="showModal"
-      title="🧠 매칭 미션 퀴즈 안내"
+      title="매칭 미션 퀴즈 안내"
       message="퀴즈는 매칭 기간(일주일) 동안 단 1번만 응시 가능합니다.<br/>❗️ 제출 후 재응시는 불가능합니다.<br/>준비가 되셨다면 신중하게 시작해 주세요!"
-      button-text="네!"
       @close="modalClose"
       @confirm="goToQuiz"
     />

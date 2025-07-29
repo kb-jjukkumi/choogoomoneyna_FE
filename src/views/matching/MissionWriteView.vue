@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -89,8 +89,12 @@ const MISSION_LIST = {
   missionScore: 10,
 };
 
+const isMissionCompleted = computed(() => {
+  return inputText.value.length >= MISSION_LIST.missionRestrict;
+});
+
 function handleNext() {
-  if (inputText.value.length >= MISSION_LIST.missionRestrict) {
+  if (isMissionCompleted.value) {
     showSuccessModal.value = true;
   }
 }

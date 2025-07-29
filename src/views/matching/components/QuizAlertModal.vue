@@ -16,7 +16,7 @@
         class="w-36 h-12 bg-limegreen-500 text-ivory rounded-lg py-2 text-lg font-bold"
         @click="$emit('confirm')"
       >
-        {{ buttonText }}
+        <p>네!</p>
       </button>
     </div>
   </div>
@@ -28,6 +28,5 @@ import system_close from '@/assets/img/icons/system/system_close.png';
 defineProps({
   title: { type: String, default: '알림' },
   message: { type: String, required: true },
-  buttonText: { type: String, default: '확인' },
 });
 </script>
