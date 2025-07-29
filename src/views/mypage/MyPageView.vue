@@ -1,9 +1,11 @@
 <template>
-  <TopNavigation />
-  <div class="flex justify-center w-full">
-    <div class="bg-ivory flex w-full flex-col gap-6 px-6">
+  <div class="relative flex justify-center min-h-screen w-full">
+    <TopNavigation :show-back="false" :show-logo-text="true" />
+    <div
+      class="bg-ivory flex flex-grow w-full flex-col items-center justify-center gap-5 px-6"
+    >
       <!-- 프로필-->
-      <div class="flex flex-col items-center gap-2">
+      <div class="flex flex-col items-center gap-2 w-full">
         <!-- 캐릭터 -->
         <div
           class="relative flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[170px] h-[170px]"
@@ -55,13 +57,11 @@
         </div>
       </div>
       <!--버튼 영역-->
-      <div class="px-2">
+      <div class="px-4 w-full">
         <div class="flex flex-col gap-3">
-          <MyPageBtn text="자산 관리 분석 리포트" to="home" />
-          <MyPageBtn text="역대 랭킹 기록" to="mypageRecord" />
+          <MyPageBtn text="나의 리포트 기록" to="home" />
+          <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
           <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
-        </div>
-        <div class="mt-7">
           <button
             class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
             @click="showModal = true"
