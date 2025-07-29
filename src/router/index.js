@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import AssetConnectView from '@/views/asset/AssetConnectView.vue';
 import AssetSelectView from '@/views/asset/AssetSelectView.vue';
+import AssetReportView from '@/views/asset/report/AssetReportView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
@@ -12,6 +13,7 @@ import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageRecordView from '@/views/mypage/MyPageRecordView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
+import CharacterSelectComponent from '@/views/signup/components/character/CharacterSelectComponent.vue';
 import SurveyView from '@/views/signup/components/survey/SurveyView.vue';
 import SignupView from '@/views/signup/SignupView.vue';
 
@@ -52,6 +54,16 @@ const router = createRouter({
       path: '/asset/select/:bankId',
       name: 'assetConnect',
       component: AssetConnectView,
+    },
+    {
+      path: '/asset/report',
+      name: 'assetReport',
+      component: AssetReportView,
+    },
+    {
+      path: '/character',
+      name: 'character',
+      component: CharacterSelectComponent,
     },
     {
       path: '/ranking',
