@@ -111,7 +111,7 @@
             </div>
             <!-- 약관 내용 표시 부분만 수정 -->
             <div
-              class="text-gray-600 text-sm bg-limegreen-100 rounded-lg p-4 overflow-y-auto max-h-64 leading-relaxed whitespace-pre-line [&::-webkit-scrollbar]:hidden"
+              class="text-gray-600 text-xs bg-limegreen-100 rounded-lg p-1 overflow-y-auto max-h-30 leading-relaxed whitespace-pre-line [&::-webkit-scrollbar]:hidden"
             >
               {{ term.content }}
             </div>
@@ -147,34 +147,27 @@ const terms = ref([
     title: '서비스 이용약관',
     required: true,
     agreed: false,
-    content: `• 추구미 가계부 서비스 이용에 관한 기본 규칙입니다.
+    content: `
+    추구미 가계부 서비스 이용에 관한 기본 규칙입니다.
 
-• 회원가입 시 정확한 정보를 입력해주세요.
-
-• 타인의 계정을 사용하거나 허위 정보 입력을 금지합니다.
-
-• 서비스는 시스템 점검 등으로 일시 중단될 수 있습니다.
-
-• 회사는 서비스 개선을 위해 기능을 변경할 수 있습니다.
-
-• 부적절한 이용 시 서비스 이용이 제한될 수 있습니다.`,
+    - 회원가입 시 정확한 정보를 입력해주세요.
+    - 타인의 계정을 사용하거나 허위 정보 입력을 금지합니다.
+    - 서비스는 시스템 점검 등으로 일시 중단될 수 있습니다.
+    - 회사는 서비스 개선을 위해 기능을 변경할 수 있습니다.
+    - 부적절한 이용 시 서비스 이용이 제한될 수 있습니다.`,
   },
   {
     id: 'privacy',
     title: '개인정보 처리방침',
     required: true,
     agreed: false,
-    content: `• 수집하는 정보: 이메일, 닉네임, 은행 연동 정보
-
-• 이용 목적: 서비스 제공, 가계부 관리, 금융 분석
-
-• 보관 기간: 회원 탈퇴 시까지 (법령에 의한 보관 제외)
-
-• 제3자 제공: 법령에 의한 경우를 제외하고는 제공하지 않습니다.
-
-• 개인정보는 암호화하여 안전하게 보관합니다.
-
-• 회원은 언제든지 개인정보 수정, 삭제를 요청할 수 있습니다.`,
+    content: `
+    - 수집하는 정보: 이메일, 닉네임, 은행 연동 정보
+    - 이용 목적: 서비스 제공, 가계부 관리, 금융 분석
+    - 보관 기간: 회원 탈퇴 시까지 (법령에 의한 보관 제외)
+    - 제3자 제공: 법령에 의한 경우를 제외하고는 제공하지 않습니다.
+    - 개인정보는 암호화하여 안전하게 보관합니다.
+    - 회원은 언제든지 개인정보 수정, 삭제를 요청할 수 있습니다.`,
   },
 ]);
 
