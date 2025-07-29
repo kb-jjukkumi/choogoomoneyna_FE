@@ -1,7 +1,7 @@
 <template>
-  <TopNavigation :showBack="true" :showLogoText="false" />
-  <div class="flex justify-center w-full">
-    <div class="bg-ivory flex flex-col gap-6 w-full px-6 justify-between">
+  <div class="relative flex justify-center w-full">
+    <TopNavigation :showBack="true" :showLogoText="false" />
+    <div class="bg-ivory flex flex-col gap-6 w-full mt-10 px-6 justify-between">
       <!-- 타이틀 -->
       <div class="flex flex-col text-center gap-2">
         <div class="tfont-bold text-2xl justify-center">투자도전형 QUIZ</div>
@@ -52,8 +52,8 @@
         @close="showModal = false"
       />
     </div>
+    <BottomNavigation />
   </div>
-  <BottomNavigation />
 </template>
 
 <script setup>
