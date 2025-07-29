@@ -229,6 +229,5 @@ const showModal = ref(true);
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
-  // TODO: API 연동 또는 로직 처리
 }
 </script>
