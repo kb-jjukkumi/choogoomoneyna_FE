@@ -3,14 +3,14 @@
     <!-- 메인 콘텐츠 영역 -->
     <div class="flex flex-col items-center gap-8">
       <!-- 캐릭터 파도 애니메이션 영역 -->
-      <div class="flex items-center justify-center gap-6 h-32">
+      <div class="flex items-center justify-center h-32">
         <!-- 캐릭터들이 일렬로 배치 -->
         <div
           v-for="(character, index) in characters"
           :key="character.name"
           class="flex flex-col items-center animate-wave"
           :style="{
-            animationDelay: index * 0.2 + 's',
+            animationDelay: index * 0.05 + 's',
             '--wave-height': '50px',
           }"
         >
