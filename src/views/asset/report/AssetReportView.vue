@@ -46,7 +46,7 @@
       <!-- 분석 내용 박스 -->
       <div class="bg-limegreen-200 rounded-lg overflow-hidden">
         <div
-          class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll"
+          class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
         >
           <div class="text-gray-600">{{ reportData.title }}</div>
           <div class="text-gray-600 leading-relaxed whitespace-pre-line">
@@ -68,7 +68,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { Carousel, Navigation, Pagination, Slide } from 'vue3-carousel';
+import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
