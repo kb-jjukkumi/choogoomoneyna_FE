@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="fixed inset-0 bg-ivory flex flex-col items-center justify-center z-50"
-  >
+  <div class="w-full flex flex-col items-center justify-center z-50">
     <!-- 메인 콘텐츠 영역 -->
     <div class="flex flex-col items-center gap-8">
       <!-- 캐릭터 파도 애니메이션 영역 -->
