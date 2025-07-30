@@ -8,15 +8,15 @@
       <div class="flex flex-col items-center">
         <!-- 프로필 캐릭터 -->
         <img
-          :src="img_character"
-          alt="지출제로형 캐릭터"
+          :src="choogoomiImage"
+          alt="캐릭터 이미지"
           class="w-[100px] mx-auto mt-8 mb-2"
         />
         <!-- 추구미 유형명 -->
         <span
           class="bg-green text-white px-2.5 py-[2px] rounded-full text-xs text-center tracking-wide"
         >
-          지출제로형
+          {{ choogoomi.choogoomiType }}
         </span>
         <!-- 닉네임 -->
         <p class="text-limegreen-800 text-lg text-center my-[2px]">
@@ -47,7 +47,7 @@
           <div>
             <span class="text-[14px] text-limegreen-700">현재 순위</span><br />
             <span class="text-[17px] text-green">{{
-              USER_PROFILE.userLevel + '위'
+              USER_PROFILE.userRanking + '위'
             }}</span>
           </div>
           <div>
@@ -135,13 +135,13 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { fetchAccounts } from '@/api/bankApi';
-import img_character from '@/assets/img/characters/character_zero_1.png';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 
 const router = useRouter();
 
@@ -150,12 +150,18 @@ const ACCOUNTS = ref([]);
 
 const USER_PROFILE = {
   choogoomiName: 'A',
-  nickname: '심쿵비비',
-  userLevel: 2,
-  userScore: 410,
-  userRanking: 4,
+  nickname: '멜랑콜리',
+  userLevel: 0,
+  userScore: 30,
+  userRanking: 20,
   isLevelUp: false,
 };
+
+const choogoomi =
+  CHOOGOOMI_MAP[USER_PROFILE.choogoomiName][USER_PROFILE.userLevel];
+
+// 캐릭터 이미지 주소 가져오기
+const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
 
 const getBankInfo = bankId =>
   BANK_LIST.find(bank => bank.bankId === bankId || bank.id === bankId);
