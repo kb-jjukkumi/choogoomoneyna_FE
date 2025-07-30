@@ -175,19 +175,16 @@ const handleLogin = async () => {
     return;
   }
   try {
-    const response = await axiosInstance.post('/api/users/login', {
-      email: email.value,
-      password: password.value,
-    });
-    // accessToken, refreshToken 저장
-    window.localStorage.setItem('accessToken', response.data.accessToken);
-    window.localStorage.setItem('refreshToken', response.data.refreshToken);
-
-    authStore.setAccessToken(response.data.accessToken);
-    authStore.setRefreshToken(response.data.refreshToken);
+    // response 값이 true 면 로그인 성공, false 면 로그인 실패
+    const response = await authStore.login(email.value, password.value);
     // 로그인 성공 시 모달 창 띄우기
-    showModal.value = true;
-    modalType.value = 'success';
+    if (response) {
+      showModal.value = true;
+      modalType.value = 'success';
+    } else {
+      showModal.value = true;
+      modalType.value = 'fail';
+    }
   } catch (error) {
     showModal.value = true;
     modalType.value = 'fail';
