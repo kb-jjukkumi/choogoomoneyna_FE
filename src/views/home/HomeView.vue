@@ -20,7 +20,7 @@
         </span>
         <!-- 닉네임 -->
         <p class="text-limegreen-800 text-lg text-center my-[2px]">
-          카카오대학교라이언
+          {{ USER_PROFILE.nickname }}
         </p>
         <!-- 레벨 박스 -->
         <div class="p-1 w-70 max-w-[400px] mx-auto">
@@ -30,7 +30,15 @@
             <div class="bg-green h-full w-1/2 rounded-xl"></div>
           </div>
           <!-- 현재 레벨 & 점수 -->
-          <div class="text-center text-limegreen-700 text-xs">Lv.2 / 410점</div>
+          <div class="text-center text-limegreen-700 text-xs">
+            {{
+              'Lv.' +
+              USER_PROFILE.userLevel +
+              ' / ' +
+              USER_PROFILE.userScore +
+              '점'
+            }}
+          </div>
         </div>
         <!-- 현재 순위 & 최근 성적 -->
         <div
@@ -38,7 +46,9 @@
         >
           <div>
             <span class="text-[14px] text-limegreen-700">현재 순위</span><br />
-            <span class="text-[17px] text-green">5위</span>
+            <span class="text-[17px] text-green">{{
+              USER_PROFILE.userLevel + '위'
+            }}</span>
           </div>
           <div>
             <span class="text-[14px] text-limegreen-700">최근 성적</span><br />
@@ -137,6 +147,15 @@ const router = useRouter();
 
 // 계좌목록 데이터
 const ACCOUNTS = ref([]);
+
+const USER_PROFILE = {
+  choogoomiName: 'A',
+  nickname: '심쿵비비',
+  userLevel: 2,
+  userScore: 410,
+  userRanking: 4,
+  isLevelUp: false,
+};
 
 const getBankInfo = bankId =>
   BANK_LIST.find(bank => bank.bankId === bankId || bank.id === bankId);
