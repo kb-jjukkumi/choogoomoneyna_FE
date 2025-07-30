@@ -180,12 +180,13 @@
       @close="modalClose"
       @confirm="goToQuiz"
     />
+    <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
     <BottomNavigation />
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import img_character_user1 from '@/assets/img/characters/character_zero_1.png';
@@ -194,10 +195,13 @@ import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
+import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
 const showModal = ref(false);
+
+const showResultModal = ref(true);
 
 const MATCHING_DATA = ref({
   matchingId: 123,
@@ -325,6 +329,10 @@ const MISSION_INFORMATION = [
       '이번 주 지출 10만원 이하’처럼 7일간의 실제 계좌 기록을 확인해야 하는 미션은 해당 매칭이 끝난 뒤 자동으로 점수가 반영돼요.',
   },
 ];
+
+const closeResultModal = () => {
+  showResultModal.value = false;
+};
 
 const goToWrite = () => {
   router.push({ name: 'missionWrite' });
