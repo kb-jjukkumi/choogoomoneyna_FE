@@ -8,12 +8,12 @@
       <div class="relative flex flex-col items-center gap-2.5 w-full -top-4">
         <!-- 캐릭터 -->
         <div
-          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[150px] h-[150px]"
+          class="flex flex-col items-center justify-center gap-1 bg-limegreen-100 rounded-full w-[150px] h-[150px]"
         >
           <img
-            :src="character_savings"
+            :src="choogoomiImage"
             alt="저축실천형 캐릭터"
-            class="w-[100px] mt-7"
+            class="w-[100px] h-[100px] mt-5"
           />
           <!-- 추구미 유형명 -->
           <div class="relative">
@@ -25,7 +25,7 @@
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
               >
-                저축실천형
+                {{ choogoomi.choogoomiType }}
               </div>
               <div class="flex justify-center items-center">
                 <img :src="edit" alt="수정 아이콘" class="h-3 w-3" />
@@ -121,6 +121,7 @@ import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import router from '@/router';
 import { isEditableDay } from '@/utils/dateUtils';
 
@@ -130,13 +131,17 @@ const showModal = ref(false);
 const showChoogoomiEditModal = ref(false);
 
 const userInfo = reactive({
-  choogoomiName: 'C',
+  choogoomiName: 'A',
   nickname: '카카오대학교라이언',
-  userLevel: 2,
+  userLevel: 0,
   userScore: 410,
   userRanking: 5,
   isLevelUp: false,
 });
+
+const choogoomi = CHOOGOOMI_MAP[userInfo.choogoomiName][userInfo.userLevel];
+
+const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
 
 const editableDay = isEditableDay();
 
