@@ -101,8 +101,9 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
+import axiosInstance from '@/api/axios';
 import character_savings from '@/assets/img/characters/character_savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -121,7 +122,7 @@ const userInfo = reactive({
   userLevel: 2,
   userScore: 410,
   userRanking: 5,
-  IsLevelUp: false,
+  isLevelUp: false,
 });
 
 const editableDay = isEditableDay();
@@ -130,4 +131,19 @@ const logout = () => {
   localStorage.clear();
   router.push('/login');
 };
+
+onMounted(async () => {
+  try {
+    const { data } = await axiosInstance.get('/api/users/main-profile');
+    // userInfo에 가져온 데이터 할당
+    userInfo.choogoomiName = data.choogoomiName;
+    userInfo.nickname = data.nickname;
+    userInfo.userLevel = data.userLevel;
+    userInfo.userScore = data.userScore;
+    userInfo.userRanking = data.userRanking;
+    userInfo.isLevelUp = data.isLevelUp;
+  } catch (error) {
+    console.error('프로필 정보 불러오기 실패');
+  }
+});
 </script>
