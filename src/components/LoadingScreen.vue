@@ -11,7 +11,7 @@
           class="flex flex-col items-center animate-wave"
           :style="{
             animationDelay: index * 0.05 + 's',
-            '--wave-height': '50px',
+            '--wave-height': '20px',
           }"
         >
           <img
