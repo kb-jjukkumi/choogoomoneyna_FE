@@ -111,7 +111,7 @@ router.beforeEach(async (to, from, next) => {
   const isLoggedIn = authStore.isLoggedIn;
 
   // 공개 페이지 정의
-  const publicPages = ['/login', '/signup', '/survey', '/character'];
+  const publicPages = ['/login', '/signup'];
 
   console.log('🚦 Router Guard:', {
     to: to.path,
