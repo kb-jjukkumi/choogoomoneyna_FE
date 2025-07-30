@@ -201,7 +201,7 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 const router = useRouter();
 const showModal = ref(false);
 
-const showResultModal = ref(false);
+const showResultModal = ref(true);
 
 const MATCHING_DATA = ref({
   matchingId: 123,
@@ -350,8 +350,4 @@ const goToQuiz = () => {
   console.log('클릭됨');
   router.push({ name: 'missionQuiz' });
 };
-
-onMounted(() => {
-  showResultModal.value = true;
-});
 </script>
