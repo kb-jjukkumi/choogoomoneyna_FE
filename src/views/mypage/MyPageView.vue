@@ -30,7 +30,7 @@
               </div>
 
               <div
-                v-if="!isEditableDay"
+                v-if="!editableDay"
                 class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 hidden group-hover:block shadow-[2px_2px_6px_0px] shadow-limegreen-500"
               >
                 변경 가능 시간<br />
@@ -109,6 +109,7 @@ import BottomNavigation from '@/components/BottomNavigation.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import router from '@/router';
+import { isEditableDay } from '@/utils/dateUtils';
 
 import MyPageBtn from './components/MyPageBtn.vue';
 
@@ -120,32 +121,10 @@ const userInfo = reactive({
   userLevel: 2,
   userScore: 410,
   userRanking: 5,
-  userWin: 3,
-  userLose: 2,
   IsLevelUp: false,
 });
 
-const isEditableDay = computed(() => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-
-  // 해당 달의 1일부터 7일까지
-  for (let day = 1; day <= 7; day++) {
-    const date = new Date(year, month, day);
-
-    // 일요일 찾음
-    if (date.getDay() === 0) {
-      //오늘이 첫째주 일요일이라면
-      return (
-        today.getDate() === date.getDate() &&
-        today.getMonth() === date.getMonth() &&
-        today.getFullYear() === date.getFullYear()
-      );
-    }
-  }
-  return false;
-});
+const editableDay = isEditableDay();
 
 const logout = () => {
   localStorage.clear();
