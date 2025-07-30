@@ -42,7 +42,7 @@
 
         <!-- 닉네임 -->
         <p class="text-limegreen-800 text-normal text-center mt-1">
-          카카오대학교라이언
+          {{ userInfo.nickname }}
         </p>
 
         <!-- 레벨 -->
@@ -50,20 +50,24 @@
           <div class="bg-limegreen-100 h-2 rounded-full">
             <div class="bg-green h-full w-1/2 rounded-full"></div>
           </div>
-          <div class="text-center text-limegreen-700 text-xs">Lv.2 / 410점</div>
+          <div class="text-center text-limegreen-700 text-xs">
+            Lv.{{ userInfo.userLevel }} / {{ userInfo.userScore }}점
+          </div>
         </div>
 
         <!-- 현재 순위 & 최근 성적 -->
         <div class="flex justify-between text-center items-center text-sm">
           <div class="flex flex-col gap-1">
             <div class="text-limegreen-700">현재 순위</div>
-            <div class="text-green">5위</div>
+            <div class="text-green">{{ userInfo.userRanking }}위</div>
           </div>
           <!-- 현재 순위와 최근 성적 구별선 -->
           <div class="h-[70%] bg-limegreen-100 w-0.5 mx-8"></div>
           <div class="flex flex-col gap-1">
             <div class="text-limegreen-700">최근 성적</div>
-            <div class="text-green">3승 2패</div>
+            <div class="text-green">
+              {{ userInfo.userWin }}승 {{ userInfo.userLose }}패
+            </div>
           </div>
         </div>
       </div>
@@ -97,7 +101,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 import character_savings from '@/assets/img/characters/character_savings.png';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
@@ -109,6 +113,17 @@ import router from '@/router';
 import MyPageBtn from './components/MyPageBtn.vue';
 
 const showModal = ref(false);
+
+const userInfo = reactive({
+  choogoomiName: 'C',
+  nickname: '카카오대학교라이언',
+  userLevel: 2,
+  userScore: 410,
+  userRanking: 5,
+  userWin: 3,
+  userLose: 2,
+  IsLevelUp: false,
+});
 
 const isEditableDay = computed(() => {
   const today = new Date();
