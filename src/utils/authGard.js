@@ -1,4 +1,3 @@
-import authApi from '@/api/authApi';
 import { useAuthStore } from '@/stores/authStore';
 
 // 로그인 상태 확인
@@ -9,11 +8,5 @@ export const isLoggedIn = async () => {
     return false;
   }
   // 토큰이 있으면 로그인 상태
-  try {
-    await authApi.fetchMyInfo();
-    // 로그인 상태
-    return true;
-  } catch {
-    return false;
-  }
+  return true;
 };
