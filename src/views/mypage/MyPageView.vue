@@ -19,6 +19,8 @@
           <div class="relative">
             <button
               class="group flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full relative"
+              @click="showChoogoomiEditModal = true"
+              :disabled="!editableDay"
             >
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
@@ -95,6 +97,16 @@
         @cancel="showModal = false"
         @confirm="logout"
       />
+
+      <ConfirmModal
+        v-if="showChoogoomiEditModal"
+        title="추구 유형 수정"
+        :message="'추구 유형을 수정하면\n모든 랭킹과 점수가 초기화됩니다.\n그래도 수정하시겠습니까?'"
+        :cancelBtn="'취소'"
+        :confirmBtn="'확인'"
+        @cancel="showChoogoomiEditModal = false"
+        @confirm="router.push('/character')"
+      />
     </div>
   </div>
   <BottomNavigation />
@@ -115,6 +127,7 @@ import { isEditableDay } from '@/utils/dateUtils';
 import MyPageBtn from './components/MyPageBtn.vue';
 
 const showModal = ref(false);
+const showChoogoomiEditModal = ref(false);
 
 const userInfo = reactive({
   choogoomiName: 'C',
