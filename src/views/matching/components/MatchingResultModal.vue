@@ -1,29 +1,35 @@
 <template>
   <div class="fixed inset-0 flex items-center justify-center bg-black/70 z-20">
     <div
-      class="flex flex-col gap-3 bg-limegreen-500 rounded-4xl p-6 items-center"
+      class="flex flex-col gap-4 bg-limegreen-500 rounded-4xl p-5 items-center"
     >
       <!--지난주 매칭 결과-->
-      <div>
-        <div class="text-limegreen-900">지난주 매칭 결과</div>
-        <div class="bg-ivory flex rounded-[10px] p-5">
-          <div class="flex gap-5 text-sm text-center">
+      <div class="flex flex-col gap-0.5 w-full mt-1">
+        <div class="text-limegreen-900 text-lg">지난주 매칭 결과</div>
+        <div class="bg-ivory flex rounded-2xl p-5">
+          <div class="flex gap-6 text-sm text-center items-center">
             <div>
-              <div>카카오대학교라이언</div>
-              <div>50점</div>
+              <div class="text-limegreen-900">카카오대학교라이언</div>
+              <div class="text-green">50점</div>
             </div>
-            <div>VS</div>
+            <div class="text-limegreen-900 text-lg">VS</div>
             <div>
-              <div>카카오대학교어피치</div>
-              <div>20점</div>
+              <div class="text-limegreen-900">카카오대학교어피치</div>
+              <div class="text-green">20점</div>
             </div>
           </div>
         </div>
       </div>
       <!--미션 목록-->
-      <div></div>
+      <div class="flex flex-col w-full gap-0.5">
+        <div class="text-limegreen-900 text-lg">미션 목록</div>
+        <div class="flex flex-col gap-2 text-sm">
+          <MissionListCard />
+          <MissionListCard />
+        </div>
+      </div>
       <button
-        class="bg-ivory w-36 h-12 rounded-[10px] text-limegreen-900"
+        class="bg-ivory w-36 h-12 rounded-2xl text-limegreen-900"
         @click="$emit('close')"
       >
         확인
@@ -34,4 +40,6 @@
 
 <script setup>
 import { ref } from 'vue';
+
+import MissionListCard from './MissionListCard.vue';
 </script>
