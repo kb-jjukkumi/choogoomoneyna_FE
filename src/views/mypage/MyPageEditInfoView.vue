@@ -128,7 +128,7 @@
       :cancelBtn="'취소'"
       :confirmBtn="'확인'"
       @cancel="showConfirmModal = false"
-      @confirm="showAlertModal = true"
+      @confirm="submitUpdate"
     />
     <AlertModal
       v-if="showAlertModal"
@@ -155,6 +155,12 @@ const member = reactive({
   userScore: null,
   userRanking: null,
   isLevelUp: false,
+});
+
+const editedProfile = reactive({
+  nickname: '',
+  password: '',
+  newPassword: '',
 });
 
 const newNickname = ref('');
@@ -226,10 +232,6 @@ const validateCurrentPassword = () => {
     CurrnetPwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
-  if (currentPassword.value !== member.password) {
-    CurrnetPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
-    return false;
-  }
   CurrnetPwdErrorMessage.value = '';
   isCurrnetPwdChecked.value = true;
   return true;
@@ -260,7 +262,6 @@ const handleUpdate = async () => {
   }
 
   if (!isCurrnetPwdChecked.value) {
-    CurrnetPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     hasError = true;
   }
 
@@ -272,12 +273,24 @@ const handleUpdate = async () => {
   if (hasError) return;
 
   try {
-    //비밀번호 필드에 수정된 비밀번호 넣기
-    member.password = newPassword.value;
-    member.nickname = newNickname.value;
+    editedProfile.nickname = newNickname.value;
+    editedProfile.password = currentPassword.value;
+    editedProfile.newPassword = newPassword.value;
   } finally {
     console.log(member);
     showConfirmModal.value = true;
+  }
+};
+
+const submitUpdate = async () => {
+  try {
+    console.log(editedProfile);
+    await axiosInstance.put('/api/users/update', editedProfile);
+    showConfirmModal.value = false;
+    showAlertModal.value = true;
+  } catch (error) {
+    showConfirmModal.value = false;
+    console.error('회원 정보 수정 실패:', error);
   }
 };
 
