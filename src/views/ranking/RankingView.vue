@@ -27,7 +27,10 @@
             >
               <div>
                 <p class="text-bold text-[13px] text-yellow">
-                  {{ choogoomiType[choogoomiName] }}
+                  {{
+                    CHOOGOOMI_MAP.find(c => c.choogoomiName === choogoomiName)
+                      ?.userLevel[0].choogoomiType
+                  }}
                 </p>
               </div>
               <div
@@ -206,7 +209,7 @@ const aboutReward = {
 
 const USER_PROFILE = {
   choogoomiName: 'A',
-  nickname: '쭈꾸미',
+  nickname: '',
   userScore: 500,
   userRanking: 20,
   isLevelUp: false,
@@ -337,7 +340,7 @@ const rewardEntries = allUsers.map(user => {
 });
 
 // choogoomiName만 추출 -> 'v-for'에 사용
-const choogoomiNames = rewardEntries.map(([choogoomiName]) => choogoomiName);
+const choogoomiNames = [...new Set(allUsers.map(user => user.choogoomiName))];
 
 // 유형 이름 객체로 변환 (nickname -> 지출제로형)
 const choogoomiType = Object.fromEntries(
