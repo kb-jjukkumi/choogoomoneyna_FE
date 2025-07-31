@@ -157,8 +157,9 @@ const USER_PROFILE = {
   isLevelUp: false,
 };
 
-const choogoomi =
-  CHOOGOOMI_MAP[USER_PROFILE.choogoomiName][USER_PROFILE.userLevel];
+const choogoomi = CHOOGOOMI_MAP.find(
+  item => item.choogoomiName === USER_PROFILE.choogoomiName
+).userLevel[USER_PROFILE.userLevel];
 
 // 캐릭터 이미지 주소 가져오기
 const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
@@ -175,8 +176,8 @@ onMounted(async () => {
       const bankInfo = getBankInfo(account.bankId);
       return {
         ...account,
-        bankLogo: bankInfo?.icon || '', // 은행 로고
-        bankName: bankInfo?.name || '알 수 없음', // 은행 이름
+        bankLogo: bankInfo.icon,
+        bankName: bankInfo.name,
       };
     });
   } catch (err) {
@@ -190,7 +191,7 @@ const goToTransaction = account => {
     params: {
       accountNum: account.accountNum,
       accountName: account.accountName,
-      bankId: account.bankId, // 여기만 params
+      bankId: account.bankId,
     },
     query: {
       accountBalance: account.accountBalance,

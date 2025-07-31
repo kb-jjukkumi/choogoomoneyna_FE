@@ -1,9 +1,47 @@
 <template>
   <div class="relative flex justify-center w-full h-full">
     <TopNavigation />
-    <div class="mt-20 w-full">
+    <div class="mt-14 w-full">
+      <div class="relative">
+        <p class="text-lg text-limegreen-800 mb-3 text-center">명예의 전당</p>
+        <div
+          class="absolute top-1/2 left-1/2 translate-x-[45px] pb-3 -translate-y-1.5 group"
+        >
+          <img
+            :src="icon_info"
+            alt="정보 아이콘"
+            class="size-3.5 cursor-pointer"
+          />
+          <!-- hover 이벤트 -->
+          <div
+            class="absolute top-full -translate-x-[65%] w-75 bg-white border-none text-center rounded-xl shadow-sm drop-shadow-[0_8px_10px_rgba(183,202,112,0.5)] z-20 px-5 py-4 space-y-3 group-hover:block hidden"
+          >
+            <p class="text-green text-3xl mt-3 mb-3">{{ aboutReward.title }}</p>
+            <p class="text-green text-[13px] leading-snug whitespace-pre-line">
+              {{ aboutReward.content }}
+            </p>
+            <div
+              v-for="choogoomiName in rewardTypes"
+              :key="choogoomiName"
+              class="text-xs leading-tight text-limegreen-800 whitespace-pre-line mt-2 space-y-1"
+            >
+              <div>
+                <p class="text-bold text-[13px] text-yellow">
+                  {{ choogoomiType[choogoomiName] }}
+                </p>
+              </div>
+              <div
+                v-for="(reward, rank) in rewardMap[choogoomiName]"
+                :key="rank"
+              >
+                {{ rank + '등: ' + reward }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 1~3위 -->
-      <div class="flex gap-1 items-center mb-6 px-6">
+      <div class="flex gap-1 items-center mb-2 px-6">
         <!-- 2위 -->
         <div
           class="flex flex-1 flex-col items-center w-25 h-40 bg-[#DFF1F9] rounded-xl px-4 pt-3 pb-4"
@@ -18,7 +56,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            저축실천형
+            {{ choogoomiType[secondRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ secondRankUser.nickName }}
@@ -27,7 +65,7 @@
             {{ secondRankUser.score }}점
           </div>
         </div>
-        <!-- 1등 -->
+        <!-- 1위 -->
         <div
           class="flex flex-col items-center h-50 w-32 bg-limegreen-100 rounded-xl px-4 pt-3 pb-4"
         >
@@ -41,7 +79,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[2px] rounded-full text-xs text-center"
           >
-            저축실천형
+            {{ choogoomiType[firstRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ firstRankUser.nickName }}
@@ -50,7 +88,7 @@
             {{ firstRankUser.score }}점
           </div>
         </div>
-        <!-- 3등 -->
+        <!-- 3위 -->
         <div
           class="flex flex-1 flex-col items-center bg-[#FFE7E7] w-25 h-40 rounded-xl px-4 pt-3 pb-4"
         >
@@ -64,7 +102,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            저축실천형
+            {{ choogoomiType[thirdRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ thirdRankUser.nickName }}
@@ -98,7 +136,7 @@
                 <span
                   class="bg-green text-white mt-[-7px] px-2 py-[2.5px] rounded-full text-[7px] text-center"
                 >
-                  저축실천형
+                  {{ choogoomiType[rank.choogoomiName] }}
                 </span>
               </div>
               <div class="flex flex-col">
@@ -141,12 +179,19 @@
 import { ref } from 'vue';
 
 import profile_savings from '@/assets/img/characters/character_savings_profile.png';
+import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap.js';
+import { REWARD_LIST } from '@/constants/rewardList.js';
 
-// api 명세서에 맞춰 수정하기
+const aboutReward = {
+  title: '🎁',
+  content: `매주 월요일, 지난주 점수를 기준으로 집계됩니다.\n 순위별로 유형별 맞춤 상품이 차등 지급될 예정입니다.`,
+};
+
 const RANKING_LIST = [
   {
     userId: 1,
@@ -154,6 +199,7 @@ const RANKING_LIST = [
     nickName: '심쿵비비',
     score: 900,
     rankingEx: 2,
+    choogoomiName: 'C',
   },
   {
     userId: 2,
@@ -161,6 +207,7 @@ const RANKING_LIST = [
     nickName: '어피치',
     score: 900,
     rankingEx: 3,
+    choogoomiName: 'C',
   },
   {
     userId: 3,
@@ -168,6 +215,7 @@ const RANKING_LIST = [
     nickName: '라이언',
     score: 900,
     rankingEx: 5,
+    choogoomiName: 'C',
   },
   {
     userId: 4,
@@ -175,6 +223,7 @@ const RANKING_LIST = [
     nickName: '프로도',
     score: 900,
     rankingEx: 6,
+    choogoomiName: 'A',
   },
   {
     userId: 5,
@@ -182,6 +231,7 @@ const RANKING_LIST = [
     nickName: '춘식이',
     score: 900,
     rankingEx: 7,
+    choogoomiName: 'B',
   },
   {
     userId: 6,
@@ -189,6 +239,7 @@ const RANKING_LIST = [
     nickName: '멜랑콜리',
     score: 900,
     rankingEx: 8,
+    choogoomiName: 'D',
   },
   {
     userId: 7,
@@ -196,6 +247,7 @@ const RANKING_LIST = [
     nickName: '롤로라무',
     score: 900,
     rankingEx: 10,
+    choogoomiName: 'E',
   },
   {
     userId: 8,
@@ -203,6 +255,7 @@ const RANKING_LIST = [
     nickName: '포스아거',
     score: 900,
     rankingEx: 1,
+    choogoomiName: 'A',
   },
   {
     userId: 9,
@@ -210,6 +263,7 @@ const RANKING_LIST = [
     nickName: '루나키키',
     score: 900,
     rankingEx: 4,
+    choogoomiName: 'B',
   },
   {
     userId: 10,
@@ -217,6 +271,7 @@ const RANKING_LIST = [
     nickName: '무지',
     score: 900,
     rankingEx: 11,
+    choogoomiName: 'D',
   },
 ];
 
@@ -225,7 +280,27 @@ const firstRankUser = RANKING_LIST.find(user => user.rankingNow === 1);
 const thirdRankUser = RANKING_LIST.find(user => user.rankingNow === 3);
 const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
 
+// 모달 표시 여부
 const showModal = ref(true);
+
+// 중간 매핑: [choogoomiName, 이름] 쌍 배열
+const rewardEntries = REWARD_LIST.map(({ choogoomiName }) => {
+  const mapEntry = CHOOGOOMI_MAP.find(
+    item => item.choogoomiName === choogoomiName
+  );
+  return [choogoomiName, mapEntry.userLevel[0].choogoomiType];
+});
+
+// choogoomiName만 추출 -> 'v-for'에 사용
+const rewardTypes = rewardEntries.map(([choogoomiName]) => choogoomiName);
+
+// 유형 이름 객체로 변환 (A -> 지출제로형)
+const choogoomiType = Object.fromEntries(rewardEntries);
+
+// 보상 매핑 객체 (A -> {1: "...", 2: "...", 3: "..."})
+const rewardMap = Object.fromEntries(
+  REWARD_LIST.map(item => [item.choogoomiName, item.rewards])
+);
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
