@@ -53,7 +53,7 @@
             <div class="bg-green h-full w-1/2 rounded-full"></div>
           </div>
           <div class="text-center text-limegreen-700 text-xs">
-            Lv.{{ userInfo.userLevel }} / {{ userInfo.userScore }}점
+            Lv.{{ userLevel }} / {{ userInfo.userScore }}점
           </div>
         </div>
 
@@ -123,6 +123,7 @@ import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import router from '@/router';
 import { isEditableDay } from '@/utils/dateUtils';
+import { getLevel } from '@/utils/levelUtils';
 
 import MyPageBtn from './components/MyPageBtn.vue';
 
@@ -130,6 +131,7 @@ const showModal = ref(false);
 const showChoogoomiEditModal = ref(false);
 
 const choogoomiImage = ref('');
+const userLevel = ref(0);
 
 const userInfo = reactive({
   choogoomiName: '',
@@ -150,10 +152,11 @@ onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('/api/users/main-profile');
 
-    console.log(data);
+    //userScore로 레벨 계산
+    userLevel.value = getLevel(data.userScore);
 
     //추구미 알파벳을 유형명으로 매핑
-    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][0];
+    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][userLevel.value];
     choogoomiImage.value = new URL(choogoomi.character, import.meta.url).href;
 
     // userInfo 업데이트
