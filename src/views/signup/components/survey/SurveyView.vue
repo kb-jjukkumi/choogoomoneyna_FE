@@ -28,7 +28,7 @@ const surveyAnswers = ref([]);
 
 // 설문 1 완료 처리
 const handleSurveyOneComplete = surveyOneAnswers => {
-  // ✅ 배열을 평면화하여 추가 (spread operator 사용)
+  // 배열을 평면화하여 추가 (spread operator 사용)
   surveyAnswers.value.push(...surveyOneAnswers);
   // 다음 설문으로 이동
   currentStep.value = 2;
@@ -36,7 +36,7 @@ const handleSurveyOneComplete = surveyOneAnswers => {
 
 // 설문 2 완료 처리
 const handleSurveyTwoComplete = surveyTwoAnswers => {
-  // ✅ 설문 2 답변들도 평면화하여 추가
+  // 설문 2 답변들도 평면화하여 추가
   surveyAnswers.value.push(...surveyTwoAnswers);
   // 최종 설문 데이터 출력 (총 14개 값이 하나의 배열에)
   console.log('전체 설문 완료:', surveyAnswers.value);
