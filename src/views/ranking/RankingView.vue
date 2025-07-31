@@ -2,10 +2,10 @@
   <div class="relative flex justify-center w-full h-full">
     <TopNavigation />
     <div class="mt-14 w-full">
-      <div class="relative mb-3">
-        <p class="text-lg text-limegreen-800 text-center">명예의 전당</p>
+      <div class="relative">
+        <p class="text-lg text-limegreen-800 mb-3 text-center">명예의 전당</p>
         <div
-          class="absolute top-1/2 left-1/2 translate-x-[45px] -translate-y-1/2 group"
+          class="absolute top-1/2 left-1/2 translate-x-[45px] pb-3 -translate-y-1.5 group"
         >
           <img
             :src="icon_info"
@@ -14,7 +14,7 @@
           />
           <!-- hover 이벤트 -->
           <div
-            class="absolute top-full mt-2.5 -translate-x-[65%] w-75 bg-white border-none text-center rounded-xl shadow-sm drop-shadow-[0_8px_10px_rgba(183,202,112,0.5)] z-20 px-5 py-4 space-y-3 group-hover:block hidden"
+            class="absolute top-full -translate-x-[65%] w-75 bg-white border-none text-center rounded-xl shadow-sm drop-shadow-[0_8px_10px_rgba(183,202,112,0.5)] z-20 px-5 py-4 space-y-3 group-hover:block hidden"
           >
             <p class="text-green text-3xl mt-3 mb-3">{{ aboutReward.title }}</p>
             <p class="text-green text-[13px] leading-snug whitespace-pre-line">
@@ -27,7 +27,7 @@
             >
               <div>
                 <p class="text-bold text-[13px] text-yellow">
-                  {{ getChoogoomiType(type) }}
+                  {{ choogoomiType[type] }}
                 </p>
               </div>
               <div v-for="(reward, rank) in rewards" :key="rank">
@@ -53,7 +53,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ getChoogoomiType(secondRankUser.choogoomiName) }}
+            {{ choogoomiType[secondRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ secondRankUser.nickName }}
@@ -76,7 +76,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[2px] rounded-full text-xs text-center"
           >
-            {{ getChoogoomiType(firstRankUser.choogoomiName) }}
+            {{ choogoomiType[firstRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ firstRankUser.nickName }}
@@ -99,7 +99,7 @@
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ getChoogoomiType(thirdRankUser.choogoomiName) }}
+            {{ choogoomiType[thirdRankUser.choogoomiName] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ thirdRankUser.nickName }}
@@ -133,7 +133,7 @@
                 <span
                   class="bg-green text-white mt-[-7px] px-2 py-[2.5px] rounded-full text-[7px] text-center"
                 >
-                  {{ getChoogoomiType(rank.choogoomiName) }}
+                  {{ choogoomiType[rank.choogoomiName] }}
                 </span>
               </div>
               <div class="flex flex-col">
@@ -280,10 +280,13 @@ const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
 
 const showModal = ref(true);
 
-// 추구미 유형 이름 매핑
-function getChoogoomiType(typeCode) {
-  return CHOOGOOMI_MAP[typeCode]?.[0]?.choogoomiType || '';
-}
+// 추구미 유형 이름 매핑 객체
+const choogoomiType = Object.fromEntries(
+  Object.keys(REWARD_LIST).map(type => [
+    type,
+    CHOOGOOMI_MAP[type][0].choogoomiType,
+  ])
+);
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
