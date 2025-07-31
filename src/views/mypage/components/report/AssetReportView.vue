@@ -72,7 +72,7 @@
         </div>
       </div>
       <!-- 리포트 생성날짜 및 인덱스 -->
-      <div class="text-gray-500 text-lg mb-4">
+      <div class="text-limegreen-900 text-lg mb-4">
         {{ currentReport.regDate }}
       </div>
 
