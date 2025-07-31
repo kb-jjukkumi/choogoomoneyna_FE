@@ -8,29 +8,31 @@
       <div class="relative flex flex-col items-center gap-2.5 w-full -top-4">
         <!-- 캐릭터 -->
         <div
-          class="flex flex-col items-center gap-1 bg-limegreen-100 rounded-full w-[150px] h-[150px]"
+          class="flex flex-col items-center justify-center gap-1 bg-limegreen-100 rounded-full w-[150px] h-[150px]"
         >
           <img
-            :src="character_savings"
+            :src="choogoomiImage"
             alt="저축실천형 캐릭터"
-            class="w-[100px] mt-7"
+            class="w-[100px] h-[100px] mt-5"
           />
           <!-- 추구미 유형명 -->
           <div class="relative">
             <button
               class="group flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full relative"
+              @click="showChoogoomiEditModal = true"
+              :disabled="!isEditable"
             >
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
               >
-                저축실천형
+                {{ userInfo.choogoomiName }}
               </div>
               <div class="flex justify-center items-center">
                 <img :src="edit" alt="수정 아이콘" class="h-3 w-3" />
               </div>
 
               <div
-                v-if="!isEditableDay"
+                v-if="!isEditable"
                 class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 hidden group-hover:block shadow-[2px_2px_6px_0px] shadow-limegreen-500"
               >
                 변경 가능 시간<br />
@@ -42,28 +44,37 @@
 
         <!-- 닉네임 -->
         <p class="text-limegreen-800 text-normal text-center mt-1">
-          카카오대학교라이언
+          {{ userInfo.nickname }}
         </p>
 
         <!-- 레벨 -->
         <div class="flex flex-col gap-1 w-[60%]">
           <div class="bg-limegreen-100 h-2 rounded-full">
-            <div class="bg-green h-full w-1/2 rounded-full"></div>
+            <div
+              class="bg-green h-full rounded-full"
+              :style="{
+                width: `${(userInfo.userScore / LEVEL_THRESHOLDS[userLevel + 1]) * 100}%`,
+              }"
+            ></div>
           </div>
-          <div class="text-center text-limegreen-700 text-xs">Lv.2 / 410점</div>
+          <div class="text-center text-limegreen-700 text-xs">
+            Lv.{{ userLevel }} / {{ userInfo.userScore }}점
+          </div>
         </div>
 
         <!-- 현재 순위 & 최근 성적 -->
         <div class="flex justify-between text-center items-center text-sm">
           <div class="flex flex-col gap-1">
             <div class="text-limegreen-700">현재 순위</div>
-            <div class="text-green">5위</div>
+            <div class="text-green">{{ userInfo.userRanking }}위</div>
           </div>
           <!-- 현재 순위와 최근 성적 구별선 -->
           <div class="h-[70%] bg-limegreen-100 w-0.5 mx-8"></div>
           <div class="flex flex-col gap-1">
             <div class="text-limegreen-700">최근 성적</div>
-            <div class="text-green">3승 2패</div>
+            <div class="text-green">
+              {{ userInfo.userWin }}승 {{ userInfo.userLose }}패
+            </div>
           </div>
         </div>
       </div>
@@ -91,49 +102,76 @@
         @cancel="showModal = false"
         @confirm="logout"
       />
+
+      <ConfirmModal
+        v-if="showChoogoomiEditModal"
+        title="추구 유형 수정"
+        :message="'추구 유형을 수정하면\n모든 랭킹과 점수가 초기화됩니다.\n그래도 수정하시겠습니까?'"
+        :cancelBtn="'취소'"
+        :confirmBtn="'확인'"
+        @cancel="showChoogoomiEditModal = false"
+        @confirm="router.push('/character')"
+      />
     </div>
   </div>
   <BottomNavigation />
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
-import character_savings from '@/assets/img/characters/character_savings.png';
+import axiosInstance from '@/api/axios';
 import edit from '@/assets/img/icons/feature/icon_edit.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import router from '@/router';
+import { isEditableDay } from '@/utils/dateUtils';
+import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 
 import MyPageBtn from './components/MyPageBtn.vue';
 
 const showModal = ref(false);
+const showChoogoomiEditModal = ref(false);
 
-const isEditableDay = computed(() => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+const choogoomiImage = ref('');
+const userLevel = ref(0);
 
-  // 해당 달의 1일부터 7일까지
-  for (let day = 1; day <= 7; day++) {
-    const date = new Date(year, month, day);
-
-    // 일요일 찾음
-    if (date.getDay() === 0) {
-      //오늘이 첫째주 일요일이라면
-      return (
-        today.getDate() === date.getDate() &&
-        today.getMonth() === date.getMonth() &&
-        today.getFullYear() === date.getFullYear()
-      );
-    }
-  }
-  return false;
+const userInfo = reactive({
+  choogoomiName: '',
+  nickname: '',
+  userScore: null,
+  userRanking: null,
+  isLevelUp: false,
 });
+
+const isEditable = isEditableDay();
 
 const logout = () => {
   localStorage.clear();
   router.push('/login');
 };
+
+onMounted(async () => {
+  try {
+    const { data } = await axiosInstance.get('/api/users/main-profile');
+
+    //userScore로 레벨 계산
+    userLevel.value = getLevel(data.userScore);
+
+    //추구미 알파벳을 유형명으로 매핑
+    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][userLevel.value];
+    choogoomiImage.value = new URL(choogoomi.character, import.meta.url).href;
+
+    // userInfo 업데이트
+    userInfo.choogoomiName = choogoomi.choogoomiType;
+    userInfo.nickname = data.nickname;
+    userInfo.userScore = data.userScore;
+    userInfo.userRanking = data.userRanking;
+    userInfo.isLevelUp = data.isLevelUp;
+  } catch (error) {
+    console.error('프로필 정보 불러오기 실패');
+  }
+});
 </script>

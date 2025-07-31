@@ -19,7 +19,7 @@
         </slot>
       </div>
       <div class="text-limegreen-900 text-2xl font-jua mb-2">{{ title }}</div>
-      <div class="text-gray-400 text-base mb-6 text-center">
+      <div class="text-gray-300 text-base mb-6 text-center whitespace-pre-line">
         {{ message }}
       </div>
       <!-- 버튼 영역 -->
