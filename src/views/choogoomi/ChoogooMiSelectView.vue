@@ -8,7 +8,7 @@
     <div class="min-w-xs mt-10">
       <!-- 첫 번째 행: 2개 -->
       <div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-8">
-        <CharacterCard
+        <ChoogooMiCard
           v-for="character in CHOOGOOMI_CHARACTERS.slice(0, 2)"
           :key="character.choogoomiId"
           :img="character.img"
@@ -20,7 +20,7 @@
 
       <!-- 두 번째 행: 1개 (가운데 정렬) -->
       <div class="flex justify-center mb-8">
-        <CharacterCard
+        <ChoogooMiCard
           :img="CHOOGOOMI_CHARACTERS[2].img"
           :label="CHOOGOOMI_CHARACTERS[2].label"
           :selected="selected === CHOOGOOMI_CHARACTERS[2].choogoomiId"
@@ -30,7 +30,7 @@
 
       <!-- 세 번째 행: 2개 -->
       <div class="grid grid-cols-2 gap-x-8 gap-y-8">
-        <CharacterCard
+        <ChoogooMiCard
           v-for="character in CHOOGOOMI_CHARACTERS.slice(3, 5)"
           :key="character.choogoomiId"
           :img="character.img"
@@ -40,7 +40,7 @@
         />
       </div>
     </div>
-    <CharacterDetailModal
+    <ChoogooMiDetailModal
       v-if="isModalOpen"
       :selected-character="selectedCharacter"
       :is-signing-up="isSigningUp"
@@ -68,10 +68,10 @@ import { useRouter } from 'vue-router';
 
 import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
+import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
 
-import { CHOOGOOMI_CHARACTERS } from '../../constants/ChoogoomiList';
-import CharacterCard from './CharacterCard.vue';
-import CharacterDetailModal from './CharacterDetailModal.vue';
+import ChoogooMiCard from './ChoogooMiCard.vue';
+import ChoogooMiDetailModal from './ChoogooMiDetailModal.vue';
 
 const router = useRouter();
 
