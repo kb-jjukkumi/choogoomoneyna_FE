@@ -108,7 +108,6 @@ const handleNext = () => {
 
   // 마지막 질문일 때
   if (isLastSurvey.value) {
-    console.log('Survey2 답변:', survey2Answers.value);
     emit('next', survey2Answers.value);
     return;
   }

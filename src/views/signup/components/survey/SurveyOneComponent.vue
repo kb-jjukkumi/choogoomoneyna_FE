@@ -122,8 +122,6 @@ function handleNext() {
     showModal.value = true;
     return;
   }
-
-  console.log('Survey1 답변:', answers);
   emit('next', answers);
 }
 </script>

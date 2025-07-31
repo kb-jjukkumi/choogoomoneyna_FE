@@ -39,6 +39,22 @@ const handleSurveyTwoComplete = surveyTwoAnswers => {
   // 설문 2 답변들도 평면화하여 추가
   surveyAnswers.value.push(...surveyTwoAnswers);
   // 최종 설문 데이터 출력 (총 14개 값이 하나의 배열에)
-  console.log('전체 설문 완료:', surveyAnswers.value);
+  sendSurveyData();
+};
+
+// API 요청 형식으로 변환하는 함수
+const convertToRequestData = () => {
+  // 문제의 id값은 1부터 14까지
+  return {
+    surveyAnswers: surveyAnswers.value.map((answer, index) => ({
+      surveyQuestionId: index + 1,
+      surveyAnswerId: answer,
+    })),
+  };
+};
+
+const sendSurveyData = () => {
+  const requestData = convertToRequestData();
+  console.log('요청 데이터:', requestData);
 };
 </script>
