@@ -21,17 +21,20 @@
               {{ aboutReward.content }}
             </p>
             <div
-              v-for="(rewards, type) in REWARD_LIST"
-              :key="type"
+              v-for="choogoomiName in rewardTypes"
+              :key="choogoomiName"
               class="text-xs leading-tight text-limegreen-800 whitespace-pre-line mt-2 space-y-1"
             >
               <div>
                 <p class="text-bold text-[13px] text-yellow">
-                  {{ choogoomiType[type] }}
+                  {{ choogoomiType[choogoomiName] }}
                 </p>
               </div>
-              <div v-for="(reward, rank) in rewards" :key="rank">
-                {{ rank }}등: {{ reward }}
+              <div
+                v-for="(reward, rank) in rewardMap[choogoomiName]"
+                :key="rank"
+              >
+                {{ rank + '등: ' + reward }}
               </div>
             </div>
           </div>
@@ -62,7 +65,7 @@
             {{ secondRankUser.score }}점
           </div>
         </div>
-        <!-- 1등 -->
+        <!-- 1위 -->
         <div
           class="flex flex-col items-center h-50 w-32 bg-limegreen-100 rounded-xl px-4 pt-3 pb-4"
         >
@@ -85,7 +88,7 @@
             {{ firstRankUser.score }}점
           </div>
         </div>
-        <!-- 3등 -->
+        <!-- 3위 -->
         <div
           class="flex flex-1 flex-col items-center bg-[#FFE7E7] w-25 h-40 rounded-xl px-4 pt-3 pb-4"
         >
@@ -189,7 +192,6 @@ const aboutReward = {
   content: `매주 월요일, 지난주 점수를 기준으로 집계됩니다.\n 순위별로 유형별 맞춤 상품이 차등 지급될 예정입니다.`,
 };
 
-// api 명세서에 맞춰 수정하기
 const RANKING_LIST = [
   {
     userId: 1,
@@ -278,14 +280,24 @@ const firstRankUser = RANKING_LIST.find(user => user.rankingNow === 1);
 const thirdRankUser = RANKING_LIST.find(user => user.rankingNow === 3);
 const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
 
+// 모달 표시 여부
 const showModal = ref(true);
 
-// 추구미 유형 이름 매핑 객체
-const choogoomiType = Object.fromEntries(
-  Object.keys(REWARD_LIST).map(type => [
-    type,
-    CHOOGOOMI_MAP[type][0].choogoomiType,
-  ])
+// 중간 매핑: [choogoomiName, 이름] 쌍 배열
+const rewardEntries = REWARD_LIST.map(({ choogoomiName }) => [
+  choogoomiName,
+  CHOOGOOMI_MAP[choogoomiName][0].choogoomiType,
+]);
+
+// choogoomiName만 추출 -> 'v-for'에 사용
+const rewardTypes = rewardEntries.map(([choogoomiName]) => choogoomiName);
+
+// 유형 이름 객체로 변환 (A -> 지출제로형)
+const choogoomiType = Object.fromEntries(rewardEntries);
+
+// 보상 매핑 객체 (A -> {1: "...", 2: "...", 3: "..."})
+const rewardMap = Object.fromEntries(
+  REWARD_LIST.map(item => [item.choogoomiName, item.rewards])
 );
 
 function handlePhoneSubmit(phoneNumber) {
