@@ -176,8 +176,8 @@ onMounted(async () => {
       const bankInfo = getBankInfo(account.bankId);
       return {
         ...account,
-        bankLogo: bankInfo.icon, // 은행 로고
-        bankName: bankInfo.name, // 은행 이름
+        bankLogo: bankInfo.icon,
+        bankName: bankInfo.name,
       };
     });
   } catch (err) {
@@ -191,7 +191,7 @@ const goToTransaction = account => {
     params: {
       accountNum: account.accountNum,
       accountName: account.accountName,
-      bankId: account.bankId, // 여기만 params
+      bankId: account.bankId,
     },
     query: {
       accountBalance: account.accountBalance,
