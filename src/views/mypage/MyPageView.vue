@@ -25,7 +25,7 @@
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
               >
-                {{ choogoomi.choogoomiType }}
+                {{ userInfo.choogoomiName }}
               </div>
               <div class="flex justify-center items-center">
                 <img :src="edit" alt="수정 아이콘" class="h-3 w-3" />
@@ -129,18 +129,15 @@ import MyPageBtn from './components/MyPageBtn.vue';
 const showModal = ref(false);
 const showChoogoomiEditModal = ref(false);
 
+const choogoomiImage = ref('');
+
 const userInfo = reactive({
-  choogoomiName: 'A',
-  nickname: '카카오대학교라이언',
-  userLevel: 0,
-  userScore: 410,
-  userRanking: 5,
+  choogoomiName: '',
+  nickname: '',
+  userScore: null,
+  userRanking: null,
   isLevelUp: false,
 });
-
-const choogoomi = CHOOGOOMI_MAP[userInfo.choogoomiName][userInfo.userLevel];
-
-const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
 
 const editableDay = isEditableDay();
 
@@ -152,10 +149,16 @@ const logout = () => {
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('/api/users/main-profile');
-    // userInfo에 가져온 데이터 할당
-    userInfo.choogoomiName = data.choogoomiName;
+
+    console.log(data);
+
+    //추구미 알파벳을 유형명으로 매핑
+    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][0];
+    choogoomiImage.value = new URL(choogoomi.character, import.meta.url).href;
+
+    // userInfo 업데이트
+    userInfo.choogoomiName = choogoomi.choogoomiType;
     userInfo.nickname = data.nickname;
-    userInfo.userLevel = data.userLevel;
     userInfo.userScore = data.userScore;
     userInfo.userRanking = data.userRanking;
     userInfo.isLevelUp = data.isLevelUp;
