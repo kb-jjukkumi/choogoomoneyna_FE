@@ -50,7 +50,12 @@
         <!-- 레벨 -->
         <div class="flex flex-col gap-1 w-[60%]">
           <div class="bg-limegreen-100 h-2 rounded-full">
-            <div class="bg-green h-full w-1/2 rounded-full"></div>
+            <div
+              class="bg-green h-full rounded-full"
+              :style="{
+                width: `${(userInfo.userScore / LEVEL_THRESHOLDS[userLevel + 1]) * 100}%`,
+              }"
+            ></div>
           </div>
           <div class="text-center text-limegreen-700 text-xs">
             Lv.{{ userLevel }} / {{ userInfo.userScore }}점
@@ -123,7 +128,7 @@ import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import router from '@/router';
 import { isEditableDay } from '@/utils/dateUtils';
-import { getLevel } from '@/utils/levelUtils';
+import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 
 import MyPageBtn from './components/MyPageBtn.vue';
 
