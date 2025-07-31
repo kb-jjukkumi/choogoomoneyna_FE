@@ -23,23 +23,22 @@ import SurveyTwoComponent from './SurveyTwoComponent.vue';
 // 현재 설문 단계 (1: 첫 번째 설문, 2: 두 번째 설문)
 const currentStep = ref(1);
 
-// 설문 데이터를 저장할 배열 [[설문1 데이터들...], [설문2 데이터들...]]
-const surveyData = ref([null, null]);
+// 설문 데이터를 저장할 평면 배열 [설문1답변1, 설문1답변2, ..., 설문2답변1, 설문2답변2, ...] (총 14개)
+const surveyAnswers = ref([]);
 
 // 설문 1 완료 처리
 const handleSurveyOneComplete = surveyOneAnswers => {
-  // 설문 1 답변을 배열 형태로 변환 (객체의 값들을 배열로)
-  const surveyOneArray = Object.values(surveyOneAnswers);
-  surveyData.value[0] = surveyOneArray;
+  // ✅ 배열을 평면화하여 추가 (spread operator 사용)
+  surveyAnswers.value.push(...surveyOneAnswers);
   // 다음 설문으로 이동
   currentStep.value = 2;
 };
 
 // 설문 2 완료 처리
 const handleSurveyTwoComplete = surveyTwoAnswers => {
-  // 설문 2 답변 저장
-  surveyData.value[1] = surveyTwoAnswers;
-  // 최종 설문 데이터 출력
-  console.log('전체 설문 완료:', surveyData.value);
+  // ✅ 설문 2 답변들도 평면화하여 추가
+  surveyAnswers.value.push(...surveyTwoAnswers);
+  // 최종 설문 데이터 출력 (총 14개 값이 하나의 배열에)
+  console.log('전체 설문 완료:', surveyAnswers.value);
 };
 </script>
