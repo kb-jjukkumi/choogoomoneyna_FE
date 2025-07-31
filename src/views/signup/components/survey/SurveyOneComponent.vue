@@ -101,11 +101,7 @@ const emit = defineEmits(['next']);
 const surveyList = SURVEY_LIST.filter(question => question.id <= 3);
 
 // 답변
-const answers = reactive(
-  surveyList.map(question => ({
-    [question.id]: null,
-  }))
-);
+const answers = reactive(Array(surveyList.length).fill(null));
 
 // 모달 상태
 const showModal = ref(false);
