@@ -284,10 +284,12 @@ const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
 const showModal = ref(true);
 
 // 중간 매핑: [choogoomiName, 이름] 쌍 배열
-const rewardEntries = REWARD_LIST.map(({ choogoomiName }) => [
-  choogoomiName,
-  CHOOGOOMI_MAP[choogoomiName][0].choogoomiType,
-]);
+const rewardEntries = REWARD_LIST.map(({ choogoomiName }) => {
+  const mapEntry = CHOOGOOMI_MAP.find(
+    item => item.choogoomiName === choogoomiName
+  );
+  return [choogoomiName, mapEntry.userLevel[0].choogoomiType];
+});
 
 // choogoomiName만 추출 -> 'v-for'에 사용
 const rewardTypes = rewardEntries.map(([choogoomiName]) => choogoomiName);
