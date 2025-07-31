@@ -42,8 +42,7 @@
     </div>
     <ChoogooMiDetailModal
       v-if="isModalOpen"
-      :selected-character="selectedCharacter"
-      :is-signing-up="isSigningUp"
+      :selected-choogoo-mi="selectedChoogooMi"
       @close="isModalOpen = false"
       @select="confirmSelection"
     />
@@ -66,7 +65,6 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import authApi from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
 
@@ -75,65 +73,39 @@ import ChoogooMiDetailModal from './ChoogooMiDetailModal.vue';
 
 const router = useRouter();
 
-// Props 정의
-const props = defineProps({
-  allData: { type: Object, required: true },
-  assetSkipped: { type: Boolean, default: false },
-});
-
-// Emit 정의
-const emit = defineEmits(['complete', 'error']);
-
 const selected = ref(null);
 const isModalOpen = ref(false);
 const isErrorModalOpen = ref(false);
 const isSuccessModalOpen = ref(false);
-const isSigningUp = ref(false);
 
-const profileImage = ref(null);
-
+// 선택한 카드의 index 저장
 const select = idx => {
   selected.value = idx;
-  const selectedChar = CHOOGOOMI_CHARACTERS.find(
-    char => char.choogoomiId === idx
-  );
-
   isModalOpen.value = true;
 };
 
-// 캐릭터 선택 확정 및 회원가입 API 호출
+// 추구미 선택 확정
 const confirmSelection = async () => {
-  if (isSigningUp.value) return; // 중복 요청 방지
-
-  isSigningUp.value = true;
   try {
-    const selectedChar = CHOOGOOMI_CHARACTERS.find(
-      char => char.choogoomiId === selected.value
-    );
-
-    // 최종 회원가입 데이터 구성 (누적된 모든 데이터 포함)
-    const finalSignupData = {
-      ...props.allData.signupData,
-      profileImage: profileImage.value,
-      choogooMi: selectedChar.choogoomiId,
+    // API 호출: 선택한 추구미 이름과 함께 요청
+    const requestData = {
+      choogoomiName: selected.value,
     };
-    // 회원가입 API 호출
-    await authApi.signup(finalSignupData);
+    console.log('추구미 선택 요청:', requestData);
 
-    // 회원가입 성공 시 성공 모달 표시
+    // 임시로 성공 처리
     isSuccessModalOpen.value = true;
   } catch (error) {
-    console.error('회원가입 실패:', error);
+    console.error('추구미 선택 실패:', error);
     // 에러 처리 - 에러 모달 표시
     isErrorModalOpen.value = true;
   } finally {
     isModalOpen.value = false;
-    isSigningUp.value = false;
   }
 };
 
 // 선택된 캐릭터 정보
-const selectedCharacter = computed(() => {
+const selectedChoogooMi = computed(() => {
   return selected.value !== null
     ? CHOOGOOMI_CHARACTERS.find(char => char.choogoomiId === selected.value)
     : null;
@@ -141,20 +113,12 @@ const selectedCharacter = computed(() => {
 
 const handleError = () => {
   isErrorModalOpen.value = false;
-  emit('error');
+  // 에러 발생 시 다시 선택할 수 있도록 모달만 닫기
 };
 
 const handleSuccess = () => {
   isSuccessModalOpen.value = false;
-
-  // 최종 선택된 캐릭터 정보 전달
-  const selectedCharacterData = {
-    choogooMi: selected.value,
-    profileImage: profileImage.value,
-  };
-
-  emit('complete', selectedCharacterData);
-
-  router.push('/login');
+  // 추구미 선택 완료 후 홈으로 이동
+  router.push('/');
 };
 </script>

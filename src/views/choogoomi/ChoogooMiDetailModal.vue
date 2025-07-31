@@ -14,31 +14,30 @@
       </div>
       <div class="w-full flex items-center justify-center">
         <img
-          :src="selectedCharacter.img"
-          :alt="selectedCharacter.label"
+          :src="selectedChoogooMi.img"
+          :alt="selectedChoogooMi.label"
           class="w-40 h-45 object-contain"
         />
       </div>
       <div class="text-limegreen-800 text-2xl font-bold">
-        {{ selectedCharacter.label }}
+        {{ selectedChoogooMi.label }}
       </div>
       <div class="w-10 h-[2px] bg-gray-100 m-4 rounded-full"></div>
       <div
         class="flex items-center justify-center w-full h-10 text-green text-xl m-4"
       >
-        {{ selectedCharacter.summary }}
+        {{ selectedChoogooMi.summary }}
       </div>
       <div
         class="text-limegreen-800 mb-6 text-center whitespace-pre-line leading-relaxed max-w-full px-2 break-keep"
       >
-        {{ selectedCharacter.explain }}
+        {{ selectedChoogooMi.explain }}
       </div>
       <button
         class="w-36 h-12 bg-limegreen-500 text-ivory rounded-lg py-2 text-xl! disabled:opacity-50"
         @click="$emit('select')"
-        :disabled="isSigningUp"
       >
-        {{ isSigningUp ? '가입 중...' : '선택' }}
+        선택
       </button>
     </div>
   </div>
@@ -46,8 +45,7 @@
 
 <script setup>
 defineProps({
-  selectedCharacter: { type: Object, required: true },
-  isSigningUp: { type: Boolean, default: false },
+  selectedChoogooMi: { type: Object, required: true },
 });
 
 defineEmits(['close', 'select']);
