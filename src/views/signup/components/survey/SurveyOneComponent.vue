@@ -12,7 +12,7 @@
       <!-- 설문조사 문항 -->
       <div class="flex flex-col gap-5">
         <div
-          v-for="question in INITIAL_QUESTION_LIST"
+          v-for="question in surveyList"
           :key="question.id"
           class="flex flex-col gap-3 bg-ivory rounded-lg"
         >
@@ -43,7 +43,7 @@
 
             <!-- 설문조사 응답 버튼과 라벨 -->
             <div class="grid grid-cols-5 gap-0 relative z-10">
-              <div v-for="(option, index) in question.options" :key="index">
+              <div v-for="option in question.options" :key="option.value">
                 <!-- 각 옵션을 컨테이너로 묶기 -->
                 <div class="flex flex-col items-center">
                   <div
@@ -55,7 +55,7 @@
                         : 'bg-white hover:bg-limegreen-100',
                     ]"
                   >
-                    {{ index + 1 }}
+                    {{ option.value }}
                   </div>
                   <!-- 라벨 -->
                   <div
@@ -94,37 +94,36 @@
 import { reactive, ref } from 'vue';
 
 import AlertModal from '@/components/AlertModal.vue';
-
-import { INITIAL_QUESTION_LIST } from '../../constants/question';
+import { SURVEY_LIST } from '@/views/signup/constants/survey';
 
 const emit = defineEmits(['next']);
 
+const surveyList = SURVEY_LIST.filter(question => question.id <= 3);
+
 // 답변
-const answers = reactive({
-  age: null,
-  income: null,
-  save: null,
-  habit: null,
-});
+const answers = reactive(
+  surveyList.map(question => ({
+    [question.id]: null,
+  }))
+);
 
 // 모달 상태
 const showModal = ref(false);
 
 // 응답 선택
-function selectOption(questionId, value) {
+const selectOption = (questionId, value) => {
   answers[questionId] = value;
-}
+};
 
 // 다음 버튼 클릭 시
 function handleNext() {
   //answers의 value들을 배열에 담아 값이 null이 아닌지(모든 항목이 선택되었는지) 확인
-  const isAllAnswered = Object.values(answers).every(value => value !== null);
-  if (!isAllAnswered) {
+  if (answers.some(answer => answer === null)) {
     showModal.value = true;
     return;
   }
 
-  console.log('Survey1 답변:');
+  console.log('Survey1 답변:', answers);
   emit('next', answers);
 }
 </script>
