@@ -20,7 +20,7 @@
             <button
               class="group flex justify-center items-center gap-1 bg-green text-white px-2 py-1 rounded-full relative"
               @click="showChoogoomiEditModal = true"
-              :disabled="!editableDay"
+              :disabled="!isEditable"
             >
               <div
                 class="flex text-center text-xs tracking-widest items-center leading-none text-[14px]"
@@ -32,7 +32,7 @@
               </div>
 
               <div
-                v-if="!editableDay"
+                v-if="!isEditable"
                 class="absolute left-full top-1/2 -translate-y-1/2 w-30 ml-2 whitespace-pre-wrap bg-ivory border-3 border-limegreen-500 text-limegreen-700 text-xs rounded-[10px] px-2 py-1.5 z-10 hidden group-hover:block shadow-[2px_2px_6px_0px] shadow-limegreen-500"
               >
                 변경 가능 시간<br />
@@ -146,7 +146,7 @@ const userInfo = reactive({
   isLevelUp: false,
 });
 
-const editableDay = isEditableDay();
+const isEditable = isEditableDay();
 
 const logout = () => {
   localStorage.clear();
