@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import { useAuthStore } from '@/stores/authStore';
 import AssetConnectView from '@/views/asset/AssetConnectView.vue';
 import AssetSelectView from '@/views/asset/AssetSelectView.vue';
 import AssetReportView from '@/views/asset/report/AssetReportView.vue';
@@ -103,32 +104,46 @@ const router = createRouter({
   ],
 });
 
-// 라우터 가드
-// router.beforeEach((to, from, next) => {
-//   const accessToken = localStorage.getItem('accessToken');
-//   const publicPages = [
-//     '/login',
-//     '/signup',
-//     '/survey1',
-//     '/survey2',
-//     '/character-select',
-//   ];
-//   const assetPages = ['/asset/select', '/asset/connect'];
-//   const authRequired =
-//     !publicPages.includes(to.path) && !assetPages.includes(to.path);
+// ✅ 요청하신 테스트 시나리오에 맞는 라우터 가드
+router.beforeEach(async (to, from, next) => {
+  // ✅ AuthStore에서 로그인 상태 확인
+  const authStore = useAuthStore();
+  const isLoggedIn = authStore.isLoggedIn;
 
-//   if (accessToken) {
-//     // 로그인 후: publicPages (asset 페이지 제외)에 접근 못하도록
-//     if (publicPages.includes(to.path)) {
-//       return next('/');
-//     }
-//   } else {
-//     // 로그인 전: 인증이 필요한 페이지에 접근하면 로그인 페이지로 이동
-//     if (authRequired) {
-//       return next('/login');
-//     }
-//   }
-//   next();
-// });
+  // 공개 페이지 정의
+  const publicPages = ['/login', '/signup'];
 
+  console.log('🚦 Router Guard:', {
+    to: to.path,
+    isLoggedIn,
+  });
+
+  if (isLoggedIn) {
+    // ✅ 로그인된 상태에서의 처리
+    if (publicPages.includes(to.path)) {
+      // ✅ /login → / 리디렉트
+      // ✅ /signup → / 리디렉트
+      console.log('로그인된 사용자가 공개 페이지 접근 → 홈으로 리디렉트');
+      return next('/');
+    }
+
+    // ✅ / → 접근 허용
+    // ✅ /mypage → 접근 허용
+    console.log('로그인된 사용자 → 접근 허용');
+    return next();
+  } else {
+    // ✅ 로그인되지 않은 상태에서의 처리
+    if (publicPages.includes(to.path)) {
+      // ✅ /login → 접근 허용
+      // ✅ /signup → 접근 허용
+      console.log('미로그인 사용자 → 공개 페이지 접근 허용');
+      return next();
+    }
+
+    // ✅ / → /login으로 리디렉트
+    // ✅ /mypage → /login으로 리디렉트
+    console.log('미로그인 사용자가 보호된 페이지 접근 → 로그인으로 리디렉트');
+    return next('/login');
+  }
+});
 export default router;

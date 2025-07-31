@@ -51,4 +51,17 @@ const signup = async signupData => {
   }
 };
 
-export default { checkName, sendCode, verifyCode, signup };
+// 로그인
+const login = async (email, password) => {
+  try {
+    const { data } = await axiosInstance.post('api/users/login', {
+      email,
+      password,
+    });
+    return data;
+  } catch {
+    throw new Error('로그인 실패');
+  }
+};
+
+export default { checkName, sendCode, verifyCode, signup, login };
