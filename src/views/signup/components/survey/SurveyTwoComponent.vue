@@ -15,7 +15,7 @@
           <div
             class="h-full bg-green rounded-full transition-all"
             :style="{
-              width: `${((currentIndex + 1) / QUESTION_LIST.length) * 100}%`,
+              width: `${((currentIndex + 1) / surveyList.length) * 100}%`,
             }"
           ></div>
         </div>
@@ -23,7 +23,7 @@
           <div class="text-sm text-green">
             {{ currentIndex + 1 }}
           </div>
-          <div class="px-1">/ {{ QUESTION_LIST.length }}</div>
+          <div class="px-1">/ {{ surveyList.length }}</div>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
         {{
           isProcessing
             ? '처리 중...'
-            : currentIndex === QUESTION_LIST.length - 1
+            : currentIndex === surveyList.length - 1
               ? '자산 연동'
               : '다음'
         }}
@@ -65,42 +65,55 @@
 import { computed, ref } from 'vue';
 
 import AlertModal from '@/components/AlertModal.vue';
+import { SURVEY_LIST } from '@/views/signup/constants/survey';
 
-import { QUESTION_LIST } from '../../constants/question';
 import QuestionCard from './QuestionCard.vue';
 
 // Emit 정의
 const emit = defineEmits(['next']);
 
+// 설문 2 목록
+const surveyList = SURVEY_LIST.filter(question => question.id >= 4);
+
+// 현재 질문 인덱스
 const currentIndex = ref(0);
+
+// 선택된 옵션
 const selectedOption = ref(null);
+
+// 모달 상태
 const showModal = ref(false);
 
 // 로딩 상태 관리
 const isProcessing = ref(false);
 
 // survey2 답변들을 저장할 배열
-const survey2Answers = ref([]);
+const survey2Answers = ref([selectedOption.value]);
 
-const currentQuestion = computed(() => QUESTION_LIST[currentIndex.value]);
+// 현재 질문
+const currentQuestion = computed(() => surveyList[currentIndex.value]);
+
+const isLastSurvey = computed(
+  () => currentIndex.value === surveyList.length - 1
+);
 
 const handleNext = () => {
+  // 선택된 옵션이 없을 때
   if (!selectedOption.value) {
     showModal.value = true;
     return;
   }
-
   // 현재 질문의 답변을 저장
   survey2Answers.value[currentIndex.value] = selectedOption.value;
 
-  if (currentIndex.value < QUESTION_LIST.length - 1) {
-    currentIndex.value++;
-    selectedOption.value = null;
-  } else {
-    console.log('Survey2 답변:', survey2Answers.value);
-
-    // survey2 답변만 전달 (allData는 부모에서 관리)
+  // 마지막 질문일 때
+  if (isLastSurvey.value) {
     emit('next', survey2Answers.value);
+    return;
   }
+
+  // 다음 질문으로 이동
+  currentIndex.value++;
+  selectedOption.value = null;
 };
 </script>
