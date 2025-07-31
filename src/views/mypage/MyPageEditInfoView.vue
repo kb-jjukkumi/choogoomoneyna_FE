@@ -140,23 +140,24 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 import authApi from '@/api/authApi';
+import axiosInstance from '@/api/axios';
 import AlertModal from '@/components/AlertModal.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import router from '@/router';
 
 const member = reactive({
-  profileImage: null,
-  email: 'test@test.com',
-  password: '3333',
-  nickname: '카카오대학교라이언',
-  choogooMi: 'A',
+  choogoomiName: '',
+  nickname: '',
+  userScore: null,
+  userRanking: null,
+  isLevelUp: false,
 });
 
-const newNickname = ref(member.nickname);
+const newNickname = ref('');
 const currentPassword = ref('');
 const newPassword = ref(''); //비밀번호 확인
 const newPassword2 = ref(''); //비밀번호 확인
@@ -279,4 +280,18 @@ const handleUpdate = async () => {
     showConfirmModal.value = true;
   }
 };
+
+onMounted(async () => {
+  try {
+    const { data } = await axiosInstance.get('/api/users/main-profile');
+    console.log(data);
+
+    //userInfo에 저장
+    Object.assign(member, data);
+    newNickname.value = member.nickname;
+    console.log(member);
+  } catch (error) {
+    console.error('회원 정보 불러오기 실패');
+  }
+});
 </script>
