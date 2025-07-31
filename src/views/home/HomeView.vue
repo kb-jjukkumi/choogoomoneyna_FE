@@ -117,8 +117,7 @@
     <BottomNavigation />
     <RewardModal
       v-if="showModal"
-      title="레벨 * 달성
-      축하합니다!"
+      :title="'레벨 ' + USER_PROFILE.userLevel + ' 달성 \n 축하합니다!'"
       message="꾸준한 미션 수행으로 추구미를 향해 멋지게 성장하고 있어요 👏
        기프티콘 발송을 위해 휴대폰 번호를 입력해주세요.
        입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
@@ -206,7 +205,7 @@ const addAccount = () => {
   });
 };
 
-const showModal = ref(true);
+const showModal = ref(USER_PROFILE.isLevelUp);
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
