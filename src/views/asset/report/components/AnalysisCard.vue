@@ -91,9 +91,6 @@
 <script setup>
 import { defineProps } from 'vue';
 
-const { image, name, summary } = props.characterData;
-const { percentage, categories } = props.chartData;
-
 // Props 정의
 const props = defineProps({
   // 모드: 'chart', 'character'
@@ -125,6 +122,9 @@ const props = defineProps({
     }),
   },
 });
+
+const { image, name, summary } = props.characterData;
+const { percentage, categories } = props.chartData;
 </script>
 
 <style scoped>
