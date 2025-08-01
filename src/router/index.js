@@ -11,6 +11,7 @@ import LoginView from '@/views/login/LoginView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MissionWriteView from '@/views/matching/MissionWriteView.vue';
+import MyPageAssetReportView from '@/views/mypage/components/report/AssetReportView.vue';
 import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageRecordView from '@/views/mypage/MyPageRecordView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
@@ -100,6 +101,11 @@ const router = createRouter({
       path: '/mypage/record',
       name: 'mypageRecord',
       component: MyPageRecordView,
+    },
+    {
+      path: '/mypage/asset-report',
+      name: 'mypageAssetReport',
+      component: MyPageAssetReportView,
     },
   ],
 });
