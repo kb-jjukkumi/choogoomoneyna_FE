@@ -120,10 +120,12 @@
             <div
               class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
             >
-              <div class="text-gray-600">{{ currentReport.title }}</div>
-              <div class="text-gray-600 leading-relaxed whitespace-pre-line">
+              <span class="text-green text-lg">{{ currentReport.title }}</span>
+              <span
+                class="text-gray-600 text-sm leading-relaxed whitespace-pre-line"
+              >
                 {{ currentReport.content }}
-              </div>
+              </span>
             </div>
           </div>
         </div>
