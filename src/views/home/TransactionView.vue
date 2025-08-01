@@ -42,7 +42,7 @@
               {{ transaction.formattedTime }}
             </p>
             <p class="text-sm text-limegreen-800 text-medium">
-              {{ transaction.trDesc2 }}
+              {{ transaction.trDesc3 }}
             </p>
           </div>
 
