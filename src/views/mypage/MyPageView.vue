@@ -161,8 +161,13 @@ onMounted(async () => {
     userLevel.value = getLevel(data.userScore);
 
     //추구미 알파벳을 유형명으로 매핑
-    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][userLevel.value];
-    choogoomiImage.value = new URL(choogoomi.character, import.meta.url).href;
+    const choogoomi = CHOOGOOMI_MAP.find(
+      choogoomi => choogoomi.choogoomiName === data.choogooMi
+    );
+    choogoomiImage.value = new URL(
+      choogoomi.userLevel[userLevel.value].character,
+      import.meta.url
+    ).href;
 
     // userInfo 업데이트
     userInfo.choogoomiName = choogoomi.choogoomiType;
