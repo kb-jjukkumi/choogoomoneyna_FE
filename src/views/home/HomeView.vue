@@ -12,16 +12,19 @@
           alt="캐릭터 이미지"
           class="w-[100px] mx-auto mt-8 mb-2"
         />
+
         <!-- 추구미 유형명 -->
         <span
           class="bg-green text-white px-2.5 py-[2px] rounded-full text-xs text-center tracking-wide"
         >
           {{ choogoomi.choogoomiType }}
         </span>
+
         <!-- 닉네임 -->
         <p class="text-limegreen-800 text-lg text-center my-[2px]">
           {{ USER_PROFILE.nickname }}
         </p>
+
         <!-- 레벨 박스 -->
         <div class="p-1 w-70 max-w-[400px] mx-auto">
           <!-- 레벨 표시 바 - 전체 -->
@@ -29,11 +32,13 @@
             <!-- 레벨 표시 바 - 현재 레벨 -->
             <div class="bg-green h-full w-1/2 rounded-xl"></div>
           </div>
+
           <!-- 현재 레벨 & 점수 -->
           <div class="text-center text-limegreen-700 text-xs">
             {{ 'Lv.' + userLevel + ' / ' + USER_PROFILE.userScore + '점' }}
           </div>
         </div>
+
         <!-- 현재 순위 & 최근 성적 -->
         <div
           class="flex justify-between text-center w-full max-w-[400px] px-30"
@@ -50,13 +55,14 @@
           </div>
         </div>
       </div>
+
       <!-- 연동 계좌 목록 박스 -->
       <div
         class="flex flex-grow flex-col bg-limegreen-500 rounded-t-[30px] px-3 py-2 w-full h-full mt-4 mx-auto"
       >
         <p class="text-lg text-limegreen-900 pt-4 pb-3 px-4">연동 계좌 목록</p>
+
         <!-- 연동 계좌 목록 -->
-        <!-- 계좌 목록의 길이가 '430px'을 넘어가면 스크롤 처리 -->
         <div
           class="max-h-[calc(100vh-550px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
         >
@@ -99,6 +105,7 @@
             </div>
           </div>
         </div>
+
         <!-- 계좌 추가 버튼 -->
         <div
           class="bg-ivory rounded-xl my-1 mx-3 flex justify-center items-center cursor-pointer"
@@ -108,7 +115,9 @@
         </div>
       </div>
     </div>
+
     <BottomNavigation />
+
     <RewardModal
       v-if="showModal"
       :title="'레벨 ' + USER_PROFILE.userLevel + ' 달성 \n 축하합니다!'"
@@ -127,6 +136,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { userInfo } from '@/api/authApi';
 import { fetchAccounts } from '@/api/bankApi';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
@@ -135,40 +145,57 @@ import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { getLevel } from '@/utils/levelUtils';
 
 const router = useRouter();
 
-// 계좌목록 데이터
-const ACCOUNTS = ref([]);
+const ACCOUNTS = ref([]); // 계좌목록 데이터
+const userLevel = ref(0); // 레벨
+const USER_PROFILE = ref({}); // 프로필 정보
+// 추구미 유형 정보 - 추구미 유형명, 캐릭터
+const choogoomi = ref({});
+const choogoomiImage = ref(''); // 추구미 캐릭터 이미지 URL
 
-const userLevel = ref(0);
-
-const USER_PROFILE = {
-  choogoomiName: 'A',
-  nickname: '멜랑콜리',
-  userScore: 30,
-  userRanking: 20,
-  isLevelUp: false,
-};
-
-const choogoomi = CHOOGOOMI_MAP.find(
-  item => item.choogoomiName === USER_PROFILE.choogoomiName
-).userLevel[userLevel.value];
-
-// 캐릭터 이미지 주소 가져오기
-const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
-
+// 은행 ID로 은행 정보를 찾아 반환하는 함수
 const getBankInfo = bankId =>
   BANK_LIST.find(bank => bank.bankId === bankId || bank.id === bankId);
 
+// 레벨 업 보상 모달 표시 여부
+const showModal = ref(false);
+
+// 컴포넌트가 마운트될 때 실행
 onMounted(async () => {
   try {
+    // 사용자 프로필 정보를 API로부터 받아옴
+    const profileData = await userInfo();
+
+    // 받아온 프로필 정보에 레벨 추가하여 저장
+    USER_PROFILE.value = {
+      ...profileData,
+      // 레벨 -> 점수 이용하여 계산
+      userLevel: getLevel(profileData.userScore),
+    };
+
+    userLevel.value = USER_PROFILE.value.userLevel;
+
+    // 추구미 이름 & 레벨 -> 추구미 캐릭터 정보 매핑
+    choogoomi.value = CHOOGOOMI_MAP.find(
+      item => item.choogoomiName === USER_PROFILE.value.choogooMi
+    ).userLevel[userLevel.value];
+
+    // 추구미 캐릭터 이미지 URL
+    choogoomiImage.value = new URL(
+      choogoomi.value.character,
+      import.meta.url
+    ).href;
+
+    // 레벨 업 여부에 따라 보상 모달 표시 여부 결정
+    showModal.value = USER_PROFILE.value.isLevelUp;
+
+    // 계좌목록 데이터를 API로부터 받아옴
     const data = await fetchAccounts();
 
-    // 점수로 레벨 계산
-    userLevel.value = getLevel(data.userScore);
-
-    // 계좌 목록에 은행 이름과 로고 추가
+    // 받아온 계좌 목록에 은행 이름과 로고 정보를 추가하여 저장
     ACCOUNTS.value = data.map(account => {
       const bankInfo = getBankInfo(account.bankId);
       return {
@@ -182,6 +209,7 @@ onMounted(async () => {
   }
 });
 
+// 계좌 클릭 -> 해당 계좌의 거래 내역 페이지로 이동하는 함수
 const goToTransaction = account => {
   router.push({
     name: 'transaction',
@@ -197,14 +225,14 @@ const goToTransaction = account => {
   });
 };
 
+// 계좌 추가 페이지로 이동하는 함수
 const addAccount = () => {
   router.push({
     name: 'assetSelect',
   });
 };
 
-const showModal = ref(USER_PROFILE.isLevelUp);
-
+// 보상 모달에서 전화번호 제출 시 호출되는 함수
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
 }
