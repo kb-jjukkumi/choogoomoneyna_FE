@@ -73,12 +73,10 @@ export const useAuthStore = defineStore('auth', {
         this.setRefreshToken(response.refreshToken);
 
         console.log('✅ 로그인 성공 - 토큰 저장 완료');
-        return { success: true };
+        return true;
       } catch (error) {
-        console.error('로그인 실패:', error);
-        return { success: false, error: error.message };
-      } finally {
-        this.isLoading = false;
+        console.log(error);
+        return false;
       }
     },
   },
