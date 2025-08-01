@@ -65,7 +65,7 @@ const login = async (email, password) => {
 };
 
 // 유저 프로필 정보
-const userInfo = async () => {
+export const userInfo = async () => {
   try {
     const { data } = await axiosInstance.get('api/users/main-profile');
     return data;
