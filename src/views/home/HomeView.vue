@@ -31,13 +31,7 @@
           </div>
           <!-- 현재 레벨 & 점수 -->
           <div class="text-center text-limegreen-700 text-xs">
-            {{
-              'Lv.' +
-              USER_PROFILE.userLevel +
-              ' / ' +
-              USER_PROFILE.userScore +
-              '점'
-            }}
+            {{ 'Lv.' + userLevel + ' / ' + USER_PROFILE.userScore + '점' }}
           </div>
         </div>
         <!-- 현재 순위 & 최근 성적 -->
@@ -147,10 +141,11 @@ const router = useRouter();
 // 계좌목록 데이터
 const ACCOUNTS = ref([]);
 
+const userLevel = ref(0);
+
 const USER_PROFILE = {
   choogoomiName: 'A',
   nickname: '멜랑콜리',
-  userLevel: 0,
   userScore: 30,
   userRanking: 20,
   isLevelUp: false,
@@ -158,7 +153,7 @@ const USER_PROFILE = {
 
 const choogoomi = CHOOGOOMI_MAP.find(
   item => item.choogoomiName === USER_PROFILE.choogoomiName
-).userLevel[USER_PROFILE.userLevel];
+).userLevel[userLevel.value];
 
 // 캐릭터 이미지 주소 가져오기
 const choogoomiImage = new URL(choogoomi.character, import.meta.url).href;
@@ -169,6 +164,9 @@ const getBankInfo = bankId =>
 onMounted(async () => {
   try {
     const data = await fetchAccounts();
+
+    // 점수로 레벨 계산
+    userLevel.value = getLevel(data.userScore);
 
     // 계좌 목록에 은행 이름과 로고 추가
     ACCOUNTS.value = data.map(account => {
