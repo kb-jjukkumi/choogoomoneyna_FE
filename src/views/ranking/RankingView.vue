@@ -21,13 +21,16 @@
               {{ aboutReward.content }}
             </p>
             <div
-              v-for="choogoomiName in rewardTypes"
+              v-for="choogoomiName in choogoomiNames"
               :key="choogoomiName"
               class="text-xs leading-tight text-limegreen-800 whitespace-pre-line mt-2 space-y-1"
             >
               <div>
                 <p class="text-bold text-[13px] text-yellow">
-                  {{ choogoomiType[choogoomiName] }}
+                  {{
+                    CHOOGOOMI_MAP.find(c => c.choogoomiName === choogoomiName)
+                      ?.userLevel[0].choogoomiType
+                  }}
                 </p>
               </div>
               <div
@@ -40,108 +43,115 @@
           </div>
         </div>
       </div>
-      <!-- 1~3위 -->
+
+      <!-- 지난주 랭킹 명예의 전당 -->
       <div class="flex gap-1 items-center mb-2 px-6">
-        <!-- 2위 -->
+        <!-- 2등 -->
         <div
           class="flex flex-1 flex-col items-center w-25 h-40 bg-[#DFF1F9] rounded-xl px-4 pt-3 pb-4"
         >
           <span class="text-gray-300 text-lg font-semibold">{{
-            secondRankUser.rankingNow
+            secondRankUser.ranking
           }}</span>
           <img
-            :src="profile_savings"
+            :src="choogoomiCharacter[secondRankUser.userNickname]"
             class="bg-ivory rounded-full mt-2 size-15 object-cover"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ choogoomiType[secondRankUser.choogoomiName] }}
+            {{ choogoomiType[secondRankUser.userNickname] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
-            {{ secondRankUser.nickName }}
+            {{ secondRankUser.userNickname }}
           </div>
           <div class="text-[11px] text-gray-300">
             {{ secondRankUser.score }}점
           </div>
         </div>
-        <!-- 1위 -->
+
+        <!-- 1등 -->
         <div
           class="flex flex-col items-center h-50 w-32 bg-limegreen-100 rounded-xl px-4 pt-3 pb-4"
         >
           <span class="text-yellow text-2xl font-semibold">
-            {{ firstRankUser.rankingNow }}
+            {{ firstRankUser.ranking }}
           </span>
           <img
-            :src="profile_savings"
+            :src="choogoomiCharacter[firstRankUser.userNickname]"
             class="bg-ivory rounded-full mt-1 size-20"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[2px] rounded-full text-xs text-center"
           >
-            {{ choogoomiType[firstRankUser.choogoomiName] }}
+            {{ choogoomiType[firstRankUser.userNickname] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
-            {{ firstRankUser.nickName }}
+            {{ firstRankUser.userNickname }}
           </div>
           <div class="text-[11px] text-gray-300">
             {{ firstRankUser.score }}점
           </div>
         </div>
-        <!-- 3위 -->
+
+        <!-- 3등 -->
         <div
           class="flex flex-1 flex-col items-center bg-[#FFE7E7] w-25 h-40 rounded-xl px-4 pt-3 pb-4"
         >
-          <span class="text-[#F29C3A] text-lg font-semibold">{{
-            thirdRankUser.rankingNow
-          }}</span>
+          <span class="text-[#F29C3A] text-lg font-semibold">
+            {{ thirdRankUser.ranking }}
+          </span>
           <img
-            :src="profile_savings"
+            :src="choogoomiCharacter[thirdRankUser.userNickname]"
             class="bg-ivory rounded-full mt-2 size-15 object-cover"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ choogoomiType[thirdRankUser.choogoomiName] }}
+            {{ choogoomiType[thirdRankUser.userNickname] }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
-            {{ thirdRankUser.nickName }}
+            {{ thirdRankUser.userNickname }}
           </div>
           <div class="text-[11px] text-gray-300">
             {{ thirdRankUser.score }}점
           </div>
         </div>
       </div>
-      <!-- 랭킹 리스트 -->
+
+      <!-- 이번주 실시간 랭킹 -->
       <div
         class="flex flex-grow flex-col bg-limegreen-500 rounded-t-[30px] px-3 py-2 w-full h-full mt-4"
       >
+        <p class="text-lg text-limegreen-900 text-center pt-3 pb-4 px-4">
+          실시간 랭킹
+        </p>
         <div
-          class="max-h-[calc(100vh-415px)] overflow-scroll [&::-webkit-scrollbar]:hidden bg-limegreen-500 mx-3 mt-5 mb-1 space-y-2"
+          class="max-h-[calc(100vh-450px)] overflow-scroll [&::-webkit-scrollbar]:hidden bg-limegreen-500 mx-3 mb-1 space-y-2"
         >
           <div
-            v-for="(rank, i) in restRankUsers"
+            v-for="(rank, i) in RANKING_LIST"
             :key="i"
-            class="bg-white rounded-xl px-5 py-3 flex justify-between items-center"
+            class="bg-white rounded-xl px-5 py-2 flex justify-between items-center"
           >
             <div class="flex items-center gap-3">
               <div class="text-lg font-semibold text-limegreen-800">
-                {{ rank.rankingNow }}
+                {{ rank.ranking }}
               </div>
               <div class="flex flex-col items-center ml-1">
                 <img
-                  :src="profile_savings"
+                  :src="choogoomiCharacter[rank.userNickname]"
                   class="bg-limegreen-100 rounded-full size-10"
                 />
                 <span
                   class="bg-green text-white mt-[-7px] px-2 py-[2.5px] rounded-full text-[7px] text-center"
                 >
-                  {{ choogoomiType[rank.choogoomiName] }}
+                  {{ choogoomiType[rank.userNickname] }}
                 </span>
               </div>
               <div class="flex flex-col">
                 <span class="text-sm font-medium text-limegreen-900">{{
-                  rank.nickName
+                  rank.userNickname
                 }}</span>
                 <span class="text-xs text-gray-500">{{ rank.score }}점</span>
               </div>
@@ -152,15 +162,17 @@
               <img
                 :src="rankChange"
                 class="size-2 mr-1"
-                :class="{ 'rotate-180': rank.rankingNow - rank.rankingEx > 0 }"
+                :class="{ 'rotate-180': rank.ranking - rank.befRanking > 0 }"
               />
-              <span>{{ Math.abs(rank.rankingNow - rank.rankingEx) }}</span>
+              <span>{{ Math.abs(rank.ranking - rank.befRanking) }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
     <BottomNavigation />
+
     <RewardModal
       v-if="showModal"
       title="축하합니다! 
@@ -178,7 +190,6 @@
 <script setup>
 import { ref } from 'vue';
 
-import profile_savings from '@/assets/img/characters/character_savings_profile.png';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -186,116 +197,160 @@ import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap.js';
 import { REWARD_LIST } from '@/constants/rewardList.js';
+import { getLevel } from '@/utils/levelUtils.js';
+
+// 모달 표시 여부
+const showModal = ref(false);
 
 const aboutReward = {
   title: '🎁',
   content: `매주 월요일, 지난주 점수를 기준으로 집계됩니다.\n 순위별로 유형별 맞춤 상품이 차등 지급될 예정입니다.`,
 };
 
-const RANKING_LIST = [
+const USER_PROFILE = {
+  choogoomiName: 'A',
+  nickname: '',
+  userScore: 500,
+  userRanking: 20,
+  isLevelUp: false,
+};
+
+const LAST_RANKING_LIST = ref([
   {
-    userId: 1,
-    rankingNow: 1,
-    nickName: '심쿵비비',
-    score: 900,
-    rankingEx: 2,
-    choogoomiName: 'C',
-  },
-  {
-    userId: 2,
-    rankingNow: 2,
-    nickName: '어피치',
-    score: 900,
-    rankingEx: 3,
-    choogoomiName: 'C',
-  },
-  {
-    userId: 3,
-    rankingNow: 3,
-    nickName: '라이언',
-    score: 900,
-    rankingEx: 5,
-    choogoomiName: 'C',
-  },
-  {
-    userId: 4,
-    rankingNow: 4,
-    nickName: '프로도',
-    score: 900,
-    rankingEx: 6,
+    userNickname: '쭈꾸미',
+    ranking: 1,
+    score: 500,
     choogoomiName: 'A',
   },
   {
-    userId: 5,
-    rankingNow: 5,
-    nickName: '춘식이',
+    userNickname: '오징어',
+    ranking: 2,
+    score: 490,
+    choogoomiName: 'A',
+  },
+  {
+    userNickname: '낙지',
+    ranking: 3,
+    score: 480,
+    choogoomiName: 'A',
+  },
+]);
+
+const RANKING_LIST = [
+  {
+    ranking: 1,
+    userNickname: '심쿵비비',
+    befRanking: 2,
     score: 900,
-    rankingEx: 7,
+    choogoomiName: 'C',
+  },
+  {
+    ranking: 2,
+    userNickname: '어피치',
+    befRanking: 3,
+    score: 900,
+    choogoomiName: 'C',
+  },
+  {
+    ranking: 3,
+    userNickname: '라이언',
+    befRanking: 5,
+    score: 900,
+    choogoomiName: 'C',
+  },
+  {
+    ranking: 4,
+    userNickname: '프로도',
+    befRanking: 6,
+    score: 900,
+    choogoomiName: 'A',
+  },
+  {
+    ranking: 5,
+    userNickname: '춘식이',
+    befRanking: 7,
+    score: 900,
     choogoomiName: 'B',
   },
   {
-    userId: 6,
-    rankingNow: 6,
-    nickName: '멜랑콜리',
+    ranking: 6,
+    userNickname: '멜랑콜리',
+    befRanking: 8,
     score: 900,
-    rankingEx: 8,
     choogoomiName: 'D',
   },
   {
-    userId: 7,
-    rankingNow: 7,
-    nickName: '롤로라무',
+    ranking: 7,
+    userNickname: '롤로라무',
+    befRanking: 10,
     score: 900,
-    rankingEx: 10,
     choogoomiName: 'E',
   },
   {
-    userId: 8,
-    rankingNow: 8,
-    nickName: '포스아거',
+    ranking: 8,
+    userNickname: '포스아거',
+    befRanking: 1,
     score: 900,
-    rankingEx: 1,
     choogoomiName: 'A',
   },
   {
-    userId: 9,
-    rankingNow: 9,
-    nickName: '루나키키',
+    ranking: 9,
+    userNickname: '루나키키',
+    befRanking: 4,
     score: 900,
-    rankingEx: 4,
     choogoomiName: 'B',
   },
   {
-    userId: 10,
-    rankingNow: 10,
-    nickName: '무지',
+    ranking: 10,
+    userNickname: '무지',
+    befRanking: 11,
     score: 900,
-    rankingEx: 11,
     choogoomiName: 'D',
   },
 ];
 
-const secondRankUser = RANKING_LIST.find(user => user.rankingNow === 2);
-const firstRankUser = RANKING_LIST.find(user => user.rankingNow === 1);
-const thirdRankUser = RANKING_LIST.find(user => user.rankingNow === 3);
-const restRankUsers = RANKING_LIST.filter(user => user.rankingNow > 3);
+const secondRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 2);
+const firstRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 1);
+const thirdRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 3);
 
-// 모달 표시 여부
-const showModal = ref(true);
+// 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
+if (
+  [firstRankUser, secondRankUser, thirdRankUser].some(
+    user => user && user.userNickname === USER_PROFILE.nickname
+  )
+) {
+  showModal.value = true;
+}
 
-// 중간 매핑: [choogoomiName, 이름] 쌍 배열
-const rewardEntries = REWARD_LIST.map(({ choogoomiName }) => {
+// 중간 매핑: [userNickname, { 추구미유형, 캐릭터 }] 쌍 배열
+const allUsers = [...LAST_RANKING_LIST.value, ...RANKING_LIST];
+const rewardEntries = allUsers.map(user => {
+  const level = getLevel(user.score);
+
   const mapEntry = CHOOGOOMI_MAP.find(
-    item => item.choogoomiName === choogoomiName
+    item => item.choogoomiName === user.choogoomiName
   );
-  return [choogoomiName, mapEntry.userLevel[0].choogoomiType];
+  return [
+    user.userNickname,
+    {
+      choogoomiType: mapEntry.userLevel[level].choogoomiType,
+      profile: new URL(mapEntry.userLevel[level].profile, import.meta.url).href,
+    },
+  ];
 });
 
 // choogoomiName만 추출 -> 'v-for'에 사용
-const rewardTypes = rewardEntries.map(([choogoomiName]) => choogoomiName);
+const choogoomiNames = [...new Set(allUsers.map(user => user.choogoomiName))];
 
-// 유형 이름 객체로 변환 (A -> 지출제로형)
-const choogoomiType = Object.fromEntries(rewardEntries);
+// 유형 이름 객체로 변환 (nickname -> 지출제로형)
+const choogoomiType = Object.fromEntries(
+  rewardEntries.map(([nickname, data]) => [nickname, data.choogoomiType])
+);
+
+// 프로필 이미지 객체로 변환 (nickname -> profile 이미지 경로)
+const choogoomiCharacter = Object.fromEntries(
+  rewardEntries.map(([nickname, data]) => [nickname, data.profile])
+);
 
 // 보상 매핑 객체 (A -> {1: "...", 2: "...", 3: "..."})
 const rewardMap = Object.fromEntries(
