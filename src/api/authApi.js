@@ -64,4 +64,14 @@ const login = async (email, password) => {
   }
 };
 
-export default { checkName, sendCode, verifyCode, signup, login };
+// 유저 프로필 정보
+const userInfo = async () => {
+  try {
+    const { data } = await axiosInstance.get('api/users/main-profile');
+    return data;
+  } catch {
+    throw new Error('유저 프로필 정보 불러오기 실패');
+  }
+};
+
+export default { checkName, sendCode, verifyCode, signup, login, userInfo };
