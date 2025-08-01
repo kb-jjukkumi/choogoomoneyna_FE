@@ -29,21 +29,19 @@
               stroke="#228b22"
               stroke-width="10"
               stroke-dasharray="314.16"
-              :stroke-dashoffset="
-                314.16 - (314.16 * chartData.percentage) / 100
-              "
+              :stroke-dashoffset="314.16 - (314.16 * percentage) / 100"
               stroke-linecap="round"
             />
           </svg>
           <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-sm text-green">{{ chartData.percentage }}%</span>
+            <span class="text-sm text-green">{{ percentage }}%</span>
           </div>
         </div>
 
         <!-- 카테고리별 데이터 -->
         <div class="flex flex-col space-y-2">
           <div
-            v-for="category in chartData.categories"
+            v-for="category in categories"
             :key="category.name"
             class="flex items-center justify-between gap-2"
           >
@@ -73,20 +71,16 @@
       >
         <!-- 캐릭터 이미지 -->
         <div class="flex items-center justify-center flex-col">
-          <img
-            :src="characterData.image"
-            :alt="characterData.name"
-            class="size-22 object-cover"
-          />
+          <img :src="image" :alt="name" class="size-22 object-cover" />
           <div class="text-limegreen-700">
-            {{ characterData.name }}
+            {{ name }}
           </div>
         </div>
 
         <!-- 캐릭터 정보 -->
         <div class="flex-1">
           <div class="text-gray-500 text-sm leading-relaxed">
-            {{ characterData.summary }}
+            {{ summary }}
           </div>
         </div>
       </div>
@@ -128,6 +122,8 @@ const props = defineProps({
     }),
   },
 });
+const { image, name, summary } = props.characterData;
+const { percentage, categories } = props.chartData;
 </script>
 
 <style scoped>
