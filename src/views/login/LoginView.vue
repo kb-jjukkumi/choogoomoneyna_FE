@@ -175,14 +175,8 @@ const handleLogin = async () => {
   }
   // response 값이 true 면 로그인 성공, false 면 로그인 실패
   const response = await authStore.login(email.value, password.value);
-  // 로그인 성공 시 모달 창 띄우기
-  if (response) {
-    showModal.value = true;
-    modalType.value = 'success';
-  } else {
-    showModal.value = true;
-    modalType.value = 'fail';
-  }
+  showModal.value = true;
+  modalType.value = response ? 'success' : 'fail';
 };
 
 const handleModalClose = () => {
