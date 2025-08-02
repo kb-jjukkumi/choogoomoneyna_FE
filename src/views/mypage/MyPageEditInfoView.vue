@@ -136,6 +136,12 @@
       message="회원 정보가 수정되었습니다."
       @close="router.push('/mypage')"
     />
+    <AlertModal
+      v-if="showErrorModal"
+      title="회원 정보 수정"
+      message="회원 정보가 수정에 실패했습니다. 다시 시도해주세요."
+      @close="showErrorModal = false"
+    />
   </div>
 </template>
 
@@ -176,6 +182,7 @@ const NewPwdErrorMessage = ref('');
 //모달창 관리
 const showConfirmModal = ref(false);
 const showAlertModal = ref(false);
+const showErrorModal = ref(false);
 
 //항목별 인증 여부 확인
 const isNameChecked = ref(false);
