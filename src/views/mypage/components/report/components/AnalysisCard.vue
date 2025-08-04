@@ -122,7 +122,6 @@ const props = defineProps({
     }),
   },
 });
-
 const { image, name, summary } = props.characterData;
 const { percentage, categories } = props.chartData;
 </script>

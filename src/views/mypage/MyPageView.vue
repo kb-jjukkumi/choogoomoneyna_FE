@@ -81,7 +81,7 @@
       <!--버튼 영역-->
       <div class="px-4 w-full">
         <div class="flex flex-col gap-2.5">
-          <MyPageBtn text="나의 자산 분석 리포트" to="home" />
+          <MyPageBtn text="나의 자산 분석 리포트" to="mypageAssetReport" />
           <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
           <MyPageBtn text="사전 조사 다시하기" to="survey" />
           <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
@@ -161,8 +161,13 @@ onMounted(async () => {
     userLevel.value = getLevel(data.userScore);
 
     //추구미 알파벳을 유형명으로 매핑
-    const choogoomi = CHOOGOOMI_MAP[data.choogooMi][userLevel.value];
-    choogoomiImage.value = new URL(choogoomi.character, import.meta.url).href;
+    const choogoomi = CHOOGOOMI_MAP.find(
+      choogoomi => choogoomi.choogoomiName === data.choogooMi
+    );
+    choogoomiImage.value = new URL(
+      choogoomi.userLevel[userLevel.value].character,
+      import.meta.url
+    ).href;
 
     // userInfo 업데이트
     userInfo.choogoomiName = choogoomi.choogoomiType;
