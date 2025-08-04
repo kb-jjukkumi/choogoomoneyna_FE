@@ -235,7 +235,7 @@ const handleCheckName = async () => {
 
 //새 비밀번호 일치 여부 확인
 const validateNewPassword = () => {
-  if (!newPassword.value.trim() || !newPassword.value.trim()) {
+  if (!newPassword.value.trim() || !newPassword2.value.trim()) {
     NewPwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
