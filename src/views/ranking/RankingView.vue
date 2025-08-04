@@ -124,30 +124,30 @@
           class="max-h-[calc(100vh-450px)] overflow-scroll [&::-webkit-scrollbar]:hidden bg-limegreen-500 mx-3 mb-1 space-y-2"
         >
           <div
-            v-for="(rank, i) in RANKING_LIST"
-            :key="i"
+            v-for="user in currentRankingList"
+            :key="user.ranking"
             class="bg-white rounded-xl px-5 py-2 flex justify-between items-center"
           >
             <div class="flex items-center gap-3">
               <div class="text-lg font-semibold text-limegreen-800">
-                {{ rank.ranking }}
+                {{ user.ranking }}
               </div>
               <div class="flex flex-col items-center ml-1">
                 <img
-                  :src="getProfileImage(rank)"
+                  :src="getProfileImage(user)"
                   class="bg-limegreen-100 rounded-full size-10"
                 />
                 <span
                   class="bg-green text-white mt-[-7px] px-2 py-[2.5px] rounded-full text-[7px] text-center"
                 >
-                  {{ getChoogoomiType(rank) }}
+                  {{ getChoogoomiType(user) }}
                 </span>
               </div>
               <div class="flex flex-col">
                 <span class="text-sm font-medium text-limegreen-900">{{
-                  rank.userNickname
+                  user.userNickname
                 }}</span>
-                <span class="text-xs text-gray-500">{{ rank.score }}점</span>
+                <span class="text-xs text-gray-500">{{ user.score }}점</span>
               </div>
             </div>
             <div
@@ -156,9 +156,9 @@
               <img
                 :src="rankChange"
                 class="size-2 mr-1"
-                :class="{ 'rotate-180': rank.ranking - rank.befRanking > 0 }"
+                :class="{ 'rotate-180': user.ranking - user.beforeRanking > 0 }"
               />
-              <span>{{ Math.abs(rank.ranking - rank.befRanking) }}</span>
+              <span>{{ Math.abs(user.ranking - user.beforeRanking) }}</span>
             </div>
           </div>
         </div>
@@ -184,7 +184,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import { fetchLastRankingList } from '@/api/ranking.js';
+import { fetchLastRankingList, fetchRankingList } from '@/api/ranking.js';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -212,12 +212,18 @@ const USER_PROFILE = {
 };
 
 const lastRankingList = ref([]);
+const currentRankingList = ref([]);
 const firstRankUser = ref({});
 const secondRankUser = ref({});
 const thirdRankUser = ref({});
 
 const fetchLastRankingData = async () => {
   const response = await fetchLastRankingList();
+  return response;
+};
+
+const fetchCurrentRankingData = async () => {
+  const response = await fetchRankingList();
   return response;
 };
 
@@ -229,80 +235,12 @@ onMounted(async () => {
   firstRankUser.value = lastRankingList.value[0];
   secondRankUser.value = lastRankingList.value[1];
   thirdRankUser.value = lastRankingList.value[2];
-});
 
-const RANKING_LIST = [
-  {
-    ranking: 1,
-    userNickname: '심쿵비비',
-    befRanking: 2,
-    score: 900,
-    choogoomiName: 'C',
-  },
-  {
-    ranking: 2,
-    userNickname: '어피치',
-    befRanking: 3,
-    score: 900,
-    choogoomiName: 'C',
-  },
-  {
-    ranking: 3,
-    userNickname: '라이언',
-    befRanking: 5,
-    score: 900,
-    choogoomiName: 'C',
-  },
-  {
-    ranking: 4,
-    userNickname: '프로도',
-    befRanking: 6,
-    score: 900,
-    choogoomiName: 'A',
-  },
-  {
-    ranking: 5,
-    userNickname: '춘식이',
-    befRanking: 7,
-    score: 900,
-    choogoomiName: 'B',
-  },
-  {
-    ranking: 6,
-    userNickname: '멜랑콜리',
-    befRanking: 8,
-    score: 900,
-    choogoomiName: 'D',
-  },
-  {
-    ranking: 7,
-    userNickname: '롤로라무',
-    befRanking: 10,
-    score: 900,
-    choogoomiName: 'E',
-  },
-  {
-    ranking: 8,
-    userNickname: '포스아거',
-    befRanking: 1,
-    score: 900,
-    choogoomiName: 'A',
-  },
-  {
-    ranking: 9,
-    userNickname: '루나키키',
-    befRanking: 4,
-    score: 900,
-    choogoomiName: 'B',
-  },
-  {
-    ranking: 10,
-    userNickname: '무지',
-    befRanking: 11,
-    score: 900,
-    choogoomiName: 'D',
-  },
-];
+  const currentData = await fetchCurrentRankingData();
+  currentRankingList.value = currentData.map(user => ({
+    ...user,
+  }));
+});
 
 // 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
 if (
