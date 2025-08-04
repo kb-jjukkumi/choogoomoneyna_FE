@@ -54,13 +54,13 @@
             secondRankUser.ranking
           }}</span>
           <img
-            :src="choogoomiCharacter[secondRankUser.userNickname]"
+            :src="getProfileImage(secondRankUser)"
             class="bg-ivory rounded-full mt-2 size-15 object-cover"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ choogoomiType[secondRankUser.userNickname] }}
+            {{ getChoogoomiType(secondRankUser) }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ secondRankUser.userNickname }}
@@ -78,13 +78,13 @@
             {{ firstRankUser.ranking }}
           </span>
           <img
-            :src="choogoomiCharacter[firstRankUser.userNickname]"
+            :src="getProfileImage(firstRankUser)"
             class="bg-ivory rounded-full mt-1 size-20"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[2px] rounded-full text-xs text-center"
           >
-            {{ choogoomiType[firstRankUser.userNickname] }}
+            {{ getChoogoomiType(firstRankUser) }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ firstRankUser.userNickname }}
@@ -102,13 +102,13 @@
             {{ thirdRankUser.ranking }}
           </span>
           <img
-            :src="choogoomiCharacter[thirdRankUser.userNickname]"
+            :src="getProfileImage(thirdRankUser)"
             class="bg-ivory rounded-full mt-2 size-15 object-cover"
           />
           <span
             class="bg-green text-white mt-[-7px] px-2.5 py-[3px] rounded-full text-[9px] text-center"
           >
-            {{ choogoomiType[thirdRankUser.userNickname] }}
+            {{ getChoogoomiType(thirdRankUser) }}
           </span>
           <div class="text-[13px] text-limegreen-800 mt-2">
             {{ thirdRankUser.userNickname }}
@@ -175,7 +175,7 @@
 
     <RewardModal
       v-if="showModal"
-      title="축하합니다! 
+      title="축하합니다!
 상위 랭크에 도달했어요."
       message="보상(기프티콘) 발송을 위해 휴대폰 번호를 입력해주세요.
 입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
@@ -188,8 +188,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
+import { fetchLastRankingList } from '@/api/ranking.js';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import rankChange from '@/assets/img/icons/feature/icon_rankChange.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -200,6 +201,14 @@ import { REWARD_LIST } from '@/constants/rewardList.js';
 import { getLevel } from '@/utils/levelUtils.js';
 
 // 모달 표시 여부
+const CHOOGOOMI_TYPE = ref({
+  A: '지출제로형',
+  B: '합리소비형',
+  C: '저축실천형',
+  D: '투자도전형',
+  E: '금융탐구형',
+});
+
 const showModal = ref(false);
 
 const aboutReward = {
@@ -214,6 +223,26 @@ const USER_PROFILE = {
   userRanking: 20,
   isLevelUp: false,
 };
+
+const lastRankingList = ref([]);
+const firstRankUser = ref({});
+const secondRankUser = ref({});
+const thirdRankUser = ref({});
+
+const fetchLastRankingData = async () => {
+  const response = await fetchLastRankingList();
+  return response;
+};
+
+onMounted(async () => {
+  const data = await fetchLastRankingData();
+  lastRankingList.value = data.map(user => ({
+    ...user,
+  }));
+  firstRankUser.value = lastRankingList.value[0];
+  secondRankUser.value = lastRankingList.value[1];
+  thirdRankUser.value = lastRankingList.value[2];
+});
 
 const LAST_RANKING_LIST = ref([
   {
@@ -309,10 +338,6 @@ const RANKING_LIST = [
   },
 ];
 
-const secondRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 2);
-const firstRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 1);
-const thirdRankUser = LAST_RANKING_LIST.value.find(user => user.ranking === 3);
-
 // 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
 if (
   [firstRankUser, secondRankUser, thirdRankUser].some(
@@ -321,6 +346,45 @@ if (
 ) {
   showModal.value = true;
 }
+
+// 쭈꾸미 유형 가져오기
+const getChoogoomiType = userData => {
+  const choogoomiName = userData.choogooMi;
+  const choogoomiData = CHOOGOOMI_MAP.find(
+    data => data.choogoomiName === choogoomiName
+  );
+  if (!choogoomiData) {
+    return '알 수 없음';
+  }
+  return choogoomiData.userLevel[0].choogoomiType;
+};
+
+const getProfileImage = userData => {
+  // 사용자 레벨 계산
+  const level = getLevel(userData.score);
+  // 사용자 쭈꾸미 유형
+  const choogoomiName = userData.choogooMi;
+  // 유형에 맞는 레벨별 데이터 가져오기
+  const choogoomiData = CHOOGOOMI_MAP.find(
+    data => data.choogoomiName === choogoomiName
+  );
+  if (!choogoomiData) {
+    // 기본 이미지 반환
+    return new URL(
+      '../../assets/img/characters/character_savings_profile.png',
+      import.meta.url
+    ).href;
+  }
+  const profileData = choogoomiData.userLevel[level];
+  if (!profileData) {
+    // 기본 레벨(0) 데이터 사용
+    const defaultProfileData = choogoomiData.userLevel[0];
+    return new URL(defaultProfileData.profile, import.meta.url).href;
+  }
+  const profileUrl = profileData.profile;
+  // 프로필 이미지 경로 반환
+  return new URL(profileUrl, import.meta.url).href;
+};
 
 // 중간 매핑: [userNickname, { 추구미유형, 캐릭터 }] 쌍 배열
 const allUsers = [...LAST_RANKING_LIST.value, ...RANKING_LIST];
@@ -341,11 +405,11 @@ const rewardEntries = allUsers.map(user => {
 
 // choogoomiName만 추출 -> 'v-for'에 사용
 const choogoomiNames = [...new Set(allUsers.map(user => user.choogoomiName))];
-
-// 유형 이름 객체로 변환 (nickname -> 지출제로형)
+// 유형 이름 객체로 변환 (nickname -> 지출제로형) [DELETE]
 const choogoomiType = Object.fromEntries(
   rewardEntries.map(([nickname, data]) => [nickname, data.choogoomiType])
 );
+// console.log(choogoomiType);
 
 // 프로필 이미지 객체로 변환 (nickname -> profile 이미지 경로)
 const choogoomiCharacter = Object.fromEntries(
