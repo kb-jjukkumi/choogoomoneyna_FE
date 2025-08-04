@@ -6,20 +6,22 @@
       {{ formattedDateRange }}
     </div>
     <div class="flex my-1 mx-3 justify-center items-center">
-      <img class="h-[80%]" :src="character_savings" alt="" />
+      <img class="h-[80%]" :src="choogoomiImage" alt="" />
     </div>
-    <div class="text-limegreen-800 text-normal">{{ rank }}위</div>
+    <div class="text-limegreen-800 text-normal">{{ ranking }}위</div>
     <div class="text-gray-300 text-sm my-1">{{ score }}점</div>
   </button>
 </template>
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-import character_savings from '@/assets/img/characters/character_savings.png';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 
-const { startDate, rank, score } = defineProps({
-  startDate: { type: String, required: true },
-  rank: { type: Number, required: true },
+const { choogoomiImage, roundNumber, startDate, ranking, score } = defineProps({
+  choogoomiImage: { type: String, required: true },
+  roundNumber: { type: Number, required: true },
+  startDate: { type: Number, required: true },
+  ranking: { type: Number, required: true },
   score: { type: Number, required: true },
 });
 

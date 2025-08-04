@@ -21,10 +21,12 @@
         <!--기록 카드-->
         <div class="grid grid-cols-2 grid-rows-2 gap-4">
           <RecordCard
-            v-for="record in pagedRecords"
+            v-for="record in pagedRecordsWithImages"
             :key="record.id"
+            :choogoomi-image="record.imageUrl"
+            :round-number="record.roundNumber"
             :start-date="record.startDate"
-            :rank="record.ranking"
+            :ranking="record.ranking"
             :score="record.score"
           />
         </div>
@@ -50,6 +52,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import axiosInstance from '@/api/axios';
 import back from '@/assets/img/icons/system/system_back.png';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 
 import RecordCard from './components/RecordCard.vue';
 
@@ -64,17 +67,11 @@ const totalPages = computed(() => Math.ceil(RECORDS.length / pageSize));
 // 화면에 보여줄 데이터 추출
 const pagedRecords = computed(() => {
   // 전체 개수
-  const total = RECORDS.length;
 
-  // 뒤에서부터 시작해서 4개씩 슬라이스
-  const start = total - (page.value + 1) * pageSize;
-  const end = total - page.value * pageSize;
-
-  // 음수면(가장 오래된 기록 페이지의 데이터가 4개 미만이면) 0부터 (맨 앞 요소부터)
-  const sliceStart = start < 0 ? 0 : start;
-
-  // 자른 후 최신순으로 보여야 하니 reverse
-  return RECORDS.slice(sliceStart, end).reverse();
+  // 4개씩 슬라이스
+  const start = page.value * pageSize;
+  const end = start + pageSize;
+  return RECORDS.slice(start, end);
 });
 
 // 최신 페이지면 우버튼 비활성화
@@ -91,12 +88,27 @@ function nextPage() {
   if (canGoNext.value) page.value--;
 }
 
+//한 페이지에 표시할 기록들 배열에 추구미 이미지 경로 추가
+const pagedRecordsWithImages = computed(() =>
+  pagedRecords.value.map(record => {
+    const choogoomi = CHOOGOOMI_MAP.find(
+      c => c.choogoomiName === record.choogooMi
+    );
+    const imageUrl = new URL(choogoomi.userLevel[0].character, import.meta.url)
+      .href;
+
+    return {
+      ...record,
+      imageUrl,
+    };
+  })
+);
+
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('api/ranking/history');
     console.log(data);
     Object.assign(RECORDS, data);
-    console.log(RECORDS);
   } catch (error) {
     console.log(error);
   }
