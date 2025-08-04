@@ -1,11 +1,11 @@
 <template>
   <button
-    class="flex flex-col py-1 justify-center items-center bg-white border-3 border-limegreen-500 rounded-[10px] shadow"
+    class="flex flex-col w-30 py-1 justify-center items-center bg-white border-3 border-limegreen-500 rounded-[10px] shadow"
   >
     <div class="text-limegreen-800 text-sm mt-1 whitespace-pre-line">
       {{ formattedDateRange }}
     </div>
-    <div class="flex my-1 mx-3 justify-center items-center">
+    <div class="flex h-30 justify-center items-center">
       <img class="h-[80%]" :src="choogoomiImage" alt="" />
     </div>
     <div class="text-limegreen-800 text-normal">{{ ranking }}위</div>
