@@ -309,14 +309,7 @@ const verify = async () => {
 //비밀번호 실시간 일치 여부 확인
 const validatePassword = () => {
   // 비밀번호가 입력되지 않은 경우
-  if (!userData.password.trim()) {
-    pwdErrorMessage.value = '';
-    isPwdChecked.value = false;
-    return false;
-  }
-
-  // 비밀번호 확인이 입력되지 않은 경우
-  if (!password2.value.trim()) {
+  if (!userData.password.trim() || !password2.value.trim()) {
     pwdErrorMessage.value = '';
     isPwdChecked.value = false;
     return false;
