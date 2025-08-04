@@ -337,12 +337,6 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true;
   try {
-    console.log('비밀번호 재설정 시도:', {
-      email: userData.email,
-      verificationCode: userData.verificationCode,
-      password: userData.password,
-    });
-
     const response = await findPassword(
       userData.email,
       userData.verificationCode,
@@ -356,8 +350,7 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error('비밀번호 재설정 오류:', error);
-    emailErrorMessage.value =
-      '비밀번호 재설정에 실패했습니다. 다시 시도해주세요.';
+    isPasswordResetFailed.value = true;
   } finally {
     isSubmitting.value = false;
   }
