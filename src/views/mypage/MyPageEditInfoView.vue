@@ -44,7 +44,7 @@
         <div class="mb-5">
           <label for="email" class="mb-1 block font-bold">이메일</label>
           <input
-            v-model="member.email"
+            v-model="userEmail"
             id="email"
             type="email"
             class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-limegreen-100 px-3 py-3 text-limegreen-700"
@@ -169,6 +169,7 @@ const editedProfile = reactive({
   newPassword: '',
 });
 
+const userEmail = ref('');
 const newNickname = ref('');
 const currentPassword = ref('');
 const newPassword = ref(''); //비밀번호 확인
@@ -292,6 +293,7 @@ onMounted(async () => {
     //userInfo에 저장
     Object.assign(member, data);
     newNickname.value = member.nickname;
+    userEmail.value = localStorage.getItem('userEmail');
   } catch (error) {
     console.error('회원 정보 불러오기 실패');
   }
