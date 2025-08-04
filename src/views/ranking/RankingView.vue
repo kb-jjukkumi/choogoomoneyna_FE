@@ -168,7 +168,10 @@
                   'icon-blue': user.ranking - user.beforeRanking > 0,
                 }"
               />
-              <span>{{ Math.abs(user.ranking - user.beforeRanking) }}</span>
+              <span v-if="user.ranking - user.beforeRanking !== 0">{{
+                Math.abs(user.ranking - user.beforeRanking)
+              }}</span>
+              <span v-else>-</span>
             </div>
           </div>
         </div>
