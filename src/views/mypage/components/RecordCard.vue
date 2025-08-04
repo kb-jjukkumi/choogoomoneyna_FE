@@ -13,9 +13,7 @@
   </button>
 </template>
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-
-import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { computed } from 'vue';
 
 const { choogoomiImage, roundNumber, startDate, ranking, score } = defineProps({
   choogoomiImage: { type: String, required: true },
