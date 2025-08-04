@@ -17,3 +17,12 @@ export const fetchLastRankingList = async () => {
     return false;
   }
 };
+
+export const updateRankingData = async () => {
+  try {
+    await axiosInstance.put('/api/ranking/update');
+    return true;
+  } catch {
+    return false;
+  }
+};
