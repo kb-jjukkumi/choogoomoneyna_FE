@@ -186,7 +186,6 @@ const showErrorModal = ref(false);
 
 //항목별 인증 여부 확인
 const isNameChecked = ref(false);
-const isCurrnetPwdChecked = ref(false);
 const isNewPwdChecked = ref(false);
 
 // 로딩 상태 관리
@@ -233,17 +232,6 @@ const checkName = async () => {
   }
 };
 
-//현재 비밀번호 일치 여부 확인
-const validateCurrentPassword = () => {
-  if (!currentPassword.value.trim()) {
-    CurrnetPwdErrorMessage.value = '비밀번호를 입력해주세요.';
-    return false;
-  }
-  CurrnetPwdErrorMessage.value = '';
-  isCurrnetPwdChecked.value = true;
-  return true;
-};
-
 //새 비밀번호 일치 여부 확인
 const validateNewPassword = () => {
   if (!newPassword.value.trim() || !newPassword.value.trim()) {
@@ -268,10 +256,6 @@ const handleUpdate = async () => {
     hasError = true;
   }
 
-  if (!isCurrnetPwdChecked.value) {
-    hasError = true;
-  }
-
   if (!isNewPwdChecked.value) {
     NewPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     hasError = true;
@@ -284,7 +268,6 @@ const handleUpdate = async () => {
     editedProfile.password = currentPassword.value;
     editedProfile.newPassword = newPassword.value;
   } finally {
-    console.log(member);
     showConfirmModal.value = true;
   }
 };
@@ -305,12 +288,10 @@ const submitUpdate = async () => {
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('/api/users/main-profile');
-    console.log(data);
 
     //userInfo에 저장
     Object.assign(member, data);
     newNickname.value = member.nickname;
-    console.log(member);
   } catch (error) {
     console.error('회원 정보 불러오기 실패');
   }

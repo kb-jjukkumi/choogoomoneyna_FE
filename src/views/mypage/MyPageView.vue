@@ -156,7 +156,6 @@ const logout = () => {
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('/api/users/main-profile');
-    console.log(data);
 
     //userScore로 레벨 계산
     userLevel.value = getLevel(data.userScore);
