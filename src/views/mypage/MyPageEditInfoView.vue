@@ -139,7 +139,7 @@
     <AlertModal
       v-if="showErrorModal"
       title="회원 정보 수정"
-      message="회원 정보가 수정에 실패했습니다. 다시 시도해주세요."
+      :message="'회원 정보 수정에 실패했습니다.\n다시 시도해주세요.'"
       @close="showErrorModal = false"
     />
   </div>
@@ -297,6 +297,7 @@ const submitUpdate = async () => {
     showAlertModal.value = true;
   } catch (error) {
     showConfirmModal.value = false;
+    showErrorModal.value = true;
     console.error('회원 정보 수정 실패:', error);
   }
 };
