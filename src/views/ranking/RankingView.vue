@@ -207,6 +207,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
+import { userInfo } from '@/api/authApi.js';
 import {
   fetchLastRankingList,
   fetchRankingList,
@@ -231,13 +232,7 @@ const aboutReward = {
   content: `매주 월요일, 지난주 점수를 기준으로 집계됩니다.\n 순위별로 유형별 맞춤 상품이 차등 지급될 예정입니다.`,
 };
 
-const USER_PROFILE = {
-  choogoomiName: 'A',
-  nickname: '',
-  userScore: 500,
-  userRanking: 20,
-  isLevelUp: false,
-};
+const userProfile = ref({});
 
 const lastRankingList = ref([]);
 const currentRankingList = ref([]);
@@ -261,6 +256,8 @@ const fetchCurrentRankingData = async () => {
 const loadRankingData = async () => {
   try {
     isLoading.value = true;
+    const userData = await userInfo();
+    Object.assign(userProfile.value, userData);
 
     // 1. 랭킹 업데이트 (선택적)
     const updateResult = await updateRankingData();
@@ -299,7 +296,7 @@ onMounted(() => {
 // 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
 if (
   [firstRankUser, secondRankUser, thirdRankUser].some(
-    user => user && user.userNickname === USER_PROFILE.nickname
+    user => user && user.userNickname === userProfile.value.nickname
   )
 ) {
   showModal.value = true;
@@ -346,6 +343,7 @@ const getProfileImage = userData => {
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
+  showModal.value = false;
 }
 </script>
 
