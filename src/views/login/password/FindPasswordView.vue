@@ -98,7 +98,7 @@
           <div class="flex flex-col gap-2">
             <div>
               <label for="password" class="mb-1 block font-bold"
-                >비밀번호</label
+                >새 비밀번호</label
               >
               <div class="relative">
                 <div
@@ -131,7 +131,7 @@
             </div>
             <div>
               <label for="password2" class="mb-1 block font-bold"
-                >비밀번호 확인</label
+                >새 비밀번호 확인</label
               >
               <div class="relative">
                 <div
