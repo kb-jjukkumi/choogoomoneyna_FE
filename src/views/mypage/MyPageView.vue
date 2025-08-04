@@ -164,13 +164,16 @@ onMounted(async () => {
     const choogoomi = CHOOGOOMI_MAP.find(
       choogoomi => choogoomi.choogoomiName === data.choogooMi
     );
+
+    const choogoomiName = choogoomi.userLevel[0].choogoomiType;
+
     choogoomiImage.value = new URL(
       choogoomi.userLevel[userLevel.value].character,
       import.meta.url
     ).href;
 
     // userInfo 업데이트
-    userInfo.choogoomiName = choogoomi.choogoomiType;
+    userInfo.choogoomiName = choogoomiName;
     userInfo.nickname = data.nickname;
     userInfo.userScore = data.userScore;
     userInfo.userRanking = data.userRanking;

@@ -44,7 +44,7 @@
         <div class="mb-5">
           <label for="email" class="mb-1 block font-bold">이메일</label>
           <input
-            v-model="member.email"
+            v-model="userEmail"
             id="email"
             type="email"
             class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-limegreen-100 px-3 py-3 text-limegreen-700"
@@ -128,7 +128,7 @@
       :cancelBtn="'취소'"
       :confirmBtn="'확인'"
       @cancel="showConfirmModal = false"
-      @confirm="showAlertModal = true"
+      @confirm="submitUpdate"
     />
     <AlertModal
       v-if="showAlertModal"
@@ -136,27 +136,41 @@
       message="회원 정보가 수정되었습니다."
       @close="router.push('/mypage')"
     />
+    <AlertModal
+      v-if="showErrorModal"
+      title="회원 정보 수정"
+      :message="'회원 정보 수정에 실패했습니다.\n다시 시도해주세요.'"
+      @close="showErrorModal = false"
+    />
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
-import { checkName } from '@/api/authApi';
+import { checkName, userInfo } from '@/api/authApi';
+import axiosInstance from '@/api/axios';
 import AlertModal from '@/components/AlertModal.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import router from '@/router';
 
 const member = reactive({
-  profileImage: null,
-  email: 'test@test.com',
-  password: '3333',
-  nickname: '카카오대학교라이언',
-  choogooMi: 'A',
+  choogoomiName: '',
+  nickname: '',
+  userScore: null,
+  userRanking: null,
+  isLevelUp: false,
 });
 
-const newNickname = ref(member.nickname);
+const editedProfile = reactive({
+  nickname: '',
+  password: '',
+  newPassword: '',
+});
+
+const userEmail = ref('');
+const newNickname = ref('');
 const currentPassword = ref('');
 const newPassword = ref(''); //비밀번호 확인
 const newPassword2 = ref(''); //비밀번호 확인
@@ -169,10 +183,10 @@ const NewPwdErrorMessage = ref('');
 //모달창 관리
 const showConfirmModal = ref(false);
 const showAlertModal = ref(false);
+const showErrorModal = ref(false);
 
 //항목별 인증 여부 확인
 const isNameChecked = ref(false);
-const isCurrnetPwdChecked = ref(false);
 const isNewPwdChecked = ref(false);
 
 // 로딩 상태 관리
@@ -219,24 +233,9 @@ const handleCheckName = async () => {
   }
 };
 
-//현재 비밀번호 일치 여부 확인
-const validateCurrentPassword = () => {
-  if (!currentPassword.value.trim()) {
-    CurrnetPwdErrorMessage.value = '비밀번호를 입력해주세요.';
-    return false;
-  }
-  if (currentPassword.value !== member.password) {
-    CurrnetPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
-    return false;
-  }
-  CurrnetPwdErrorMessage.value = '';
-  isCurrnetPwdChecked.value = true;
-  return true;
-};
-
 //새 비밀번호 일치 여부 확인
 const validateNewPassword = () => {
-  if (!newPassword.value.trim() || !newPassword.value.trim()) {
+  if (!newPassword.value.trim() || !newPassword2.value.trim()) {
     NewPwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
@@ -258,11 +257,6 @@ const handleUpdate = async () => {
     hasError = true;
   }
 
-  if (!isCurrnetPwdChecked.value) {
-    CurrnetPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
-    hasError = true;
-  }
-
   if (!isNewPwdChecked.value) {
     NewPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     hasError = true;
@@ -271,12 +265,37 @@ const handleUpdate = async () => {
   if (hasError) return;
 
   try {
-    //비밀번호 필드에 수정된 비밀번호 넣기
-    member.password = newPassword.value;
-    member.nickname = newNickname.value;
+    editedProfile.nickname = newNickname.value;
+    editedProfile.password = currentPassword.value;
+    editedProfile.newPassword = newPassword.value;
   } finally {
-    console.log(member);
     showConfirmModal.value = true;
   }
 };
+
+const submitUpdate = async () => {
+  try {
+    console.log(editedProfile);
+    await axiosInstance.put('/api/users/update', editedProfile);
+    showConfirmModal.value = false;
+    showAlertModal.value = true;
+  } catch (error) {
+    showConfirmModal.value = false;
+    showErrorModal.value = true;
+    console.error('회원 정보 수정 실패:', error);
+  }
+};
+
+onMounted(async () => {
+  try {
+    const data = await userInfo();
+    console.log(data);
+    //userInfo에 저장
+    Object.assign(member, data);
+    newNickname.value = member.nickname;
+    userEmail.value = localStorage.getItem('userEmail');
+  } catch (error) {
+    console.error('회원 정보 불러오기 실패');
+  }
+});
 </script>

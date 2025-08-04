@@ -59,6 +59,7 @@ export const useAuthStore = defineStore('auth', {
       // ✅ localStorage에서도 제거
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userEmail');
 
       console.log('✅ 인증 정보 초기화 완료');
     },
@@ -71,6 +72,9 @@ export const useAuthStore = defineStore('auth', {
         // ✅ 토큰 저장 (Pinia + localStorage)
         this.setAccessToken(response.accessToken);
         this.setRefreshToken(response.refreshToken);
+
+        //이메일도 localStorage에 저장
+        localStorage.setItem('userEmail', email);
 
         console.log('✅ 로그인 성공 - 토큰 저장 완료');
         return true;
