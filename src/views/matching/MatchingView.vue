@@ -1,23 +1,23 @@
 <template>
-  <div class="relative flex justify-center w-full">
+  <div class="relative flex justify-center">
     <TopNavigation />
-    <div class="flex flex-col min-h-[calc(100vh-120px)] bg-ivory mt-18">
+    <div class="flex flex-col w-full min-h-[calc(100vh-120px)] bg-ivory mt-18">
       <!-- 매칭 참가자 프로필 -->
       <div class="flex justify-around px-10 items-center mb-2">
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-1">
-            {{ user1MatchingScore }}점
+            {{ myInfo.matchingScore }}점
           </div>
-          <img :src="MATCHING_DATA.user1.profileImageUrl" class="w-[50px]" />
+          <img :src="myInfo.profileImageUrl" class="w-[50px]" />
         </div>
         <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
         <!-- 상대 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-2">
-            {{ user2MatchingScore }}점
+            {{ opponentInfo.matchingScore }}점
           </div>
-          <img :src="MATCHING_DATA.user2.profileImageUrl" class="w-[50px]" />
+          <img :src="opponentInfo.profileImageUrl" class="w-[50px]" />
         </div>
       </div>
       <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
@@ -25,8 +25,8 @@
           class="h-full bg-red"
           :style="{
             width:
-              (MATCHING_DATA.user1.score /
-                (MATCHING_DATA.user1.score + MATCHING_DATA.user2.score)) *
+              (myInfo.matchingScore /
+                (myInfo.matchingScore + opponentInfo.matchingScore)) *
                 100 +
               '%',
           }"
@@ -38,19 +38,13 @@
           <span
             class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
           >
-            {{ MATCHING_DATA.user1.ranking }}위
+            {{ myInfo.ranking }}위
           </span>
           <div class="text-xs text-limegreen-900 mt-1">
-            {{ MATCHING_DATA.user1.nickname }}
+            {{ myInfo.nickname }}
           </div>
           <div class="text-[10px] text-gray-300">
-            {{
-              'Lv.' +
-              MATCHING_DATA.user1.level +
-              ' / ' +
-              MATCHING_DATA.user1.score +
-              '점'
-            }}
+            {{ 'Lv.' + myInfo.level + ' / ' + myInfo.totalScore + '점' }}
           </div>
         </div>
         <!-- 상대 -->
@@ -58,17 +52,17 @@
           <span
             class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
           >
-            {{ MATCHING_DATA.user2.ranking }}위
+            {{ opponentInfo.ranking }}위
           </span>
           <div class="text-xs text-limegreen-900 mt-1">
-            {{ MATCHING_DATA.user2.nickname }}
+            {{ opponentInfo.nickname }}
           </div>
           <div class="text-[10px] text-gray-300">
             {{
               'Lv.' +
-              MATCHING_DATA.user2.level +
+              opponentInfo.level +
               ' / ' +
-              MATCHING_DATA.user2.score +
+              opponentInfo.totalScore +
               '점'
             }}
           </div>
@@ -103,10 +97,10 @@
           <span
             class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
           >
-            {{ MATCHING_DATA.user1.nickname }}
+            {{ myInfo.nickname }}
           </span>
           <div
-            v-for="(mission, i) in MISSION_LIST.myMissionProgressList"
+            v-for="(mission, i) in myInfo.missionList"
             :key="mission.missionId"
           >
             <div class="flex items-center mt-2">
@@ -131,7 +125,7 @@
                   </span>
                 </div>
                 <span class="pr-2 text-gray-300 text-[10px]">{{
-                  mission.missionDoneCount + '/' + mission.missionTotalCount
+                  mission.score + '/' + mission.missionScore
                 }}</span>
               </div>
             </div>
@@ -142,10 +136,10 @@
           <span
             class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
           >
-            {{ MATCHING_DATA.user2.nickname }}
+            {{ opponentInfo.nickname }}
           </span>
           <div
-            v-for="(mission, i) in MISSION_LIST.opponentMissionProgressList"
+            v-for="(mission, i) in opponentInfo.missionList"
             :key="mission.missionId"
           >
             <div class="flex items-center mt-2">
@@ -164,7 +158,7 @@
                   </span>
                 </div>
                 <span class="pr-2 text-gray-300 text-[10px]">{{
-                  mission.missionDoneCount + '/' + mission.missionTotalCount
+                  mission.score + '/' + mission.missionScore
                 }}</span>
               </div>
             </div>
@@ -189,11 +183,12 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import img_character_user1 from '@/assets/img/characters/character_zero_1.png';
-import img_character_user2 from '@/assets/img/characters/character_zero_1.png';
+import { fetchMatchingMain } from '@/api/matchingApi';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
+import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { getLevel } from '@/utils/levelUtils';
 
 import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
@@ -203,114 +198,62 @@ const showModal = ref(false);
 
 const showResultModal = ref(true);
 
-const MATCHING_DATA = ref({
-  matchingId: 123,
-  user1: {
-    nickname: '키카오대학교라이언',
-    profileImageUrl: img_character_user1,
-    score: 250,
-    ranking: 10,
-    level: 2,
-  },
-  user2: {
-    nickname: '카카오대학교어피치',
-    profileImageUrl: img_character_user2,
-    score: 200,
-    ranking: 11,
-    level: 2,
-  },
+const MATCHING_DATA = ref({});
+const myInfo = computed(() => MATCHING_DATA.value.myInfo || {});
+const opponentInfo = computed(() => MATCHING_DATA.value.opponentInfo || {});
+
+const myChoogoomiName = 'A';
+const opponentChoogoomiName = 'A';
+
+onMounted(async () => {
+  try {
+    const data = await fetchMatchingMain();
+
+    console.log(data);
+
+    const myTotalScore = data.myTotalScore;
+    const opponentTotalScore = data.opponentTotalScore;
+
+    MATCHING_DATA.value = {
+      myInfo: {
+        nickname: data.myMissionProgressList[0].userNickname,
+        ranking: 3,
+        totalScore: myTotalScore,
+        level: getLevel(myTotalScore),
+        profileImageUrl: new URL(
+          CHOOGOOMI_MAP.find(
+            c => c.choogoomiName === myChoogoomiName
+          )?.userLevel[getLevel(myTotalScore)]?.character,
+          import.meta.url
+        ).href,
+        matchingScore: data.myMissionProgressList.reduce(
+          (acc, cur) => acc + cur.score,
+          0
+        ),
+        missionList: data.myMissionProgressList,
+      },
+      opponentInfo: {
+        nickname: data.opponentMissionProgressList[0].userNickname,
+        ranking: 4,
+        totalScore: opponentTotalScore,
+        level: getLevel(opponentTotalScore),
+        profileImageUrl: new URL(
+          CHOOGOOMI_MAP.find(
+            c => c.choogoomiName === opponentChoogoomiName
+          )?.userLevel[getLevel(opponentTotalScore)]?.character,
+          import.meta.url
+        ).href,
+        matchingScore: data.opponentMissionProgressList.reduce(
+          (acc, cur) => acc + cur.score,
+          0
+        ),
+        missionList: data.opponentMissionProgressList,
+      },
+    };
+  } catch (err) {
+    console.error('매칭 데이터 불러오기 실패:', err);
+  }
 });
-
-const MISSION_LIST = ref({
-  myMissionProgressList: [
-    {
-      missionId: 1,
-      missionTitle: '지출 반성문 쓰기',
-      missionContent:
-        '돌아보니... 이건 굳이 안 썼어도 됐다 🙈 \n오늘 안 써도 됐던 소비가 있다면, 여기 적으며 반성해봐요!',
-      missionScore: 10,
-      missionTotalCount: 1,
-      missionDoneCount: 1,
-      missionRestrict: 100,
-      score: 10,
-    },
-
-    {
-      missionId: 502,
-      missionTitle: '투자 관련 퀴즈',
-      missionContent:
-        '이번주, 얼마나 모아볼까요? \n 이번주에 모을 금액과 방법을 직접 정해보세요!',
-      missionScore: 20,
-      missionTotalCount: 1,
-      missionDoneCount: 1,
-      missionRestrict: 100,
-      score: 20,
-    },
-    {
-      missionId: 503,
-      missionTitle: '투자 관련 컨텐츠 요약',
-      missionContent:
-        '일주일 동안 10만원, 직접 모아볼래요? \n 하루하루 채워가는 재미, 목표 금액을 완성해보세요!',
-      missionScore: 20,
-      missionTotalCount: 1,
-      missionDoneCount: 1,
-      missionRestrict: 100,
-      score: 20,
-    },
-  ],
-  opponentMissionProgressList: [
-    {
-      missionId: 1,
-      missionTitle: '지출 반성문 쓰기',
-      missionContent:
-        '돌아보니... 이건 굳이 안 썼어도 됐다 🙈 \n오늘 안 써도 됐던 소비가 있다면, 여기 적으며 반성해봐요!',
-      missionScore: 10,
-      missionTotalCount: 1,
-      missionDoneCount: 1,
-      missionRestrict: 100,
-      score: 10,
-    },
-
-    {
-      missionId: 502,
-      missionTitle: '투자 관련 퀴즈',
-      missionContent:
-        '이번주, 얼마나 모아볼까요? \n 이번주에 모을 금액과 방법을 직접 정해보세요!',
-      missionScore: 20,
-      missionTotalCount: 1,
-      missionDoneCount: 1,
-      missionRestrict: 100,
-      score: 20,
-    },
-    {
-      missionId: 503,
-      missionTitle: '투자 관련 컨텐츠 요약',
-      missionContent:
-        '일주일 동안 10만원, 직접 모아볼래요? \n 하루하루 채워가는 재미, 목표 금액을 완성해보세요!',
-      missionScore: 20,
-      missionTotalCount: 1,
-      missionDoneCount: 0,
-      missionRestrict: 100,
-      score: 0,
-    },
-  ],
-});
-
-// user1 매칭 점수
-const user1MatchingScore = computed(() =>
-  MISSION_LIST.value.myMissionProgressList.reduce(
-    (total, mission) => total + mission.score,
-    0
-  )
-);
-
-// user2 매칭 점수
-const user2MatchingScore = computed(() =>
-  MISSION_LIST.value.opponentMissionProgressList.reduce(
-    (total, mission) => total + mission.score,
-    0
-  )
-);
 
 const MISSION_INFORMATION = [
   {
