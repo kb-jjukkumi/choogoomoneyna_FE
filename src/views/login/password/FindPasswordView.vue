@@ -125,6 +125,7 @@
                   placeholder="비밀번호 입력"
                   style="font-family: Arial, sans-serif"
                   class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:font-jua"
+                  @input="validatePassword"
                 />
               </div>
             </div>
@@ -163,7 +164,11 @@
             </div>
             <p
               class="h-3 text-xs"
-              :class="pwdErrorMessage ? 'text-red-500' : 'text-transparent'"
+              :class="{
+                'text-red-500': pwdErrorMessage && !isPwdChecked,
+                'text-gray-500': pwdErrorMessage && isPwdChecked,
+                'text-transparent': !pwdErrorMessage,
+              }"
             >
               {{ pwdErrorMessage }}
             </p>
@@ -301,17 +306,31 @@ const verify = async () => {
   }
 };
 
-//비밀번호 일치 여부 확인
+//비밀번호 실시간 일치 여부 확인
 const validatePassword = () => {
-  if (!userData.password.trim() || !password2.value.trim()) {
-    pwdErrorMessage.value = '비밀번호를 입력해주세요.';
+  // 비밀번호가 입력되지 않은 경우
+  if (!userData.password.trim()) {
+    pwdErrorMessage.value = '';
+    isPwdChecked.value = false;
     return false;
   }
+
+  // 비밀번호 확인이 입력되지 않은 경우
+  if (!password2.value.trim()) {
+    pwdErrorMessage.value = '';
+    isPwdChecked.value = false;
+    return false;
+  }
+
+  // 둘 다 입력된 경우 비교
   if (userData.password !== password2.value) {
     pwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
+    isPwdChecked.value = false;
     return false;
   }
-  pwdErrorMessage.value = '';
+
+  // 비밀번호가 일치하는 경우
+  pwdErrorMessage.value = '비밀번호가 일치합니다.';
   isPwdChecked.value = true;
   return true;
 };
@@ -329,7 +348,13 @@ const handleSubmit = async () => {
   }
 
   // 비밀번호 확인
-  if (!validatePassword()) {
+  if (!userData.password.trim()) {
+    pwdErrorMessage.value = '비밀번호를 입력해주세요.';
+    hasError = true;
+  } else if (!password2.value.trim()) {
+    pwdErrorMessage.value = '비밀번호 확인을 입력해주세요.';
+    hasError = true;
+  } else if (!validatePassword()) {
     hasError = true;
   }
 
