@@ -59,18 +59,18 @@ import RecordCard from './components/RecordCard.vue';
 const RECORDS = reactive([]);
 
 const page = ref(0); //현재 페이지 번호
-const pageSize = 4; //한 페이지에 표시할 카드 개수
+const PAGE_SIZE = 4; //한 페이지에 표시할 카드 개수
 
 //총 페이지수
-const totalPages = computed(() => Math.ceil(RECORDS.length / pageSize));
+const totalPages = computed(() => Math.ceil(RECORDS.length / PAGE_SIZE));
 
 // 화면에 보여줄 데이터 추출
 const pagedRecords = computed(() => {
   // 전체 개수
 
   // 4개씩 슬라이스
-  const start = page.value * pageSize;
-  const end = start + pageSize;
+  const start = page.value * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
   return RECORDS.slice(start, end);
 });
 
