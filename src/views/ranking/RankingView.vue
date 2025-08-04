@@ -21,22 +21,16 @@
               {{ aboutReward.content }}
             </p>
             <div
-              v-for="choogoomiName in choogoomiNames"
-              :key="choogoomiName"
+              v-for="reward in REWARD_LIST"
+              :key="reward.choogoomiName"
               class="text-xs leading-tight text-limegreen-800 whitespace-pre-line mt-2 space-y-1"
             >
               <div>
                 <p class="text-bold text-[13px] text-yellow">
-                  {{
-                    CHOOGOOMI_MAP.find(c => c.choogoomiName === choogoomiName)
-                      ?.userLevel[0].choogoomiType
-                  }}
+                  {{ reward.choogoomiName }}
                 </p>
               </div>
-              <div
-                v-for="(reward, rank) in rewardMap[choogoomiName]"
-                :key="rank"
-              >
+              <div v-for="(reward, rank) in reward.rewards" :key="rank">
                 {{ rank + '등: ' + reward }}
               </div>
             </div>
@@ -140,13 +134,13 @@
               </div>
               <div class="flex flex-col items-center ml-1">
                 <img
-                  :src="choogoomiCharacter[rank.userNickname]"
+                  :src="getProfileImage(rank)"
                   class="bg-limegreen-100 rounded-full size-10"
                 />
                 <span
                   class="bg-green text-white mt-[-7px] px-2 py-[2.5px] rounded-full text-[7px] text-center"
                 >
-                  {{ choogoomiType[rank.userNickname] }}
+                  {{ getChoogoomiType(rank) }}
                 </span>
               </div>
               <div class="flex flex-col">
@@ -201,13 +195,6 @@ import { REWARD_LIST } from '@/constants/rewardList.js';
 import { getLevel } from '@/utils/levelUtils.js';
 
 // 모달 표시 여부
-const CHOOGOOMI_TYPE = ref({
-  A: '지출제로형',
-  B: '합리소비형',
-  C: '저축실천형',
-  D: '투자도전형',
-  E: '금융탐구형',
-});
 
 const showModal = ref(false);
 
@@ -243,27 +230,6 @@ onMounted(async () => {
   secondRankUser.value = lastRankingList.value[1];
   thirdRankUser.value = lastRankingList.value[2];
 });
-
-const LAST_RANKING_LIST = ref([
-  {
-    userNickname: '쭈꾸미',
-    ranking: 1,
-    score: 500,
-    choogoomiName: 'A',
-  },
-  {
-    userNickname: '오징어',
-    ranking: 2,
-    score: 490,
-    choogoomiName: 'A',
-  },
-  {
-    userNickname: '낙지',
-    ranking: 3,
-    score: 480,
-    choogoomiName: 'A',
-  },
-]);
 
 const RANKING_LIST = [
   {
@@ -385,41 +351,6 @@ const getProfileImage = userData => {
   // 프로필 이미지 경로 반환
   return new URL(profileUrl, import.meta.url).href;
 };
-
-// 중간 매핑: [userNickname, { 추구미유형, 캐릭터 }] 쌍 배열
-const allUsers = [...LAST_RANKING_LIST.value, ...RANKING_LIST];
-const rewardEntries = allUsers.map(user => {
-  const level = getLevel(user.score);
-
-  const mapEntry = CHOOGOOMI_MAP.find(
-    item => item.choogoomiName === user.choogoomiName
-  );
-  return [
-    user.userNickname,
-    {
-      choogoomiType: mapEntry.userLevel[level].choogoomiType,
-      profile: new URL(mapEntry.userLevel[level].profile, import.meta.url).href,
-    },
-  ];
-});
-
-// choogoomiName만 추출 -> 'v-for'에 사용
-const choogoomiNames = [...new Set(allUsers.map(user => user.choogoomiName))];
-// 유형 이름 객체로 변환 (nickname -> 지출제로형) [DELETE]
-const choogoomiType = Object.fromEntries(
-  rewardEntries.map(([nickname, data]) => [nickname, data.choogoomiType])
-);
-// console.log(choogoomiType);
-
-// 프로필 이미지 객체로 변환 (nickname -> profile 이미지 경로)
-const choogoomiCharacter = Object.fromEntries(
-  rewardEntries.map(([nickname, data]) => [nickname, data.profile])
-);
-
-// 보상 매핑 객체 (A -> {1: "...", 2: "...", 3: "..."})
-const rewardMap = Object.fromEntries(
-  REWARD_LIST.map(item => [item.choogoomiName, item.rewards])
-);
 
 function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
