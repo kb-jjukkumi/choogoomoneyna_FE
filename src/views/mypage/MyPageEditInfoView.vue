@@ -25,7 +25,7 @@
               <button
                 class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-[10px] disabled:opacity-50"
                 type="button"
-                @click="checkName"
+                @click="handleCheckName"
                 :disabled="isNameChecking"
               >
                 {{ isNameChecking ? '확인 중...' : '중복 확인' }}
@@ -148,7 +148,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 
-import authApi from '@/api/authApi';
+import { checkName, userInfo } from '@/api/authApi';
 import axiosInstance from '@/api/axios';
 import AlertModal from '@/components/AlertModal.vue';
 import ConfirmModal from '@/components/ConfirmModal.vue';
@@ -198,7 +198,7 @@ const onNicknameInput = () => {
 };
 
 //닉네임 중복 체크
-const checkName = async () => {
+const handleCheckName = async () => {
   if (isNameChecking.value) return; // 중복 요청 방지
 
   if (!newNickname.value.trim()) {
@@ -215,7 +215,7 @@ const checkName = async () => {
 
   isNameChecking.value = true;
   try {
-    const result = await authApi.checkName(newNickname.value);
+    const result = await checkName(newNickname.value);
 
     if (result) {
       nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
@@ -287,8 +287,8 @@ const submitUpdate = async () => {
 
 onMounted(async () => {
   try {
-    const { data } = await axiosInstance.get('/api/users/main-profile');
-
+    const data = await userInfo();
+    console.log(data);
     //userInfo에 저장
     Object.assign(member, data);
     newNickname.value = member.nickname;

@@ -24,7 +24,7 @@
                 />
                 <button
                   class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg disabled:opacity-50"
-                  @click="checkName"
+                  @click="handleCheckName"
                   type="button"
                   :disabled="isNameChecking"
                 >
@@ -155,7 +155,7 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import authApi from '@/api/authApi';
+import { checkName, sendCode, signup, verifyCode } from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
 
 import TermsAgreement from './components/terms/TermsAgreement.vue';
@@ -211,7 +211,7 @@ const verifyEmail = reactive({
 });
 
 //닉네임 중복 체크
-const checkName = async () => {
+const handleCheckName = async () => {
   if (isNameChecking.value) return; // 중복 요청 방지
 
   if (!member.nickname.trim()) {
@@ -222,7 +222,7 @@ const checkName = async () => {
 
   isNameChecking.value = true;
   try {
-    const result = await authApi.checkName(member.nickname);
+    const result = await checkName(member.nickname);
 
     if (result) {
       nameErrorMessage.value = '이미 사용중인 닉네임 입니다.';
@@ -250,7 +250,7 @@ const send = async () => {
 
   isSendingEmail.value = true;
   try {
-    await authApi.sendCode(email);
+    await sendCode(email);
     isSendEmailSuccess.value = true;
   } catch (error) {
     emailErrorMessage.value = '이메일 전송 중 오류가 발생했습니다.';
@@ -275,7 +275,7 @@ const verify = async () => {
 
   isVerifyingEmail.value = true;
   try {
-    const result = await authApi.verifyCode(verifyPayload);
+    const result = await verifyCode(verifyPayload);
 
     if (result) {
       emailErrorMessage.value = '인증이 완료되었습니다.';
@@ -344,7 +344,7 @@ const handleSubmit = async () => {
       choogooMi: member.choogooMi,
     };
 
-    await authApi.signup(signupData);
+    await signup(signupData);
 
     isSignupSuccess.value = true;
   } finally {

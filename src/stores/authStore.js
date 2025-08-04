@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-import authApi from '@/api/authApi';
+import { login } from '@/api/authApi';
 
 export const useAuthStore = defineStore('auth', {
   // 저장소 상태 정의
@@ -66,7 +66,7 @@ export const useAuthStore = defineStore('auth', {
     // ✅ 로그인 액션
     async login(email, password) {
       try {
-        const response = await authApi.login(email, password);
+        const response = await login(email, password);
 
         // ✅ 토큰 저장 (Pinia + localStorage)
         this.setAccessToken(response.accessToken);
