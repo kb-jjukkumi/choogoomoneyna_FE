@@ -1,25 +1,25 @@
 <template>
   <button
-    class="flex flex-col py-1 justify-center items-center bg-white border-3 border-limegreen-500 rounded-[10px] shadow"
+    class="flex flex-col w-30 py-1 justify-center items-center bg-white border-3 border-limegreen-500 rounded-[10px] shadow"
   >
     <div class="text-limegreen-800 text-sm mt-1 whitespace-pre-line">
       {{ formattedDateRange }}
     </div>
-    <div class="flex my-1 mx-3 justify-center items-center">
-      <img class="h-[80%]" :src="character_savings" alt="" />
+    <div class="flex h-30 justify-center items-center">
+      <img class="h-[80%]" :src="choogoomiImage" alt="" />
     </div>
-    <div class="text-limegreen-800 text-normal">{{ rank }}위</div>
+    <div class="text-limegreen-800 text-normal">{{ ranking }}위</div>
     <div class="text-gray-300 text-sm my-1">{{ score }}점</div>
   </button>
 </template>
 <script setup>
 import { computed } from 'vue';
 
-import character_savings from '@/assets/img/characters/character_savings.png';
-
-const { startDate, rank, score } = defineProps({
-  startDate: { type: String, required: true },
-  rank: { type: Number, required: true },
+const { choogoomiImage, roundNumber, startDate, ranking, score } = defineProps({
+  choogoomiImage: { type: String, required: true },
+  roundNumber: { type: Number, required: true },
+  startDate: { type: Number, required: true },
+  ranking: { type: Number, required: true },
   score: { type: Number, required: true },
 });
 
