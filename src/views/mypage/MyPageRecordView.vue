@@ -45,22 +45,15 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
+import axiosInstance from '@/api/axios';
 import back from '@/assets/img/icons/system/system_back.png';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 import RecordCard from './components/RecordCard.vue';
 
-const RECORDS = [
-  { id: 1, ranking: 15, score: 100, startDate: '2025-07-28' },
-  { id: 2, ranking: 13, score: 150, startDate: '2025-08-04' },
-  { id: 3, ranking: 12, score: 200, startDate: '2025-08-11' },
-  { id: 4, ranking: 11, score: 240, startDate: '2025-08-18' },
-  { id: 5, ranking: 10, score: 250, startDate: '2025-08-25' },
-  { id: 6, ranking: 9, score: 270, startDate: '2025-09-01' },
-  { id: 7, ranking: 8, score: 300, startDate: '2025-09-08' },
-];
+const RECORDS = reactive([]);
 
 const page = ref(0); //현재 페이지 번호
 const pageSize = 4; //한 페이지에 표시할 카드 개수
@@ -97,4 +90,15 @@ function prevPage() {
 function nextPage() {
   if (canGoNext.value) page.value--;
 }
+
+onMounted(async () => {
+  try {
+    const { data } = await axiosInstance.get('api/ranking/history');
+    console.log(data);
+    Object.assign(RECORDS, data);
+    console.log(RECORDS);
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
