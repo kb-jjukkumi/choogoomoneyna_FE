@@ -1,6 +1,6 @@
 export const REWARD_LIST = [
   {
-    choogoomiName: 'A',
+    choogoomiName: '지출제로형',
     rewards: {
       1: '다이소 상품권 2만원',
       2: '편의점 상품권 1만원',
@@ -8,7 +8,7 @@ export const REWARD_LIST = [
     },
   },
   {
-    choogoomiName: 'B',
+    choogoomiName: '합리소비형',
     rewards: {
       1: '배달앱 상품권 2만원',
       2: '백화점 상품권 1만원',
@@ -16,7 +16,7 @@ export const REWARD_LIST = [
     },
   },
   {
-    choogoomiName: 'C',
+    choogoomiName: '저축실천형',
     rewards: {
       1: '네이버페이 포인트 2만원',
       2: '네이버페이 포인트 1만원',
@@ -24,7 +24,7 @@ export const REWARD_LIST = [
     },
   },
   {
-    choogoomiName: 'D',
+    choogoomiName: '투자도전형',
     rewards: {
       1: '깨비증권 쿠폰 2만원',
       2: '깨비증권 쿠폰 1만원',
@@ -32,7 +32,7 @@ export const REWARD_LIST = [
     },
   },
   {
-    choogoomiName: 'E',
+    choogoomiName: '금융탐구형',
     rewards: {
       1: '도서상품권 2만원',
       2: '도서상품권 1만원',
