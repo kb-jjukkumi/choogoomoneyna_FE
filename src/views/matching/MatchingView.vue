@@ -2,6 +2,7 @@
   <div class="relative flex justify-center">
     <TopNavigation />
     <div class="flex flex-col w-full min-h-[calc(100vh-120px)] bg-ivory mt-18">
+      <!-- 매칭 참가자 프로필 -->
       <div class="flex justify-around px-10 items-center mb-2">
         <!-- 매칭 점수 비교 -->
         <!-- 나 -->
