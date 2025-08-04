@@ -1,7 +1,7 @@
 // axios 라이브러리 불러오기 -> 커스텀 인스턴스 만들기
 import axiosInstance from './axios';
 
-// 계좌 연동
+// 계좌 연동 (CODEF)
 export const fetchBankFromCodef = async ({
   selectedBankId,
   userBankId,
@@ -20,7 +20,21 @@ export const fetchBankFromCodef = async ({
   }
 };
 
-// 연동된 계좌의 거래 내역 불러오기
+// 계좌 한 개 업데이트 (CODEF)
+export const updateAccountFromCodef = async ({ bankId, accountNum }) => {
+  try {
+    const response = await axiosInstance.post('/api/codef/account/update', {
+      bankId: bankId,
+      accountNum: accountNum,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('계좌 업데이트 실패:', error);
+    throw error;
+  }
+};
+
+// 거래내역 목록 연동 (CODEF)
 export const fetchTransactionsFromCodef = async ({
   account,
   organization,
@@ -40,7 +54,8 @@ export const fetchTransactionsFromCodef = async ({
     throw error;
   }
 };
-// 계좌 목록 조회
+
+// 계좌 목록 조회 (DB)
 export const fetchAccounts = async () => {
   try {
     const response = await axiosInstance.get('/account/db');
@@ -51,7 +66,7 @@ export const fetchAccounts = async () => {
   }
 };
 
-// 거래 내역 조회
+// 거래내역 목록 조회 (DB)
 export const fetchTransactions = async accountNum => {
   try {
     const { data } = await axiosInstance.get(

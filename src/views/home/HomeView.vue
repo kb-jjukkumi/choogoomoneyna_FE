@@ -79,9 +79,9 @@
               class="size-12 object-contain"
             />
             <!-- 계좌 정보 -->
-            <div class="flex-1 flex-col ml-6">
+            <div class="flex-1 flex-col ml-4">
               <p
-                class="bg-limegreen-100 text-limegreen-600 text-[10px] px-2 py-[2px] rounded-[5px] w-fit"
+                class="bg-limegreen-100 text-limegreen-600 text-[10px] px-1.5 py-[2px] rounded-[5px] w-fit"
               >
                 {{ account.accountName }}
               </p>
@@ -94,13 +94,18 @@
             </div>
             <!-- 새로고침 -->
             <div
-              class="text-gray-300 text-[10px] flex items-end gap-1 scale-90 mt-[-35px]"
+              class="text-gray-300 text-[10px] flex items-end gap-1 scale-90 mt-[-25px]"
+              @click.stop="refreshAccount(account, i)"
             >
               {{ account.date }}
               <div
-                class="size-3.5 border rounded-full flex items-center justify-center"
+                class="size-3 border rounded-full flex items-center justify-center"
               >
-                <img :src="icon_refresh" alt="새로고침 아이콘" class="size-2" />
+                <img
+                  :src="icon_refresh"
+                  alt="새로고침 아이콘"
+                  class="size-1.5"
+                />
               </div>
             </div>
           </div>
@@ -137,7 +142,7 @@ import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { userInfo } from '@/api/authApi';
-import { fetchAccounts } from '@/api/bankApi';
+import { fetchAccounts, updateAccountFromCodef } from '@/api/bankApi';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -202,6 +207,7 @@ onMounted(async () => {
         ...account,
         bankLogo: bankInfo.icon,
         bankName: bankInfo.name,
+        date: account.fetchedDate,
       };
     });
   } catch (err) {
@@ -209,8 +215,28 @@ onMounted(async () => {
   }
 });
 
+// 계좌 새로고침 함수
+const refreshAccount = async (account, index) => {
+  try {
+    const updated = await updateAccountFromCodef({
+      bankId: account.bankId,
+      accountNum: account.accountNum,
+    });
+
+    const bankInfo = getBankInfo(updated.bankId);
+    ACCOUNTS.value[index] = {
+      ...updated,
+      bankLogo: bankInfo.icon,
+      bankName: bankInfo.name,
+      date: updated.fetchedDate,
+    };
+  } catch (err) {
+    console.error('계좌 새로고침 실패:', err);
+  }
+};
+
 // 계좌 클릭 -> 해당 계좌의 거래 내역 페이지로 이동하는 함수
-const goToTransaction = account => {
+const goToTransaction = async account => {
   router.push({
     name: 'transaction',
     params: {
