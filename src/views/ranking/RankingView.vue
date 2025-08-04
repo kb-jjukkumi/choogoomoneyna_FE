@@ -151,12 +151,22 @@
               </div>
             </div>
             <div
-              class="flex items-center text-xs text-red font-semibold leaning-none"
+              class="flex items-center text-xs font-semibold leaning-none"
+              :class="{
+                'text-limegreen-900': user.ranking - user.beforeRanking === 0,
+                'text-red': user.ranking - user.beforeRanking < 0,
+                'text-blue-500': user.ranking - user.beforeRanking > 0,
+              }"
             >
               <img
+                v-if="user.ranking - user.beforeRanking !== 0"
                 :src="rankChange"
                 class="size-2 mr-1"
-                :class="{ 'rotate-180': user.ranking - user.beforeRanking > 0 }"
+                :class="{
+                  'rotate-180': user.ranking - user.beforeRanking > 0,
+                  'icon-red': user.ranking - user.beforeRanking < 0,
+                  'icon-blue': user.ranking - user.beforeRanking > 0,
+                }"
               />
               <span>{{ Math.abs(user.ranking - user.beforeRanking) }}</span>
             </div>
@@ -294,3 +304,16 @@ function handlePhoneSubmit(phoneNumber) {
   console.log('제출된 전화번호:', phoneNumber);
 }
 </script>
+
+<style scoped>
+/* 아이콘 색상 변경을 위한 CSS 필터 */
+.icon-red {
+  filter: brightness(0) saturate(100%) invert(15%) sepia(89%) saturate(7500%)
+    hue-rotate(359deg) brightness(95%) contrast(107%);
+}
+
+.icon-blue {
+  filter: brightness(0) saturate(100%) invert(26%) sepia(100%) saturate(4625%)
+    hue-rotate(213deg) brightness(95%) contrast(106%);
+}
+</style>
