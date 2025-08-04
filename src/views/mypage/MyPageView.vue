@@ -156,6 +156,7 @@ const logout = () => {
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('/api/users/main-profile');
+    console.log(data);
 
     //userScore로 레벨 계산
     userLevel.value = getLevel(data.userScore);
@@ -164,13 +165,16 @@ onMounted(async () => {
     const choogoomi = CHOOGOOMI_MAP.find(
       choogoomi => choogoomi.choogoomiName === data.choogooMi
     );
+
+    const choogoomiName = choogoomi.userLevel[0].choogoomiType;
+
     choogoomiImage.value = new URL(
       choogoomi.userLevel[userLevel.value].character,
       import.meta.url
     ).href;
 
     // userInfo 업데이트
-    userInfo.choogoomiName = choogoomi.choogoomiType;
+    userInfo.choogoomiName = choogoomiName;
     userInfo.nickname = data.nickname;
     userInfo.userScore = data.userScore;
     userInfo.userRanking = data.userRanking;
