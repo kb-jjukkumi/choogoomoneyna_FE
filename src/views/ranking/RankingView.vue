@@ -10,7 +10,7 @@
         <div class="relative">
           <p class="text-lg text-limegreen-800 mb-3 text-center">명예의 전당</p>
           <div
-            class="absolute top-1/2 left-1/2 translate-x-[45px] pb-3 -translate-y-1.5 group"
+            class="absolute top-1/2 left-1/2 translate-x-[45px] pb-3 -translate-y-1.5 group z-10"
           >
             <img
               :src="icon_info"
