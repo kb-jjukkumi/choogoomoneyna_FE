@@ -1,6 +1,6 @@
 import axiosInstance from './axios';
 
-const checkName = async name => {
+export const checkName = async name => {
   try {
     const { data } = await axiosInstance.get(`api/users/check-nickname`, {
       params: {
@@ -14,7 +14,7 @@ const checkName = async name => {
 };
 
 //이메일로 인증코드 전송
-const sendCode = async email => {
+export const sendCode = async email => {
   try {
     const { data } = await axiosInstance.post('api/email-auth/send', email);
     return data;
@@ -24,7 +24,7 @@ const sendCode = async email => {
 };
 
 //인증코드 검증
-const verifyCode = async verifyEmail => {
+export const verifyCode = async verifyEmail => {
   try {
     const { data } = await axiosInstance.post(
       'api/email-auth/verify',
@@ -37,7 +37,7 @@ const verifyCode = async verifyEmail => {
 };
 
 //회원가입
-const signup = async signupData => {
+export const signup = async signupData => {
   try {
     const { data } = await axiosInstance.post('api/users/signup', signupData, {
       headers: {
@@ -52,7 +52,7 @@ const signup = async signupData => {
 };
 
 // 로그인
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     const { data } = await axiosInstance.post('api/users/login', {
       email,
@@ -73,5 +73,3 @@ export const userInfo = async () => {
     throw new Error('유저 프로필 정보 불러오기 실패');
   }
 };
-
-export default { checkName, sendCode, verifyCode, signup, login, userInfo };
