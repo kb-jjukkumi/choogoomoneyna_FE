@@ -70,7 +70,6 @@ const loadingTexts = [
   '추구미들을 불러오고 있어요...',
   '데이터를 준비중이에요...',
   '거의 다 됐어요!',
-  '완료!',
 ];
 const loadingText = ref(loadingTexts[0]);
 
@@ -79,14 +78,14 @@ let progressInterval;
 // 프로그레스 바 업데이트
 const updateProgress = () => {
   if (progress.value < 100) {
-    progress.value += 3; // 조금 더 천천히
+    progress.value += 5; // 2초 완료 (100 / 20 = 5)
   }
 };
 
 // 로딩 텍스트 업데이트
 const updateLoadingText = () => {
   const textIndex = Math.min(
-    Math.floor(progress.value / 25),
+    Math.floor(progress.value / 33),
     loadingTexts.length - 1
   );
   loadingText.value = loadingTexts[textIndex];
