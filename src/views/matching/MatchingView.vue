@@ -8,17 +8,17 @@
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-1">
-            {{ myInfo.matchingScore }}점
+            {{ myMatchingScore }}점
           </div>
-          <img :src="myInfo.profileImageUrl" class="w-[50px]" />
+          <img :src="myUserData.profileImageUrl" class="w-[50px]" />
         </div>
         <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
         <!-- 상대 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-2">
-            {{ opponentInfo.matchingScore }}점
+            {{ opponentMatchingScore }}점
           </div>
-          <img :src="opponentInfo.profileImageUrl" class="w-[50px]" />
+          <img :src="opponentUserData.profileImageUrl" class="w-[50px]" />
         </div>
       </div>
 
@@ -28,8 +28,8 @@
           class="h-full bg-red"
           :style="{
             width:
-              (myInfo.matchingScore /
-                (myInfo.matchingScore + opponentInfo.matchingScore)) *
+              (myUserData.matchingScore /
+                (myUserData.matchingScore + opponentUserData.matchingScore)) *
                 100 +
               '%',
           }"
@@ -43,13 +43,15 @@
           <span
             class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
           >
-            {{ myInfo.ranking }}위
+            {{ myUserData.ranking }}위
           </span>
           <div class="text-xs text-limegreen-900 mt-1">
-            {{ myInfo.nickname }}
+            {{ myUserData.nickname }}
           </div>
           <div class="text-[10px] text-gray-300">
-            {{ 'Lv.' + myInfo.level + ' / ' + myInfo.totalScore + '점' }}
+            {{
+              'Lv.' + myUserData.level + ' / ' + myUserData.totalScore + '점'
+            }}
           </div>
         </div>
 
@@ -58,17 +60,17 @@
           <span
             class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
           >
-            {{ opponentInfo.ranking }}위
+            {{ opponentUserData.ranking }}위
           </span>
           <div class="text-xs text-limegreen-900 mt-1">
-            {{ opponentInfo.nickname }}
+            {{ opponentUserData.nickname }}
           </div>
           <div class="text-[10px] text-gray-300">
             {{
               'Lv.' +
-              opponentInfo.level +
+              opponentUserData.level +
               ' / ' +
-              opponentInfo.totalScore +
+              opponentUserData.totalScore +
               '점'
             }}
           </div>
@@ -106,12 +108,9 @@
           <span
             class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
           >
-            {{ myInfo.nickname }}
+            {{ myUserData.nickname }}
           </span>
-          <div
-            v-for="(mission, i) in myInfo.missionList"
-            :key="mission.missionId"
-          >
+          <div v-for="(mission, i) in myMissionList" :key="mission.missionId">
             <div class="flex items-center mt-2">
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
@@ -146,10 +145,10 @@
           <span
             class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
           >
-            {{ opponentInfo.nickname }}
+            {{ opponentUserData.nickname }}
           </span>
           <div
-            v-for="(mission, i) in opponentInfo.missionList"
+            v-for="(mission, i) in opponentMissionList"
             :key="mission.missionId"
           >
             <div class="flex items-center mt-2">
@@ -198,7 +197,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { fetchMatchingMain } from '@/api/matchingApi';
+import { fetchMatchingData } from '@/api/matchingApi';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -211,67 +210,138 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 const router = useRouter();
 
 const showModal = ref(false); // 퀴즈 안내 모달
+const showResultModal = ref(false); // 매칭 결과 모달
 
-const showResultModal = ref(true); // 매칭 결과 모달
-
-// 매칭 API 응답 데이터 담을 객체
-const MATCHING_DATA = ref({});
-const myInfo = computed(() => MATCHING_DATA.value.myInfo || {});
-const opponentInfo = computed(() => MATCHING_DATA.value.opponentInfo || {});
+// 사용자 프로필 정보
+const myUserData = ref({});
+const opponentUserData = ref({});
+// 미션 정보
+const myMissionList = ref({});
+const opponentMissionList = ref({});
 
 const myChoogoomiName = 'A';
 const opponentChoogoomiName = 'A';
 
-// 페이지 로드 -> 매칭 상세 데이터 불러오기
+// 매칭 점수
+const myMatchingScore = ref(0);
+const opponentMatchingScore = ref(0);
+
+// 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화
 onMounted(async () => {
   try {
-    const data = await fetchMatchingMain();
+    const matchingData = await fetchMatchingData();
 
-    console.log(data);
+    // 나의 프로필 정보
+    const myData = matchingData.myMissionProgressList[0];
 
-    const myTotalScore = data.myTotalScore;
-    const opponentTotalScore = data.opponentTotalScore;
+    const myRanking = matchingData.myRanking;
+    const myNickname = myData.userNickname;
+    const myTotalScore = matchingData.myTotalScore;
+    const myLevel = getLevel(myTotalScore);
+    const myCharacter = new URL(
+      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
+        myLevel
+      ].character,
+      import.meta.url
+    ).href;
 
-    const myRanking = data.myRanking;
-    const opponentRanking = data.opponentRanking;
-
-    // API 응답값에서 필요한 정보 -> MATCHING_DATA에 저장
-    MATCHING_DATA.value = {
-      myInfo: {
-        nickname: data.myMissionProgressList[0].userNickname,
-        ranking: myRanking,
-        totalScore: myTotalScore,
-        level: getLevel(myTotalScore),
-        profileImageUrl: new URL(
-          CHOOGOOMI_MAP.find(
-            c => c.choogoomiName === myChoogoomiName
-          )?.userLevel[getLevel(myTotalScore)]?.character,
-          import.meta.url
-        ).href,
-        matchingScore: data.myMissionProgressList.reduce(
-          (acc, cur) => acc + cur.score,
-          0
-        ),
-        missionList: data.myMissionProgressList,
-      },
-      opponentInfo: {
-        nickname: data.opponentMissionProgressList[0].userNickname,
-        ranking: opponentRanking,
-        totalScore: opponentTotalScore,
-        level: getLevel(opponentTotalScore),
-        profileImageUrl: new URL(
-          CHOOGOOMI_MAP.find(
-            c => c.choogoomiName === opponentChoogoomiName
-          )?.userLevel[getLevel(opponentTotalScore)]?.character,
-          import.meta.url
-        ).href,
-        matchingScore: data.opponentMissionProgressList.reduce(
-          (acc, cur) => acc + cur.score,
-          0
-        ),
-        missionList: data.opponentMissionProgressList,
-      },
+    myUserData.value = {
+      ranking: myRanking,
+      profileImageUrl: myCharacter,
+      nickname: myNickname,
+      totalScore: myTotalScore,
+      level: myLevel,
+      matchingScore: 0,
     };
+
+    // 상대의 프로필 정보
+    const opponentData = matchingData.opponentMissionProgressList[0];
+
+    const opponentRanking = matchingData.opponentRanking;
+    const opponentNickname = opponentData.userNickname;
+    const opponentTotalScore = matchingData.opponentTotalScore;
+    const opponentLevel = getLevel(opponentTotalScore);
+    const opponentCharacter = new URL(
+      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
+        opponentLevel
+      ].character,
+      import.meta.url
+    ).href;
+
+    opponentUserData.value = {
+      ranking: opponentRanking,
+      profileImageUrl: opponentCharacter,
+      nickname: opponentNickname,
+      totalScore: opponentTotalScore,
+      level: opponentLevel,
+      matchingScore: 0,
+    };
+
+    // 나의 미션 리스트
+    const myMission = matchingData.myMissionProgressList;
+
+    myMissionList.value = [
+      {
+        missionId: myMission[0].missionId,
+        missionTitle: myMission[0].missionTitle,
+        missionContent: myMission[0].missionContent,
+        missionScore: myMission[0].missionScore,
+        score: myMission[0].score,
+      },
+      // {
+      //   missionId: myMission[1].missionId,
+      //   missionTitle: myMission[1].missionTitle,
+      //   missionContent: myMission[1].missionContent,
+      //   missionScore: myMission[1].missionScore,
+      //   score: myMission[1].score,
+      // },
+      // {
+      //   missionId: myMission[2].missionId,
+      //   missionTitle: myMission[2].missionTitle,
+      //   missionContent: myMission[2].missionContent,
+      //   missionScore: myMission[2].missionScore,
+      //   score: myMission[2].score,
+      // },
+    ];
+
+    // 상대의 미션 리스트
+    const opponentMission = matchingData.opponentMissionProgressList;
+
+    opponentMissionList.value = [
+      {
+        missionId: opponentMission[0].missionId,
+        missionTitle: opponentMission[0].missionTitle,
+        missionContent: opponentMission[0].missionContent,
+        missionScore: opponentMission[0].missionScore,
+        score: opponentMission[0].score,
+      },
+      // {
+      //   missionId: opponentMission[1].missionId,
+      //   missionTitle: opponentMission[1].missionTitle,
+      //   missionContent: opponentMission[1].missionContent,
+      //   missionScore: opponentMission[1].missionScore,
+      //   score: opponentMission[1].score,
+      // },
+      // {
+      //   missionId: opponentMission[2].missionId,
+      //   missionTitle: opponentMission[2].missionTitle,
+      //   missionContent: opponentMission[2].missionContent,
+      //   missionScore: opponentMission[2].missionScore,
+      //   score: opponentMission[2].score,
+      // },
+    ];
+
+    // 나의 매칭 점수 계산
+    myMatchingScore.value = myMissionList.value.reduce(
+      (acc, cur) => acc + cur.score,
+      0
+    );
+
+    // 상대의 매칭 점수 계산
+    opponentMatchingScore.value = opponentMissionList.value.reduce(
+      (acc, cur) => acc + cur.score,
+      0
+    );
   } catch (err) {
     console.error('매칭 데이터 불러오기 실패:', err);
   }

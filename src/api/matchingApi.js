@@ -2,7 +2,7 @@
 import axiosInstance from './axios';
 
 // 매칭 메인 정보
-export const fetchMatchingMain = async () => {
+export const fetchMatchingData = async () => {
   try {
     const response = await axiosInstance.get('/api/matching/main');
     return response.data;
