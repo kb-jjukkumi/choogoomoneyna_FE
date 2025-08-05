@@ -158,7 +158,7 @@ const handleModalClose = () => {
   isModalOpen.value = false;
   // 성공한 경우에만 홈으로 이동
   if (modalType.value === true) {
-    router.push({ name: 'home' });
+    router.push({ name: 'choogoomi' });
   }
 };
 
