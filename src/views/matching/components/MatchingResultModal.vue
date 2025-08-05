@@ -5,7 +5,7 @@
     >
       <!--지난주 매칭 결과-->
       <div class="flex flex-col gap-0.5 w-full mt-1">
-        <div class="text-limegreen-900 text-lg">지난주 매칭 결과</div>
+        <div class="text-limegreen-900 text-lg">{{ title }}</div>
         <div class="bg-ivory flex rounded-2xl p-5">
           <div class="flex gap-6 text-sm text-center items-center">
             <div>
@@ -39,7 +39,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+
+import axiosInstance from '@/api/axios';
 
 import MissionListCard from './MissionListCard.vue';
+
+const props = defineProps({
+  roundNumber: { type: Number, required: true },
+  title: { type: String, required: true },
+});
+
+onMounted(async () => {
+  try {
+    const { data } = await axiosInstance.get(
+      `/api/matching/history?roundNumber=${props.roundNumber}`
+    );
+    console.log(data);
+  } catch {
+    console.log(error);
+  }
+});
 </script>

@@ -107,7 +107,6 @@ const pagedRecordsWithImages = computed(() =>
 onMounted(async () => {
   try {
     const { data } = await axiosInstance.get('api/ranking/history');
-    console.log(data);
     Object.assign(RECORDS, data);
   } catch (error) {
     console.log(error);
