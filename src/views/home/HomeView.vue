@@ -33,7 +33,7 @@
             <div class="bg-limegreen-100 h-[9px] rounded-xl mb-[2px]">
               <!-- 레벨 표시 바 - 현재 레벨 -->
               <div
-                class="bg-green h-full rounded-xl transition-all duration-500 ease-out"
+                class="bg-green h-full rounded-xl"
                 :style="{ width: experienceProgress + '%' }"
               ></div>
             </div>
