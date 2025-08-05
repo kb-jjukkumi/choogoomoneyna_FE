@@ -5,6 +5,7 @@
       <!-- 매칭 참가자 프로필 -->
       <div class="flex justify-around px-10 items-center mb-2">
         <!-- 매칭 점수 비교 -->
+        <!-- 매칭 점수 비교 -->
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-1">
@@ -23,6 +24,8 @@
       </div>
 
       <!-- 매칭 점수 게이지 바 -->
+
+      <!-- 매칭 점수 게이지 바 -->
       <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
         <div
           class="h-full bg-red"
@@ -35,6 +38,8 @@
           }"
         ></div>
       </div>
+
+      <!-- 프로필 정보 -->
 
       <!-- 프로필 정보 -->
       <div class="flex justify-around px-10 items-center mt-2 mb-4">
@@ -90,6 +95,8 @@
             />
 
             <!-- hover 이벤트 - 미션별 점수 반영 시기 -->
+
+            <!-- hover 이벤트 - 미션별 점수 반영 시기 -->
             <div
               class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
             >
@@ -132,9 +139,9 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-[10px]">{{
-                  mission.score + '/' + mission.missionScore
-                }}</span>
+                <span class="pr-2 text-gray-300 text-[10px]">
+                  {{ mission.score + '/' + mission.missionScore }}
+                </span>
               </div>
             </div>
           </div>
@@ -166,9 +173,9 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-[10px]">{{
-                  mission.score + '/' + mission.missionScore
-                }}</span>
+                <span class="pr-2 text-gray-300 text-[10px]">
+                  {{ mission.score + '/' + mission.missionScore }}
+                </span>
               </div>
             </div>
           </div>
@@ -178,6 +185,7 @@
 
     <!-- 모달 -->
     <!-- 퀴즈 안내 모달 -->
+    <!-- 퀴즈 안내 모달 -->
     <QuizAlertModal
       v-if="showModal"
       title="매칭 미션 퀴즈 안내"
@@ -185,6 +193,8 @@
       @close="modalClose"
       @confirm="goToQuiz"
     />
+
+    <!-- 매칭 결과 모달 -->
 
     <!-- 매칭 결과 모달 -->
     <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
