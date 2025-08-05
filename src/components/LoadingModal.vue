@@ -69,11 +69,11 @@ const emit = defineEmits(['loading-complete', 'close']);
 
 // 캐릭터 데이터 - 모든 캐릭터가 항상 보임
 const characters = ref([
-  { src: characterA },
-  { src: characterB },
-  { src: characterC },
-  { src: characterD },
-  { src: characterE },
+  { src: characterA, name: 'A' },
+  { src: characterB, name: 'B' },
+  { src: characterC, name: 'C' },
+  { src: characterD, name: 'D' },
+  { src: characterE, name: 'E' },
 ]);
 
 let loadingTimeout;
