@@ -1,5 +1,6 @@
 <template>
-  <div class="relative flex justify-center">
+  <LoadingScreen v-if="isLoading" class="h-screen" />
+  <div v-else class="relative flex justify-center">
     <TopNavigation />
     <div class="flex flex-col w-full min-h-[calc(100vh-120px)] bg-ivory mt-18">
       <!-- 매칭 참가자 프로필 -->
@@ -210,6 +211,7 @@ import { useRouter } from 'vue-router';
 import { fetchMatchingData } from '@/api/matchingApi';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import { getLevel } from '@/utils/levelUtils';
@@ -218,6 +220,8 @@ import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
+
+const isLoading = ref(false);
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
@@ -239,6 +243,7 @@ const opponentMatchingScore = ref(0);
 // 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화
 onMounted(async () => {
   try {
+    isLoading.value = true;
     const matchingData = await fetchMatchingData();
 
     // 나의 프로필 정보
@@ -325,6 +330,8 @@ onMounted(async () => {
       (acc, cur) => acc + cur.score,
       0
     );
+
+    isLoading.value = false;
   } catch (err) {
     console.error('매칭 데이터 불러오기 실패:', err);
   }
