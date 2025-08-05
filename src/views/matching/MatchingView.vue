@@ -5,7 +5,6 @@
       <!-- 매칭 참가자 프로필 -->
       <div class="flex justify-around px-10 items-center mb-2">
         <!-- 매칭 점수 비교 -->
-        <!-- 매칭 점수 비교 -->
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-1">
@@ -24,8 +23,6 @@
       </div>
 
       <!-- 매칭 점수 게이지 바 -->
-
-      <!-- 매칭 점수 게이지 바 -->
       <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
         <div
           class="h-full bg-red"
@@ -38,8 +35,6 @@
           }"
         ></div>
       </div>
-
-      <!-- 프로필 정보 -->
 
       <!-- 프로필 정보 -->
       <div class="flex justify-around px-10 items-center mt-2 mb-4">
@@ -93,8 +88,6 @@
               :src="icon_info"
               class="size-4 flex items-center justify-center rounded-full group cursor-pointer"
             />
-
-            <!-- hover 이벤트 - 미션별 점수 반영 시기 -->
 
             <!-- hover 이벤트 - 미션별 점수 반영 시기 -->
             <div
@@ -183,8 +176,6 @@
       </div>
     </div>
 
-    <!-- 모달 -->
-    <!-- 퀴즈 안내 모달 -->
     <!-- 퀴즈 안내 모달 -->
     <QuizAlertModal
       v-if="showModal"
@@ -193,8 +184,6 @@
       @close="modalClose"
       @confirm="goToQuiz"
     />
-
-    <!-- 매칭 결과 모달 -->
 
     <!-- 매칭 결과 모달 -->
     <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
