@@ -33,8 +33,20 @@
       <div class="flex flex-col w-full gap-0.5">
         <div class="text-limegreen-900 text-lg">미션 목록</div>
         <div class="flex flex-col gap-2 text-sm">
-          <MissionListCard />
-          <MissionListCard />
+          <MissionListCard
+            v-for="(myMission, index) in matchingResult.myMissionProgressList"
+            :key="myMission.missionId"
+            :index="index"
+            :missions="myMission"
+          />
+          <MissionListCard
+            v-for="(
+              opponentMission, index
+            ) in matchingResult.opponentMissionProgressList"
+            :key="opponentMission.missionId"
+            :index="index"
+            :missions="opponentMission"
+          />
         </div>
       </div>
       <button
