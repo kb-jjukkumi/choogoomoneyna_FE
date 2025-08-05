@@ -2,8 +2,8 @@
   <div class="relative flex justify-center">
     <TopNavigation />
     <div class="flex flex-col w-full min-h-[calc(100vh-120px)] bg-ivory mt-18">
-      <!-- 매칭 참가자 프로필 -->
       <div class="flex justify-around px-10 items-center mb-2">
+        <!-- 매칭 점수 비교 -->
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-1">
@@ -20,6 +20,8 @@
           <img :src="opponentInfo.profileImageUrl" class="w-[50px]" />
         </div>
       </div>
+
+      <!-- 매칭 점수 게이지 바 -->
       <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
         <div
           class="h-full bg-red"
@@ -32,6 +34,8 @@
           }"
         ></div>
       </div>
+
+      <!-- 프로필 정보 -->
       <div class="flex justify-around px-10 items-center mt-2 mb-4">
         <!-- 나 -->
         <div class="flex flex-col flex-1 justify-center items-center">
@@ -47,6 +51,7 @@
             {{ 'Lv.' + myInfo.level + ' / ' + myInfo.totalScore + '점' }}
           </div>
         </div>
+
         <!-- 상대 -->
         <div class="flex flex-col flex-1 justify-center items-center">
           <span
@@ -68,6 +73,7 @@
           </div>
         </div>
       </div>
+
       <!-- 미션 목록 -->
       <div
         class="flex-1 bg-limegreen-500 rounded-t-[30px] px-6 py-2 w-full h-full mx-auto flex flex-col"
@@ -79,7 +85,8 @@
               :src="icon_info"
               class="size-4 flex items-center justify-center rounded-full group cursor-pointer"
             />
-            <!-- hover 이벤트 -->
+
+            <!-- hover 이벤트 - 미션별 점수 반영 시기 -->
             <div
               class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
             >
@@ -92,6 +99,7 @@
             </div>
           </div>
         </div>
+
         <!-- 나 -->
         <div class="bg-ivory p-3 rounded-xl">
           <span
@@ -131,6 +139,7 @@
             </div>
           </div>
         </div>
+
         <!-- 상대 -->
         <div class="bg-ivory p-3 mt-2 rounded-xl">
           <span
@@ -166,7 +175,9 @@
         </div>
       </div>
     </div>
+
     <!-- 모달 -->
+    <!-- 퀴즈 안내 모달 -->
     <QuizAlertModal
       v-if="showModal"
       title="매칭 미션 퀴즈 안내"
@@ -174,7 +185,10 @@
       @close="modalClose"
       @confirm="goToQuiz"
     />
+
+    <!-- 매칭 결과 모달 -->
     <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
+
     <BottomNavigation />
   </div>
 </template>
@@ -194,10 +208,12 @@ import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
-const showModal = ref(false);
 
-const showResultModal = ref(true);
+const showModal = ref(false); // 퀴즈 안내 모달
 
+const showResultModal = ref(true); // 매칭 결과 모달
+
+// 매칭 API 응답 데이터 담을 객체
 const MATCHING_DATA = ref({});
 const myInfo = computed(() => MATCHING_DATA.value.myInfo || {});
 const opponentInfo = computed(() => MATCHING_DATA.value.opponentInfo || {});
@@ -205,6 +221,7 @@ const opponentInfo = computed(() => MATCHING_DATA.value.opponentInfo || {});
 const myChoogoomiName = 'A';
 const opponentChoogoomiName = 'A';
 
+// 페이지 로드 -> 매칭 상세 데이터 불러오기
 onMounted(async () => {
   try {
     const data = await fetchMatchingMain();
@@ -214,10 +231,14 @@ onMounted(async () => {
     const myTotalScore = data.myTotalScore;
     const opponentTotalScore = data.opponentTotalScore;
 
+    const myRanking = data.myRanking;
+    const opponentRanking = data.opponentRanking;
+
+    // API 응답값에서 필요한 정보 -> MATCHING_DATA에 저장
     MATCHING_DATA.value = {
       myInfo: {
         nickname: data.myMissionProgressList[0].userNickname,
-        ranking: 3,
+        ranking: myRanking,
         totalScore: myTotalScore,
         level: getLevel(myTotalScore),
         profileImageUrl: new URL(
@@ -234,7 +255,7 @@ onMounted(async () => {
       },
       opponentInfo: {
         nickname: data.opponentMissionProgressList[0].userNickname,
-        ranking: 4,
+        ranking: opponentRanking,
         totalScore: opponentTotalScore,
         level: getLevel(opponentTotalScore),
         profileImageUrl: new URL(
@@ -255,6 +276,7 @@ onMounted(async () => {
   }
 });
 
+// hover 이벤트 - 미션 점수 반영 시기
 const MISSION_INFORMATION = [
   {
     title: '✅ 즉시 반영되는 미션',
@@ -273,24 +295,28 @@ const MISSION_INFORMATION = [
   },
 ];
 
+// 매칭 결과 모달 닫기
 const closeResultModal = () => {
   showResultModal.value = false;
 };
 
+// 글쓰기 미션 페이지로 이동
 const goToWrite = () => {
   router.push({ name: 'missionWrite' });
 };
 
+// 퀴즈 모달 열기
 const confirmQuiz = () => {
   showModal.value = true;
 };
 
+// 퀴즈 모달 닫기
 const modalClose = () => {
   showModal.value = false;
 };
 
+// 퀴즈 미션 페이지로 이동
 const goToQuiz = () => {
-  console.log('클릭됨');
   router.push({ name: 'missionQuiz' });
 };
 </script>
