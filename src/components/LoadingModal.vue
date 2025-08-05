@@ -7,18 +7,18 @@
   >
     <!-- 모달 컨텐츠 -->
     <div
-      class="bg-ivory rounded-2xl max-w-md w-70 shadow-2xl h-70 flex flex-col items-center justify-center"
+      class="bg-ivory rounded-2xl max-w-md w-70 shadow-2xl h-55 flex flex-col items-center justify-center gap-4"
     >
       <!-- 캐릭터 파도 애니메이션 영역 -->
-      <div class="flex items-center justify-center flex-1">
+      <div class="flex items-center justify-center">
         <!-- 캐릭터들이 일렬로 배치 -->
         <div
           v-for="(character, index) in characters"
           :key="character.name"
           class="flex flex-col items-center animate-wave"
           :style="{
-            animationDelay: index * 0.05 + 's',
-            '--wave-height': '20px',
+            animationDelay: index * 0.1 + 's',
+            '--wave-height': '10px',
           }"
         >
           <img
@@ -30,26 +30,7 @@
       </div>
 
       <!-- 로딩 스피너 -->
-      <div class="text-center mb-10">
-        <!-- 멀티 서클 스피너 -->
-        <div class="flex justify-center items-center space-x-2">
-          <div
-            class="animate-bounce-delay-0 w-3 h-3 bg-limegreen-600 rounded-full"
-          ></div>
-          <div
-            class="animate-bounce-delay-1 w-3 h-3 bg-limegreen-500 rounded-full"
-          ></div>
-          <div
-            class="animate-bounce-delay-2 w-3 h-3 bg-limegreen-400 rounded-full"
-          ></div>
-          <div
-            class="animate-bounce-delay-3 w-3 h-3 bg-limegreen-500 rounded-full"
-          ></div>
-          <div
-            class="animate-bounce-delay-4 w-3 h-3 bg-limegreen-600 rounded-full"
-          ></div>
-        </div>
-      </div>
+      <p class="text-limegreen-800 text-2xl">로딩중...</p>
     </div>
   </div>
 </template>
@@ -149,7 +130,7 @@ onUnmounted(() => {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(calc(-1 * var(--wave-height, 20px)));
+    transform: translateY(calc(-1 * var(--wave-height, 10px)));
   }
 }
 
