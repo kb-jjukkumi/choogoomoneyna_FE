@@ -31,7 +31,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         try {
           const userData = await userInfo();
-          // 츄고미 미선택 시 설문조사로 리다이렉트
+          // 추구미 미선택 시 설문조사로 리다이렉트
           if (userData.choogooMi === 'O') {
             return next('/survey');
           }

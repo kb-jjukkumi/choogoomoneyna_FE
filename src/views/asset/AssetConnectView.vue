@@ -156,7 +156,7 @@ const connectAsset = async () => {
 // 모달 닫기 핸들러
 const handleModalClose = () => {
   isModalOpen.value = false;
-  // 성공한 경우에만 홈으로 이동
+  // 성공한 경우에만 추구미 선택 페이지로 이동
   if (modalType.value === true) {
     router.push({ name: 'choogoomi' });
   }
