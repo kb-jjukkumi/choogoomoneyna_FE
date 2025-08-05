@@ -181,9 +181,9 @@ const showModal = ref(false);
 
 // 경험치 바 퍼센트 계산
 const experienceProgress = computed(() => {
-  if (!USER_PROFILE.value.userScore) return 0;
-
-  const currentScore = USER_PROFILE.value.userScore;
+  const currentScore = USER_PROFILE.value.userScore
+    ? USER_PROFILE.value.userScore
+    : 0;
   const currentLevel = userLevel.value;
 
   // 최대 레벨에 도달한 경우
@@ -201,9 +201,9 @@ const experienceProgress = computed(() => {
 
 // 레벨 정보 텍스트 계산
 const levelInfo = computed(() => {
-  if (!USER_PROFILE.value.userScore) return '';
-
-  const currentScore = USER_PROFILE.value.userScore;
+  const currentScore = USER_PROFILE.value.userScore
+    ? USER_PROFILE.value.userScore
+    : 0;
   const currentLevel = userLevel.value;
 
   // 최대 레벨에 도달한 경우
