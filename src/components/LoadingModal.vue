@@ -114,7 +114,8 @@ watch(
     } else {
       stopLoading();
     }
-  }
+  },
+  { immediate: true }
 );
 
 onUnmounted(() => {
