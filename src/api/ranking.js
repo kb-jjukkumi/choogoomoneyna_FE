@@ -26,3 +26,13 @@ export const updateRankingData = async () => {
     return false;
   }
 };
+
+//주별 랭킹, 점수, 추구미 정보 리스트 가져오기
+export const getRankingHistory = async () => {
+  try {
+    const { data } = await axiosInstance.get('api/ranking/history');
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
