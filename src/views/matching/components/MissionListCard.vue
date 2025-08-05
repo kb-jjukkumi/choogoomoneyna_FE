@@ -20,7 +20,7 @@
             :class="[
               'text-sm',
               'mr-5',
-              isMissionCompleted ? 'text-' : 'text-gray-200',
+              isMissionCompleted ? 'text-' : 'text-gray-300',
             ]"
           >
             {{ missions.missionTitle }}
@@ -30,7 +30,7 @@
           :class="[
             'text-xs',
             'mr-1',
-            isMissionCompleted ? 'text-yellow' : 'text-gray-200',
+            isMissionCompleted ? 'text-yellow' : 'text-gray-300',
           ]"
         >
           {{ missions.score }}점
