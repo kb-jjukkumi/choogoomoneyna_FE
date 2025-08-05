@@ -8,6 +8,7 @@ import ChoogooMiSelectView from '@/views/choogoomi/ChoogooMiSelectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
 import LoginView from '@/views/login/LoginView.vue';
+import FindPasswordView from '@/views/login/password/FindPasswordView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
 import MissionQuizView from '@/views/matching/MissionQuizView.vue';
 import MissionWriteView from '@/views/matching/MissionWriteView.vue';
@@ -36,6 +37,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/find-password',
+      name: 'findPassword',
+      component: FindPasswordView,
     },
     {
       path: '/signup',
@@ -117,7 +123,7 @@ router.beforeEach(async (to, from, next) => {
   const isLoggedIn = authStore.isLoggedIn;
 
   // 공개 페이지 정의
-  const publicPages = ['/login', '/signup'];
+  const publicPages = ['/login', '/signup', '/find-password'];
 
   console.log('🚦 Router Guard:', {
     to: to.path,

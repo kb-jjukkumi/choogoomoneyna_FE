@@ -75,6 +75,11 @@
               class="w-full rounded-[10px] h-11 font-spoqa! placeholder:font-jua bg-limegreen-100 pl-10 pr-4 py-3 focus:outline-none placeholder:text-[#BDBFB5] text-limegreen-900"
             />
           </div>
+          <div class="flex justify-end pt-4 text-gray-300 underline">
+            <button type="button" @click="navigateToFindPassword">
+              비밀번호를 잊으셨나요?
+            </button>
+          </div>
         </div>
         <div class="mt-12">
           <button
@@ -188,6 +193,10 @@ const handleModalClose = () => {
     // 토큰이 없으면 로그인 페이지로 이동
     router.push('/login');
   }
+};
+
+const navigateToFindPassword = () => {
+  router.push('/find-password');
 };
 
 const goToSignup = () => {

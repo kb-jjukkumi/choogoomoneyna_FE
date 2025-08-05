@@ -73,3 +73,30 @@ export const userInfo = async () => {
     throw new Error('유저 프로필 정보 불러오기 실패');
   }
 };
+
+//비밀번호 재설정 이메일 발송
+export const sendPasswordResetEmail = async email => {
+  try {
+    const { data } = await axiosInstance.post(
+      'api/email-auth/password-reset/send',
+      email
+    );
+    return data;
+  } catch {
+    throw new Error('이메일 전송 실패');
+  }
+};
+
+// 비밀번호 재설정
+export const findPassword = async (email, verificationCode, newPassword) => {
+  try {
+    await axiosInstance.put('api/users/password/reset', {
+      email,
+      verificationCode,
+      newPassword,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
