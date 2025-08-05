@@ -127,6 +127,7 @@ import ConfirmModal from '@/components/ConfirmModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import router from '@/router';
+import { useAuthStore } from '@/stores/authStore';
 import { isEditableDay } from '@/utils/dateUtils';
 import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 
@@ -137,6 +138,8 @@ const showChoogoomiEditModal = ref(false);
 
 const choogoomiImage = ref('');
 const userLevel = ref(0);
+
+const authStore = useAuthStore();
 
 const userInfo = reactive({
   choogoomiName: '',
@@ -149,7 +152,7 @@ const userInfo = reactive({
 const isEditable = isEditableDay();
 
 const logout = () => {
-  localStorage.clear();
+  authStore.clearAuth();
   router.push('/login');
 };
 
