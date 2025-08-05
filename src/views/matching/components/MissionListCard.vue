@@ -16,17 +16,40 @@
           >
             {{ index + 1 }}
           </div>
-          <div class="text-sm text-green">{{ missions.missionTitle }}</div>
+          <div
+            :class="[
+              'text-sm',
+              'mr-5',
+              isMissionCompleted ? 'text-' : 'text-gray-200',
+            ]"
+          >
+            {{ missions.missionTitle }}
+          </div>
         </div>
-        <div class="text-xs text-yellow mr-1">{{ missions.score }}점</div>
+        <div
+          :class="[
+            'text-xs',
+            'mr-1',
+            isMissionCompleted ? 'text-yellow' : 'text-gray-200',
+          ]"
+        >
+          {{ missions.score }}점
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   missions: { type: Object, required: true },
   index: { type: Number, required: true },
+});
+
+// 미션 완료 여부를 계산
+const isMissionCompleted = computed(() => {
+  return props.missions.missionScore === props.missions.score;
 });
 
 console.log(props.missions);

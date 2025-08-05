@@ -9,7 +9,7 @@
       <!--지난주 매칭 결과-->
       <div class="flex flex-col gap-0.5 w-full mt-1">
         <div class="text-limegreen-900 text-lg">{{ title }}</div>
-        <div class="bg-ivory flex rounded-2xl p-5">
+        <div class="bg-ivory flex rounded-2xl p-5 justify-center">
           <div class="flex gap-6 text-sm text-center items-center">
             <div>
               <div class="text-limegreen-900">
