@@ -32,12 +32,15 @@
             <!-- 레벨 표시 바 - 전체 -->
             <div class="bg-limegreen-100 h-[9px] rounded-xl mb-[2px]">
               <!-- 레벨 표시 바 - 현재 레벨 -->
-              <div class="bg-green h-full w-1/2 rounded-xl"></div>
+              <div
+                class="bg-green h-full rounded-xl transition-all duration-500 ease-out"
+                :style="{ width: experienceProgress + '%' }"
+              ></div>
             </div>
 
             <!-- 현재 레벨 & 점수 -->
             <div class="text-center text-limegreen-700 text-xs">
-              {{ 'Lv.' + userLevel + ' / ' + USER_PROFILE.userScore + '점' }}
+              {{ levelInfo }}
             </div>
           </div>
 
@@ -145,7 +148,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { userInfo } from '@/api/authApi';
@@ -158,7 +161,7 @@ import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
-import { getLevel } from '@/utils/levelUtils';
+import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 
 const router = useRouter();
 const isLoading = ref(true);
@@ -175,6 +178,41 @@ const getBankInfo = bankId =>
 
 // 레벨 업 보상 모달 표시 여부
 const showModal = ref(false);
+
+// 경험치 바 퍼센트 계산
+const experienceProgress = computed(() => {
+  if (!USER_PROFILE.value.userScore) return 0;
+
+  const currentScore = USER_PROFILE.value.userScore;
+  const currentLevel = userLevel.value;
+
+  // 최대 레벨에 도달한 경우
+  if (currentLevel >= LEVEL_THRESHOLDS.length - 1) {
+    return 100;
+  }
+
+  const nextLevelThreshold = LEVEL_THRESHOLDS[currentLevel + 1];
+
+  // 현재 레벨에서의 진행도 계산
+  // 퍼센트 계산 (0-100 사이 값)
+  const percentage = Math.min((currentScore / nextLevelThreshold) * 100, 100);
+  return Math.max(percentage, 0);
+});
+
+// 레벨 정보 텍스트 계산
+const levelInfo = computed(() => {
+  if (!USER_PROFILE.value.userScore) return '';
+
+  const currentScore = USER_PROFILE.value.userScore;
+  const currentLevel = userLevel.value;
+
+  // 최대 레벨에 도달한 경우
+  if (currentLevel >= LEVEL_THRESHOLDS.length - 1) {
+    return `Lv.${currentLevel} (MAX) / ${currentScore}점`;
+  }
+
+  return `Lv.${currentLevel} / ${currentScore}`;
+});
 
 // 컴포넌트가 마운트될 때 실행
 onMounted(async () => {
