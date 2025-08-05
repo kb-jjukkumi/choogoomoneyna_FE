@@ -51,6 +51,4 @@ const props = defineProps({
 const isMissionCompleted = computed(() => {
   return props.missions.missionScore === props.missions.score;
 });
-
-console.log(props.missions);
 </script>

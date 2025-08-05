@@ -49,7 +49,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue';
 
-import axiosInstance from '@/api/axios';
+import { getRankingHistory } from '@/api/ranking';
 import back from '@/assets/img/icons/system/system_back.png';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
@@ -106,8 +106,8 @@ const pagedRecordsWithImages = computed(() =>
 
 onMounted(async () => {
   try {
-    const { data } = await axiosInstance.get('api/ranking/history');
-    Object.assign(RECORDS, data);
+    const result = await getRankingHistory();
+    Object.assign(RECORDS, result);
   } catch (error) {
     console.log(error);
   }

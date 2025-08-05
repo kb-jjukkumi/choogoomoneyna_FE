@@ -35,12 +35,14 @@
       <div class="flex flex-col w-full gap-0.5">
         <div class="text-limegreen-900 text-lg">미션 목록</div>
         <div class="flex flex-col gap-2 text-sm">
+          <!--나의 미션-->
           <MissionListCard
             v-for="(myMission, index) in matchingResult.myMissionProgressList"
             :key="myMission.missionId"
             :index="index"
             :missions="myMission"
           />
+          <!--상대방 미션-->
           <MissionListCard
             v-for="(
               opponentMission, index
@@ -64,7 +66,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 
-import axiosInstance from '@/api/axios';
+import { getResultByRound } from '@/api/matchingApi';
 
 import MissionListCard from './MissionListCard.vue';
 
@@ -84,10 +86,8 @@ const isLoaded = ref(false);
 
 onMounted(async () => {
   try {
-    const { data } = await axiosInstance.get(
-      `/api/matching/history?roundNumber=${props.roundNumber}`
-    );
-    Object.assign(matchingResult, data);
+    const result = await getResultByRound(props.roundNumber);
+    Object.assign(matchingResult, result);
     isLoaded.value = true;
   } catch (error) {
     console.log(error);
