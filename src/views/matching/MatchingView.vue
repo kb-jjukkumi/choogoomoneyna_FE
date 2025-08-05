@@ -280,56 +280,23 @@ onMounted(async () => {
     // 나의 미션 리스트
     const myMission = matchingData.myMissionProgressList;
 
-    myMissionList.value = [
-      {
-        missionId: myMission[0].missionId,
-        missionTitle: myMission[0].missionTitle,
-        missionContent: myMission[0].missionContent,
-        missionScore: myMission[0].missionScore,
-        score: myMission[0].score,
-      },
-      // {
-      //   missionId: myMission[1].missionId,
-      //   missionTitle: myMission[1].missionTitle,
-      //   missionContent: myMission[1].missionContent,
-      //   missionScore: myMission[1].missionScore,
-      //   score: myMission[1].score,
-      // },
-      // {
-      //   missionId: myMission[2].missionId,
-      //   missionTitle: myMission[2].missionTitle,
-      //   missionContent: myMission[2].missionContent,
-      //   missionScore: myMission[2].missionScore,
-      //   score: myMission[2].score,
-      // },
-    ];
+    myMissionList.value = myMission.map(mission => ({
+      missionId: mission.missionId,
+      missionTitle: mission.missionTitle,
+      missionContent: mission.missionContent,
+      missionScore: mission.missionScore,
+      score: mission.score,
+    }));
 
     // 상대의 미션 리스트
     const opponentMission = matchingData.opponentMissionProgressList;
-
-    opponentMissionList.value = [
-      {
-        missionId: opponentMission[0].missionId,
-        missionTitle: opponentMission[0].missionTitle,
-        missionContent: opponentMission[0].missionContent,
-        missionScore: opponentMission[0].missionScore,
-        score: opponentMission[0].score,
-      },
-      // {
-      //   missionId: opponentMission[1].missionId,
-      //   missionTitle: opponentMission[1].missionTitle,
-      //   missionContent: opponentMission[1].missionContent,
-      //   missionScore: opponentMission[1].missionScore,
-      //   score: opponentMission[1].score,
-      // },
-      // {
-      //   missionId: opponentMission[2].missionId,
-      //   missionTitle: opponentMission[2].missionTitle,
-      //   missionContent: opponentMission[2].missionContent,
-      //   missionScore: opponentMission[2].missionScore,
-      //   score: opponentMission[2].score,
-      // },
-    ];
+    opponentMissionList.value = opponentMission.map(mission => ({
+      missionId: mission.missionId,
+      missionTitle: mission.missionTitle,
+      missionContent: mission.missionContent,
+      missionScore: mission.missionScore,
+      score: mission.score,
+    }));
 
     // 나의 매칭 점수 계산
     myMatchingScore.value = myMissionList.value.reduce(
