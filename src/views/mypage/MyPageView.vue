@@ -110,7 +110,7 @@
         :cancelBtn="'취소'"
         :confirmBtn="'확인'"
         @cancel="showChoogoomiEditModal = false"
-        @confirm="router.push('/character')"
+        @confirm="router.push('/choogoomi')"
       />
     </div>
   </div>
