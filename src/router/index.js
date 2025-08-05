@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import { userInfo } from '@/api/authApi';
 import { useAuthStore } from '@/stores/authStore';
 import AssetConnectView from '@/views/asset/AssetConnectView.vue';
 import AssetSelectView from '@/views/asset/AssetSelectView.vue';
@@ -27,6 +28,20 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      beforeEnter: async (to, from, next) => {
+        try {
+          const userData = await userInfo();
+          // 추구미 미선택 시 설문조사로 리다이렉트
+          if (userData.choogooMi === 'O') {
+            return next('/survey');
+          }
+          next();
+        } catch (error) {
+          console.error('사용자 정보 조회 실패:', error);
+          // 에러 발생 시 이전 페이지로 리디렉트
+          next(false);
+        }
+      },
     },
     {
       path: '/transaction/:bankId/:accountNum/:accountName',

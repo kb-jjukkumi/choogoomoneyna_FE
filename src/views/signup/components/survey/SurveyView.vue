@@ -11,20 +11,33 @@
       v-if="currentStep === 2"
       @next="handleSurveyTwoComplete"
     />
+    <AlertModal
+      v-if="isSuccessModalOpen"
+      title="설문 제출 완료"
+      message="설문 제출이 완료되었습니다."
+      @close="handleModalClose"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { submitSurvey } from '@/api/userApi';
+import AlertModal from '@/components/AlertModal.vue';
 
 import SurveyOneComponent from './SurveyOneComponent.vue';
 import SurveyTwoComponent from './SurveyTwoComponent.vue';
 
+const router = useRouter();
 // 현재 설문 단계 (1: 첫 번째 설문, 2: 두 번째 설문)
 const currentStep = ref(1);
 
 // 설문 데이터를 저장할 평면 배열 [설문1답변1, 설문1답변2, ..., 설문2답변1, 설문2답변2, ...] (총 14개)
 const surveyAnswers = ref([]);
+
+const isSuccessModalOpen = ref(false);
 
 // 설문 1 완료 처리
 const handleSurveyOneComplete = surveyOneAnswers => {
@@ -53,8 +66,15 @@ const convertToRequestData = () => {
   };
 };
 
-const sendSurveyData = () => {
+const sendSurveyData = async () => {
   const requestData = convertToRequestData();
-  console.log('요청 데이터:', requestData);
+
+  await submitSurvey(requestData);
+  isSuccessModalOpen.value = true;
+};
+
+const handleModalClose = () => {
+  isSuccessModalOpen.value = false;
+  router.push('/asset/select');
 };
 </script>
