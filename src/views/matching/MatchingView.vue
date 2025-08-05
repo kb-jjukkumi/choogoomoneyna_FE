@@ -110,15 +110,24 @@
           >
             {{ myUserData.nickname }}
           </span>
-          <div v-for="(mission, i) in myMissionList" :key="mission.missionId">
+          <div v-for="(mission, missionId) in myMissionList" :key="missionId">
             <div class="flex items-center mt-2">
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
                 :class="{
-                  'cursor-pointer hover:bg-limegreen-500 ': i === 0 || i === 1,
+                  'cursor-pointer hover:bg-limegreen-500 ':
+                    missionId === Object.keys(myMissionList)[0] ||
+                    missionId === Object.keys(myMissionList)[1],
                 }"
                 @click="
-                  () => (i === 0 ? goToWrite() : i === 1 ? confirmQuiz() : null)
+                  () => {
+                    const keys = Object.keys(myMissionList);
+                    return missionId === keys[0]
+                      ? goToWrite()
+                      : missionId === keys[1]
+                        ? confirmQuiz()
+                        : null;
+                  }
                 "
               >
                 <div>
@@ -127,8 +136,9 @@
                   }}</span>
                   <span class="text-limegreen-900">
                     {{
-                      (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
-                      mission.missionTitle
+                      (Object.keys(myMissionList)[0] === missionId
+                        ? '공통 미션: '
+                        : '지출제로형 미션: ') + mission.missionTitle
                     }}
                   </span>
                 </div>
@@ -148,8 +158,8 @@
             {{ opponentUserData.nickname }}
           </span>
           <div
-            v-for="(mission, i) in opponentMissionList"
-            :key="mission.missionId"
+            v-for="(mission, missionId) in opponentMissionList"
+            :key="missionId"
           >
             <div class="flex items-center mt-2">
               <div
@@ -161,8 +171,9 @@
                   }}</span>
                   <span class="text-limegreen-900">
                     {{
-                      (i === 0 ? '공통 미션: ' : '지출제로형 미션: ') +
-                      mission.missionTitle
+                      (Object.keys(opponentMissionList)[0] === missionId
+                        ? '공통 미션: '
+                        : '지출제로형 미션: ') + mission.missionTitle
                     }}
                   </span>
                 </div>
@@ -193,7 +204,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { fetchMatchingData } from '@/api/matchingApi';
@@ -279,32 +290,38 @@ onMounted(async () => {
     // 나의 미션 리스트
     const myMission = matchingData.myMissionProgressList;
 
-    myMissionList.value = myMission.map(mission => ({
-      missionId: mission.missionId,
-      missionTitle: mission.missionTitle,
-      missionContent: mission.missionContent,
-      missionScore: mission.missionScore,
-      score: mission.score,
-    }));
+    myMissionList.value = Object.fromEntries(
+      myMission.map(mission => [
+        mission.missionId,
+        {
+          missionTitle: mission.missionTitle,
+          missionContent: mission.missionContent,
+          missionScore: mission.missionScore,
+          score: mission.score,
+        },
+      ])
+    );
 
     // 상대의 미션 리스트
     const opponentMission = matchingData.opponentMissionProgressList;
-    opponentMissionList.value = opponentMission.map(mission => ({
-      missionId: mission.missionId,
-      missionTitle: mission.missionTitle,
-      missionContent: mission.missionContent,
-      missionScore: mission.missionScore,
-      score: mission.score,
-    }));
 
-    // 나의 매칭 점수 계산
-    myMatchingScore.value = myMissionList.value.reduce(
-      (acc, cur) => acc + cur.score,
-      0
+    opponentMissionList.value = Object.fromEntries(
+      opponentMission.map(mission => [
+        mission.missionId,
+        {
+          missionTitle: mission.missionTitle,
+          missionContent: mission.missionContent,
+          missionScore: mission.missionScore,
+          score: mission.score,
+        },
+      ])
     );
 
+    // 나의 매칭 점수 계산
+    myMatchingScore.value = myMission.reduce((acc, cur) => acc + cur.score, 0);
+
     // 상대의 매칭 점수 계산
-    opponentMatchingScore.value = opponentMissionList.value.reduce(
+    opponentMatchingScore.value = opponentMission.reduce(
       (acc, cur) => acc + cur.score,
       0
     );
