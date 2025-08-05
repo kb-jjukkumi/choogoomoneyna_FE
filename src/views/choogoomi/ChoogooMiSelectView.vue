@@ -54,8 +54,8 @@
     />
     <AlertModal
       v-if="isSuccessModalOpen"
-      title="회원가입"
-      message="회원가입이 완료되었습니다."
+      title="추구미 선택 완료"
+      message="추구미 선택이 완료되었습니다."
       @close="handleSuccess"
     />
   </div>
@@ -65,6 +65,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { updateChoogooMi } from '@/api/userApi';
 import AlertModal from '@/components/AlertModal.vue';
 import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
 
@@ -87,13 +88,8 @@ const select = idx => {
 // 추구미 선택 확정
 const confirmSelection = async () => {
   try {
-    // API 호출: 선택한 추구미 이름과 함께 요청
-    const requestData = {
-      choogoomiName: selected.value,
-    };
-    console.log('추구미 선택 요청:', requestData);
-
-    // 임시로 성공 처리
+    // API 호출: 선택한 추구미로 업데이트
+    await updateChoogooMi(selected.value);
     isSuccessModalOpen.value = true;
   } catch (error) {
     console.error('추구미 선택 실패:', error);
@@ -118,7 +114,6 @@ const handleError = () => {
 
 const handleSuccess = () => {
   isSuccessModalOpen.value = false;
-  // 추구미 선택 완료 후 홈으로 이동
   router.push('/');
 };
 </script>
