@@ -257,6 +257,7 @@ onMounted(async () => {
   try {
     isLoading.value = true;
     const matchingData = await fetchMatchingData();
+    choogoomiStore.initializeChoogoomiType();
 
     // 나의 프로필 정보
     const myData = matchingData.myMissionProgressList[0];

@@ -228,6 +228,7 @@ onMounted(async () => {
   try {
     // 사용자 프로필 정보를 API로부터 받아옴
     const profileData = await userInfo();
+    choogoomiStore.initializeChoogoomiType(profileData);
 
     // 받아온 프로필 정보에 레벨 추가하여 저장
     USER_PROFILE.value = {
@@ -242,8 +243,6 @@ onMounted(async () => {
     choogoomi.value = CHOOGOOMI_MAP.find(
       item => item.choogoomiName === USER_PROFILE.value.choogooMi
     ).userLevel[userLevel.value];
-
-    choogoomiStore.setChoogoomiType(choogoomi.value.choogoomiType);
 
     // 추구미 캐릭터 이미지 URL
     choogoomiImage.value = new URL(
