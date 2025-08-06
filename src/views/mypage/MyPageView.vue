@@ -154,7 +154,7 @@ const userInfo = reactive({
   isLevelUp: false,
 });
 
-//승패 겨로가 저장
+//승패 결과 저장
 const matchingRecord = ref({});
 
 //추구미 수정 가능한 날인지
