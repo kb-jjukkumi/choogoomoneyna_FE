@@ -264,6 +264,11 @@ const handleUpdate = async () => {
     hasError = true;
   }
 
+  //새 비밀번호 수정했을 때 대비해서 다시 확인
+  if (!validateNewPassword()) {
+    hasError = true;
+  }
+
   if (hasError) return;
 
   try {
