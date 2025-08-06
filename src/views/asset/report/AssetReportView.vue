@@ -13,10 +13,10 @@
       <!-- 순자산 박스 -->
       <div class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6">
         <span class="text-limegreen-900 text-lg mb-1">
-          '{{ userData.nickname }}' 님의 순자산
+          {{ userData.nickname }} 님의 순자산
         </span>
         <span class="text-green text-xl">
-          {{ userData.asset.toLocaleString() }}원
+          {{ Number(userData.asset).toLocaleString() }}원
         </span>
         <span class="text-gray-300 text-sm">
           {{ userData.summary }}
@@ -50,9 +50,13 @@
           <div
             class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
           >
-            <div class="text-gray-600">{{ reportData.title }}</div>
-            <div class="text-gray-600 leading-relaxed whitespace-pre-line">
-              {{ reportData.content }}
+            <div class="text-gray-600">{{ reportData.advice }}</div>
+            <div
+              class="text-gray-600 leading-relaxed whitespace-pre-line"
+              v-for="(item, index) in reportData.actionItems"
+              :key="index"
+            >
+              - {{ item }}
             </div>
           </div>
         </div>
@@ -77,6 +81,8 @@ import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
+import { fetchAccounts } from '@/api/bankApi';
+import { createReport, fetchUserData } from '@/api/userApi';
 import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
 
 const carouselConfig = {
@@ -99,28 +105,14 @@ const carouselConfig = {
 };
 
 const router = useRouter();
-const userData = ref({
-  nickname: '닉네임',
-  asset: 5000000,
-  summary: '현재 자산은 평균보다 조금 낮아요!',
-});
+
 // API 응답 데이터 구조
-const reportData = ref({
-  reportId: 1,
-  userId: 101,
-  title: '지출이 너무 많고 카페,식사 등 식비에 지출이 큰 유형이에요.',
-  content: `한달 수입의 80퍼센트 이상을 지출로 쓰고 있습니다.
-그 중 카페에서 매주 10만원 이상을 소비하여 이 부분을 줄인다면
-목표하는 투자형에 필요한 시드머니를 채울 수 있을 것으로 예상됩니다.
+const reportData = ref({});
 
-현재 지출 패턴을 분석한 결과:
-- 월 카페 지출: 약 40만원
-- 외식비: 약 25만원
-- 기타 식비: 약 15만원
-
-이 중 카페 지출만 절반으로 줄여도 월 20만원, 연간 240만원을 절약할 수 있습니다.
-절약한 금액을 투자 포트폴리오에 투입하면 장기적으로 더 큰 수익을 기대할 수 있습니다.`,
-  regDate: '20250716',
+const userData = ref({
+  nickname: '',
+  asset: 0,
+  summary: '',
 });
 
 // 차트 데이터
@@ -139,24 +131,46 @@ const chartAnalysisData = computed(() => ({
 }));
 
 // AnalysisCard에서 사용할 캐릭터 데이터
-const characterAnalysisData = computed(() => ({
+const characterAnalysisData = ref({
   image: '/src/assets/img/characters/A.png',
-  name: '지출제로형',
+  name: '',
   summary: '작은 실천이 모여 내일을 만든다!',
-}));
+});
 
 // API에서 리포트 데이터 가져오기
 const fetchReportData = async () => {
   try {
-    // 실제 API 호출 시 사용할 코드
-    // const response = await fetch('/api/report/{reportId}');
-    // const data = await response.json();
-    // reportData.value = data;
+    const response = await createReport();
+    // 리포트 데이터 저장
+    reportData.value = response;
+    userData.value.summary = reportData.value.summary;
 
-    console.log('리포트 데이터 로드됨:', reportData.value);
+    characterAnalysisData.value.name = reportData.value.recommend;
+    // 유저 닉네임 가져오기
+    getUserData();
+    // 유저 순자산 잔액 가져오기
+    getAsset();
   } catch (error) {
     console.error('리포트 데이터 로드 실패:', error);
   }
+};
+
+const getUserData = async () => {
+  const response = await fetchUserData();
+  userData.value.nickname = response.nickname;
+};
+
+const getAsset = async () => {
+  const accounts = await fetchAccounts();
+
+  // 계좌가 없으면 종료
+  if (accounts.length === 0) return;
+  // 자산 총액 계산
+  const totalAsset = accounts.reduce(
+    (acc, curr) => acc + curr.accountBalance,
+    0
+  );
+  userData.value.asset = totalAsset;
 };
 
 // 다음 버튼 클릭 핸들러

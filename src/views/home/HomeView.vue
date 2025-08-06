@@ -58,7 +58,10 @@
             <div>
               <span class="text-[14px] text-limegreen-700">최근 성적</span
               ><br />
-              <span class="text-[17px] text-green">3승 2패</span>
+              <span class="text-[17px] text-green"
+                >{{ matchingRecord.win }}승 {{ matchingRecord.draw }}무
+                {{ matchingRecord.lose }}패</span
+              >
             </div>
           </div>
         </div>
@@ -163,6 +166,7 @@ import { BANK_LIST } from '@/constants/bankList';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import { useChoogoomiStore } from '@/stores/choogoomiStore';
 import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
+import { getMatchingRecordStats } from '@/utils/matchingUtils';
 
 const choogoomiStore = useChoogoomiStore(); // 추구미 유형 저장
 
@@ -174,6 +178,8 @@ const USER_PROFILE = ref({}); // 프로필 정보
 // 추구미 유형 정보 - 추구미 유형명, 캐릭터
 const choogoomi = ref({});
 const choogoomiImage = ref(''); // 추구미 캐릭터 이미지 URL
+
+const matchingRecord = ref({}); //승패 데이터
 
 // 은행 ID로 은행 정보를 찾아 반환하는 함수
 const getBankInfo = bankId =>
@@ -244,6 +250,9 @@ onMounted(async () => {
       choogoomi.value.character,
       import.meta.url
     ).href;
+
+    //승패 기록 가져오기
+    matchingRecord.value = await getMatchingRecordStats();
 
     // 레벨 업 여부에 따라 보상 모달 표시 여부 결정
     showModal.value = USER_PROFILE.value.isLevelUp;
