@@ -230,7 +230,6 @@ const characterAnalysisData = computed(() => ({
 const fetchReportList = async () => {
   try {
     const response = await getReportList();
-    console.log(response);
     response.forEach(item => {
       item.regDate = calculateRegDate(item.regDate);
     });
