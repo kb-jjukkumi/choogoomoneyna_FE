@@ -71,16 +71,20 @@
       >
         <!-- 캐릭터 이미지 -->
         <div class="flex items-center justify-center flex-col">
-          <img :src="image" :alt="name" class="size-22 object-cover" />
+          <img
+            :src="characterData.image"
+            :alt="characterData.name"
+            class="size-22 object-cover"
+          />
           <div class="text-limegreen-700">
-            {{ name }}
+            {{ characterData.name }}
           </div>
         </div>
 
         <!-- 캐릭터 정보 -->
         <div class="flex-1">
           <div class="text-gray-500 text-sm leading-relaxed">
-            {{ summary }}
+            {{ characterData.summary }}
           </div>
         </div>
       </div>
@@ -126,10 +130,7 @@ const props = defineProps({
 const percentage = computed(() => props.chartData.percentage);
 const categories = computed(() => props.chartData.categories);
 
-// 캐릭터 데이터 computed로 반응성 유지
-const image = computed(() => props.characterData.image);
-const name = computed(() => props.characterData.name);
-const summary = computed(() => props.characterData.summary);
+// 캐릭터 데이터는 부모에서 computed로 전달되므로 직접 사용
 </script>
 
 <style scoped>
