@@ -206,7 +206,7 @@ const reportList = ref([
   },
 ]);
 
-const isAlertModalOpen = ref(true);
+const isAlertModalOpen = ref(false);
 
 // 현재 리포트 인덱스
 const currentReportIndex = ref(reportList.value.length - 1);
