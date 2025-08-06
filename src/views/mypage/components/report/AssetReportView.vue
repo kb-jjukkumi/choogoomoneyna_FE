@@ -83,7 +83,7 @@
           class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6"
         >
           <span class="text-limegreen-900 text-lg mb-1">
-            '{{ userData.nickname }}' 님의 순자산
+            {{ userData.nickname }} 님의 순자산
           </span>
           <span class="text-green text-xl">
             {{ Number(userData.asset).toLocaleString() }}원
@@ -276,17 +276,6 @@ const goToPreviousReport = () => {
 const goToNextReport = () => {
   if (currentReportIndex.value < reportList.value.length - 1) {
     currentReportIndex.value++;
-  }
-};
-
-// 키보드 네비게이션 핸들러
-const handleKeydown = event => {
-  if (event.key === 'ArrowLeft') {
-    event.preventDefault();
-    goToPreviousReport();
-  } else if (event.key === 'ArrowRight') {
-    event.preventDefault();
-    goToNextReport();
   }
 };
 
