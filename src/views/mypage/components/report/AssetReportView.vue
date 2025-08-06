@@ -1,6 +1,13 @@
 <template>
+  <AlertModal
+    v-if="isAlertModalOpen"
+    @close="isAlertModalOpen = false"
+    :message="'자산 분석 리포트를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.'"
+  />
   <!-- 전체 배경 -->
+
   <div
+    v-else
     class="min-h-screen bg-ivory flex flex-col items-center justify-evenly px-4"
   >
     <!-- 메인 콘텐츠 영역 -->
@@ -156,6 +163,7 @@ import { useRouter } from 'vue-router';
 import { fetchAccounts } from '@/api/bankApi';
 import { getReportList } from '@/api/userApi';
 import { fetchUserData } from '@/api/userApi';
+import AlertModal from '@/components/AlertModal.vue';
 import { calculateRegDate } from '@/utils/dateUtils';
 import AnalysisCard from '@/views/mypage/components/report/components/AnalysisCard.vue';
 
@@ -198,6 +206,8 @@ const reportList = ref([
   },
 ]);
 
+const isAlertModalOpen = ref(true);
+
 // 현재 리포트 인덱스
 const currentReportIndex = ref(reportList.value.length - 1);
 
@@ -236,26 +246,33 @@ const fetchReportList = async () => {
     getAsset();
     return response;
   } catch (error) {
-    console.error('리포트 목록 로드 실패:', error);
+    isAlertModalOpen.value = true;
   }
 };
 
 const getUserData = async () => {
-  const response = await fetchUserData();
-  userData.value.nickname = response.nickname;
+  try {
+    const response = await fetchUserData();
+    userData.value.nickname = response.nickname;
+  } catch (error) {
+    isAlertModalOpen.value = true;
+  }
 };
 
 const getAsset = async () => {
-  const accounts = await fetchAccounts();
-
-  // 계좌가 없으면 종료
-  if (accounts.length === 0) return;
-  // 자산 총액 계산
-  const totalAsset = accounts.reduce(
-    (acc, curr) => acc + curr.accountBalance,
-    0
-  );
-  userData.value.asset = totalAsset;
+  try {
+    const accounts = await fetchAccounts();
+    // 계좌가 없으면 종료
+    if (accounts.length === 0) return;
+    // 자산 총액 계산
+    const totalAsset = accounts.reduce(
+      (acc, curr) => acc + curr.accountBalance,
+      0
+    );
+    userData.value.asset = totalAsset;
+  } catch (error) {
+    isAlertModalOpen.value = true;
+  }
 };
 
 // 이전 리포트로 이동
