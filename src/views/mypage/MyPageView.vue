@@ -73,7 +73,8 @@
           <div class="flex flex-col gap-1">
             <div class="text-limegreen-700">최근 성적</div>
             <div class="text-green">
-              {{ userInfo.userWin }}승 {{ userInfo.userLose }}패
+              {{ matchingRecord.win }}승 {{ matchingRecord.draw }}무
+              {{ matchingRecord.lose }}패
             </div>
           </div>
         </div>
@@ -130,17 +131,21 @@ import router from '@/router';
 import { useAuthStore } from '@/stores/authStore';
 import { isEditableDay } from '@/utils/dateUtils';
 import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
+import { getMatchingRecordStats } from '@/utils/matchingUtils';
 
 import MyPageBtn from './components/MyPageBtn.vue';
 
+//모달창 상태 관리
 const showModal = ref(false);
 const showChoogoomiEditModal = ref(false);
 
+//추구미 이미지와 레벨 저장
 const choogoomiImage = ref('');
 const userLevel = ref(0);
 
 const authStore = useAuthStore();
 
+//api로 받아온 유저정보 저장
 const userInfo = reactive({
   choogoomiName: '',
   nickname: '',
@@ -149,6 +154,10 @@ const userInfo = reactive({
   isLevelUp: false,
 });
 
+//승패 겨로가 저장
+const matchingRecord = ref({});
+
+//추구미 수정 가능한 날인지
 const isEditable = isEditableDay();
 
 const logout = () => {
@@ -181,6 +190,9 @@ onMounted(async () => {
     userInfo.userScore = data.userScore;
     userInfo.userRanking = data.userRanking;
     userInfo.isLevelUp = data.isLevelUp;
+
+    //승패 기록 가져오기
+    matchingRecord.value = await getMatchingRecordStats();
   } catch (error) {
     console.error('프로필 정보 불러오기 실패');
   }
