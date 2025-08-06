@@ -225,9 +225,10 @@ console.log(choogoomiStore.choogoomiType);
 
 // 클릭(인증) 가능한 미션인지 확인
 //  -> 미션 타입 & 이미 수행했는지 확인
-const isClickableMission = mission =>
+const isClickableMission = mission => {
   ['TEXT_INPUT', 'QUIZ'].includes(mission.missionType) &&
-  mission.score !== mission.missionScore;
+    mission.score !== mission.missionScore;
+};
 
 const isLoading = ref(false);
 
