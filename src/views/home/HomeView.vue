@@ -164,8 +164,11 @@ import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { useChoogoomiStore } from '@/stores/choogoomiStore';
 import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 import { getMatchingRecordStats } from '@/utils/matchingUtils';
+
+const choogoomiStore = useChoogoomiStore(); // 추구미 유형 저장
 
 const router = useRouter();
 const isLoading = ref(true);
@@ -239,6 +242,8 @@ onMounted(async () => {
     choogoomi.value = CHOOGOOMI_MAP.find(
       item => item.choogoomiName === USER_PROFILE.value.choogooMi
     ).userLevel[userLevel.value];
+
+    choogoomiStore.setChoogoomiType(choogoomi.value.choogoomiType);
 
     // 추구미 캐릭터 이미지 URL
     choogoomiImage.value = new URL(

@@ -13,7 +13,12 @@
           </div>
           <img :src="myUserData.profileImageUrl" class="w-[50px]" />
         </div>
-        <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+        <div class="flex flex-col item-center justify-center text-center">
+          <span class="bg-green text-white text-xs px-3 py-0.5 rounded-full">{{
+            choogoomiStore.choogoomiType
+          }}</span>
+          <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+        </div>
         <!-- 상대 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-2">
@@ -116,19 +121,12 @@
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
                 :class="{
-                  'cursor-pointer hover:bg-limegreen-500 ':
-                    missionId === Object.keys(myMissionList)[0] ||
-                    missionId === Object.keys(myMissionList)[1],
+                  'cursor-pointer hover:bg-limegreen-500':
+                    isClickableMission(mission),
                 }"
                 @click="
-                  () => {
-                    const keys = Object.keys(myMissionList);
-                    return missionId === keys[0]
-                      ? goToWrite()
-                      : missionId === keys[1]
-                        ? confirmQuiz()
-                        : null;
-                  }
+                  isClickableMission(mission) &&
+                  goToMission(mission.missionType, missionId)
                 "
               >
                 <div>
@@ -139,7 +137,8 @@
                     {{
                       (Object.keys(myMissionList)[0] === missionId
                         ? '공통 미션: '
-                        : '지출제로형 미션: ') + mission.missionTitle
+                        : choogoomiStore.choogoomiType + ' 미션: ') +
+                      mission.missionTitle
                     }}
                   </span>
                 </div>
@@ -214,17 +213,30 @@ import BottomNavigation from '@/components/BottomNavigation.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { useChoogoomiStore } from '@/stores/choogoomiStore';
 import { getLevel } from '@/utils/levelUtils';
 
 import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
+const choogoomiStore = useChoogoomiStore();
+console.log(choogoomiStore.choogoomiType);
+
+// 클릭(인증) 가능한 미션인지 확인
+//  -> 미션 타입 & 이미 수행했는지 확인
+const isClickableMission = mission => {
+  return (
+    ['TEXT_INPUT', 'QUIZ'].includes(mission.missionType) &&
+    mission.score !== mission.missionScore
+  );
+};
 
 const isLoading = ref(false);
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
+const selectedMission = ref(null); // 선택된 미션 (인증하려는 미션)
 
 // 사용자 프로필 정보
 const myUserData = ref({});
@@ -299,10 +311,12 @@ onMounted(async () => {
       myMission.map(mission => [
         mission.missionId,
         {
+          missionId: mission.missionId,
           missionTitle: mission.missionTitle,
           missionContent: mission.missionContent,
           missionScore: mission.missionScore,
           score: mission.score,
+          missionType: mission.missionType,
         },
       ])
     );
@@ -318,6 +332,7 @@ onMounted(async () => {
           missionContent: mission.missionContent,
           missionScore: mission.missionScore,
           score: mission.score,
+          missionType: mission.missionType,
         },
       ])
     );
@@ -356,28 +371,48 @@ const MISSION_INFORMATION = [
   },
 ];
 
+// 미션 클릭 -> 미션별로 미션페이지 매핑
+const goToMission = (missionType, missionId) => {
+  const mission = myMissionList.value[missionId];
+  if (!mission) return;
+
+  // 글쓰기 미션 -> 미션 정보와 함께 페이지 이동
+  if (missionType === 'TEXT_INPUT') {
+    router.push({
+      name: 'missionWrite',
+      query: {
+        id: mission.missionId,
+        title: mission.missionTitle,
+        content: mission.missionContent,
+        score: mission.missionScore,
+      },
+    });
+  } else if (missionType === 'QUIZ') {
+    selectedMission.value = mission;
+    showModal.value = true;
+  }
+};
+
 // 매칭 결과 모달 닫기
 const closeResultModal = () => {
   showResultModal.value = false;
 };
 
-// 글쓰기 미션 페이지로 이동
-const goToWrite = () => {
-  router.push({ name: 'missionWrite' });
-};
-
-// 퀴즈 모달 열기
-const confirmQuiz = () => {
-  showModal.value = true;
+// 퀴즈 미션 페이지로 이동
+const goToQuiz = () => {
+  if (!selectedMission.value) return;
+  router.push({
+    name: 'missionQuiz',
+    query: {
+      id: selectedMission.value.missionId,
+      missionScore: selectedMission.value.missionScore,
+      score: selectedMission.value.score,
+    },
+  });
 };
 
 // 퀴즈 모달 닫기
 const modalClose = () => {
   showModal.value = false;
-};
-
-// 퀴즈 미션 페이지로 이동
-const goToQuiz = () => {
-  router.push({ name: 'missionQuiz' });
 };
 </script>
