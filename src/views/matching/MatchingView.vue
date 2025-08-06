@@ -115,19 +115,12 @@
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
                 :class="{
-                  'cursor-pointer hover:bg-limegreen-500 ':
-                    missionId === Object.keys(myMissionList)[0] ||
-                    missionId === Object.keys(myMissionList)[1],
+                  'cursor-pointer hover:bg-limegreen-500':
+                    isClickableMission(mission),
                 }"
                 @click="
-                  () => {
-                    const keys = Object.keys(myMissionList);
-                    return missionId === keys[0]
-                      ? goToWrite()
-                      : missionId === keys[1]
-                        ? confirmQuiz()
-                        : null;
-                  }
+                  isClickableMission(mission) &&
+                  goToMission(mission.missionType, missionId)
                 "
               >
                 <div>
@@ -219,6 +212,12 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
 
+// 클릭(인증) 가능한 미션인지 확인
+//  -> 미션 타입 & 이미 수행했는지 확인
+const isClickableMission = mission =>
+  ['TEXT_INPUT', 'QUIZ'].includes(mission.missionType) &&
+  mission.score !== mission.missionScore;
+
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
 
@@ -294,10 +293,12 @@ onMounted(async () => {
       myMission.map(mission => [
         mission.missionId,
         {
+          missionId: mission.missionId,
           missionTitle: mission.missionTitle,
           missionContent: mission.missionContent,
           missionScore: mission.missionScore,
           score: mission.score,
+          missionType: mission.missionType,
         },
       ])
     );
@@ -313,6 +314,7 @@ onMounted(async () => {
           missionContent: mission.missionContent,
           missionScore: mission.missionScore,
           score: mission.score,
+          missionType: mission.missionType,
         },
       ])
     );
@@ -349,6 +351,27 @@ const MISSION_INFORMATION = [
   },
 ];
 
+// 미션 클릭 -> 미션별로 미션페이지 매핑
+const goToMission = (missionType, missionId) => {
+  const selectedMission = myMissionList.value[missionId];
+  if (!selectedMission) return;
+
+  // 글쓰기 미션 -> 미션 정보와 함께 페이지 이동
+  if (missionType === 'TEXT_INPUT') {
+    router.push({
+      name: 'missionWrite',
+      query: {
+        id: selectedMission.missionId,
+        title: selectedMission.missionTitle,
+        content: selectedMission.missionContent,
+        score: selectedMission.missionScore,
+      },
+    });
+  } else if (missionType === 'QUIZ') {
+    showModal.value = true;
+  }
+};
+
 // 매칭 결과 모달 닫기
 const closeResultModal = () => {
   showResultModal.value = false;
@@ -357,16 +380,6 @@ const closeResultModal = () => {
 // 글쓰기 미션 페이지로 이동
 const goToWrite = () => {
   router.push({ name: 'missionWrite' });
-};
-
-// 퀴즈 모달 열기
-const confirmQuiz = () => {
-  showModal.value = true;
-};
-
-// 퀴즈 모달 닫기
-const modalClose = () => {
-  showModal.value = false;
 };
 
 // 퀴즈 미션 페이지로 이동

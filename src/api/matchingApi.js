@@ -23,3 +23,17 @@ export const getResultByRound = async roundNumber => {
     console.log(error);
   }
 };
+
+// 글쓰기 미션 인증 요청
+export const validateWriteMission = async missionId => {
+  try {
+    const response = await axiosInstance.put(
+      `/api/matching/missions/validate/3`,
+      { missionId }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('미션 인증 요청 실패:', error);
+    throw error;
+  }
+};

@@ -10,9 +10,7 @@
         <div class="text-limegreen-700 text-sm mt-2 whitespace-pre-line">
           {{ MISSION_LIST.missionContent }}
         </div>
-        <div class="text-red text-sm">
-          {{ '(' + MISSION_LIST.missionRestrict + '자 이상)' }}
-        </div>
+        <div class="text-red text-sm">(100자 이상)</div>
       </div>
       <div
         class="flex flex-col gap-5 bg-limegreen-100 px-4 rounded-lg text-center h-100"
@@ -28,8 +26,7 @@
           <div class="absolute bottom-0 right-3 text-sm">
             <p
               :class="
-                inputText.length < MISSION_LIST.missionRestrict ||
-                inputText.length == 500
+                inputText.length < 100 || inputText.length == 500
                   ? 'text-red'
                   : 'text-green'
               "
@@ -43,10 +40,10 @@
       <!-- 제출 버튼 -->
       <button
         @click="handleNext"
-        :disabled="inputText.length < MISSION_LIST.missionRestrict"
+        :disabled="inputText.length < 100"
         :class="[
           'w-full text-lg py-4 rounded-lg',
-          inputText.length < MISSION_LIST.missionRestrict
+          inputText.length < 100
             ? 'bg-ivory text-limegreen-500 border border-limegreen-500 cursor-not-allowed'
             : 'bg-limegreen-500 text-white',
         ]"
@@ -67,30 +64,30 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+import { validateWriteMission } from '@/api/matchingApi';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
 import SuccessModal from './components/SuccessModal.vue';
+
+const route = useRoute();
+
+const MISSION_LIST = {
+  missionId: route.query.id,
+  missionTitle: route.query.title,
+  missionContent: route.query.content,
+  missionScore: route.query.score,
+};
 
 const inputText = ref('');
 const showSuccessModal = ref(false);
 
 const router = useRouter();
 
-const MISSION_LIST = {
-  missionId: 1,
-  missionTitle: '지출 반성문 쓰기',
-  missionContent:
-    '돌아보니... 이건 굳이 안 썼어도 됐다 🙈 \n오늘 안 써도 됐던 소비가 있다면, 여기 적으며 반성해봐요!',
-  missionCount: 1,
-  missionRestrict: 100,
-  missionScore: 10,
-};
-
 const isMissionCompleted = computed(() => {
-  return inputText.value.length >= MISSION_LIST.missionRestrict;
+  return inputText.value.length >= 100;
 });
 
 function handleNext() {
@@ -99,8 +96,14 @@ function handleNext() {
   }
 }
 
-function handleSuccessClose() {
-  showSuccessModal.value = false;
-  router.push('/matching');
+async function handleSuccessClose() {
+  try {
+    await validateWriteMission(MISSION_LIST.missionId);
+    showSuccessModal.value = false;
+    router.push('/matching');
+  } catch (error) {
+    alert('미션 인증에 실패했습니다.');
+    console.error(error);
+  }
 }
 </script>
