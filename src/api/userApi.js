@@ -21,3 +21,12 @@ export const submitSurvey = async surveyAnswers => {
     throw new Error('설문 제출 실패');
   }
 };
+
+export const createReport = async () => {
+  try {
+    const response = await axiosInstance.post('api/report/create');
+    return response.data;
+  } catch {
+    throw new Error('리포트 생성 실패');
+  }
+};
