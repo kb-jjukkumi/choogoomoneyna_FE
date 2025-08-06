@@ -27,12 +27,12 @@ export const getResultByRound = async roundNumber => {
 //매칭결과 히스토리 가져오기 (n승 n무 n패 표시용)
 export const getMatchingHistory = async () => {
   try {
-    const { data } = await axiosInstance.get(
+    /* const { data } = await axiosInstance.get(
       '/api/users/matching/result/history'
-    );
+    ); */
 
     //mock데이터 (실제 데이터가 생기면 삭제 후 api 호출 코드의 주석을 제거하면 됨)
-    const data2 = [
+    const data = [
       {
         roundNumber: 1,
         startDate: '2025-06-06T00:00:00.000+09:00',
