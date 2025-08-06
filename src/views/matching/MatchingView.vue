@@ -131,7 +131,8 @@
                     {{
                       (Object.keys(myMissionList)[0] === missionId
                         ? '공통 미션: '
-                        : '지출제로형 미션: ') + mission.missionTitle
+                        : choogoomiStore.choogoomiType + ' 미션: ') +
+                      mission.missionTitle
                     }}
                   </span>
                 </div>
@@ -205,12 +206,14 @@ import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { useChoogoomiStore } from '@/stores/choogoomiStore';
 import { getLevel } from '@/utils/levelUtils';
 
 import MatchingResultModal from './components/MatchingResultModal.vue';
 import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
+const choogoomiStore = useChoogoomiStore();
 
 // 클릭(인증) 가능한 미션인지 확인
 //  -> 미션 타입 & 이미 수행했는지 확인
