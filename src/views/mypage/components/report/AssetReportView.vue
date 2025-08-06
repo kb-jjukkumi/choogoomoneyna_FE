@@ -86,7 +86,7 @@
             '{{ userData.nickname }}' 님의 순자산
           </span>
           <span class="text-green text-xl">
-            {{ userData.asset.toLocaleString() }}원
+            {{ Number(userData.asset).toLocaleString() }}원
           </span>
           <span class="text-gray-300 text-sm">
             {{ userData.summary }}
@@ -153,7 +153,9 @@ import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
+import { fetchAccounts } from '@/api/bankApi';
 import { getReportList } from '@/api/userApi';
+import { fetchUserData } from '@/api/userApi';
 import { calculateRegDate } from '@/utils/dateUtils';
 import AnalysisCard from '@/views/mypage/components/report/components/AnalysisCard.vue';
 
@@ -180,9 +182,9 @@ const router = useRouter();
 
 // 사용자 데이터
 const userData = ref({
-  nickname: '닉네임',
-  asset: 5000000,
-  summary: '현재 자산은 평균보다 조금 낮아요!',
+  nickname: '',
+  asset: 0,
+  summary: '',
 });
 
 // 리포트 데이터 배열
@@ -234,10 +236,31 @@ const fetchReportList = async () => {
       item.regDate = calculateRegDate(item.regDate);
     });
     reportList.value = response;
+    userData.value.summary = reportList.value[currentReportIndex.value].summary;
+    getUserData();
+    getAsset();
     return response;
   } catch (error) {
     console.error('리포트 목록 로드 실패:', error);
   }
+};
+
+const getUserData = async () => {
+  const response = await fetchUserData();
+  userData.value.nickname = response.nickname;
+};
+
+const getAsset = async () => {
+  const accounts = await fetchAccounts();
+
+  // 계좌가 없으면 종료
+  if (accounts.length === 0) return;
+  // 자산 총액 계산
+  const totalAsset = accounts.reduce(
+    (acc, curr) => acc + curr.accountBalance,
+    0
+  );
+  userData.value.asset = totalAsset;
 };
 
 // 이전 리포트로 이동
