@@ -24,7 +24,6 @@ export const getResultByRound = async roundNumber => {
   }
 };
 
-
 // 글쓰기 미션 인증 요청
 export const validateWriteMission = async missionId => {
   try {
@@ -50,6 +49,8 @@ export const validateQuizMission = async (missionId, score) => {
   } catch (error) {
     console.error('퀴즈 미션 인증 요청 실패:', error);
     throw error;
+  }
+};
 
 //매칭결과 히스토리 가져오기 (n승 n무 n패 표시용)
 export const getMatchingHistory = async () => {
