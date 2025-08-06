@@ -201,11 +201,6 @@ const reportList = ref([
 // 현재 리포트 인덱스
 const currentReportIndex = ref(reportList.value.length - 1);
 
-// 현재 리포트 계산된 속성
-const currentReport = computed(() => {
-  return reportList.value[currentReportIndex.value];
-});
-
 // 차트 데이터
 const expenseRatio = ref(80);
 const expenseCategories = ref([
