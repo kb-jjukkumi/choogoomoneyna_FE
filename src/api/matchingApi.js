@@ -37,3 +37,17 @@ export const validateWriteMission = async missionId => {
     throw error;
   }
 };
+
+// 퀴즈 미션 인증 요청
+export const validateQuizMission = async (missionId, score) => {
+  try {
+    const response = await axiosInstance.put(
+      '/api/matching/missions/validate/4',
+      { missionId, score }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('퀴즈 미션 인증 요청 실패:', error);
+    throw error;
+  }
+};

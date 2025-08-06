@@ -220,6 +220,7 @@ const isClickableMission = mission =>
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
+const selectedMission = ref(null); // 선택된 미션 (인증하려는 미션)
 
 // 사용자 프로필 정보
 const myUserData = ref({});
@@ -353,21 +354,22 @@ const MISSION_INFORMATION = [
 
 // 미션 클릭 -> 미션별로 미션페이지 매핑
 const goToMission = (missionType, missionId) => {
-  const selectedMission = myMissionList.value[missionId];
-  if (!selectedMission) return;
+  const mission = myMissionList.value[missionId];
+  if (!mission) return;
 
   // 글쓰기 미션 -> 미션 정보와 함께 페이지 이동
   if (missionType === 'TEXT_INPUT') {
     router.push({
       name: 'missionWrite',
       query: {
-        id: selectedMission.missionId,
-        title: selectedMission.missionTitle,
-        content: selectedMission.missionContent,
-        score: selectedMission.missionScore,
+        id: mission.missionId,
+        title: mission.missionTitle,
+        content: mission.missionContent,
+        score: mission.missionScore,
       },
     });
   } else if (missionType === 'QUIZ') {
+    selectedMission.value = mission;
     showModal.value = true;
   }
 };
@@ -377,13 +379,21 @@ const closeResultModal = () => {
   showResultModal.value = false;
 };
 
-// 글쓰기 미션 페이지로 이동
-const goToWrite = () => {
-  router.push({ name: 'missionWrite' });
-};
-
 // 퀴즈 미션 페이지로 이동
 const goToQuiz = () => {
-  router.push({ name: 'missionQuiz' });
+  if (!selectedMission.value) return;
+  router.push({
+    name: 'missionQuiz',
+    query: {
+      id: selectedMission.value.missionId,
+      missionScore: selectedMission.value.missionScore,
+      score: selectedMission.value.score,
+    },
+  });
+};
+
+// 퀴즈 모달 닫기
+const modalClose = () => {
+  showModal.value = false;
 };
 </script>

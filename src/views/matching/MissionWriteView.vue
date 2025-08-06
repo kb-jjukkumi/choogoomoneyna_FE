@@ -5,10 +5,10 @@
       <!-- 타이틀 -->
       <div class="flex flex-col text-center gap-2">
         <div class="tfont-bold text-2xl justify-center">
-          {{ MISSION_LIST.missionTitle }}
+          {{ MISSION_INFO.missionTitle }}
         </div>
         <div class="text-limegreen-700 text-sm mt-2 whitespace-pre-line">
-          {{ MISSION_LIST.missionContent }}
+          {{ MISSION_INFO.missionContent }}
         </div>
         <div class="text-red text-sm">(100자 이상)</div>
       </div>
@@ -56,7 +56,7 @@
     <SuccessModal
       v-if="showSuccessModal"
       title="미션 성공"
-      :message="MISSION_LIST.missionTitle"
+      :message="MISSION_INFO.missionTitle"
       @close="handleSuccessClose"
     />
   </div>
@@ -74,7 +74,8 @@ import SuccessModal from './components/SuccessModal.vue';
 
 const route = useRoute();
 
-const MISSION_LIST = {
+// 전달받은 미션 정보
+const MISSION_INFO = {
   missionId: route.query.id,
   missionTitle: route.query.title,
   missionContent: route.query.content,
@@ -82,10 +83,11 @@ const MISSION_LIST = {
 };
 
 const inputText = ref('');
-const showSuccessModal = ref(false);
+const showSuccessModal = ref(false); // 미션 성공 모달
 
 const router = useRouter();
 
+// 미션 완료 여부 조건: 100자 이상 작성
 const isMissionCompleted = computed(() => {
   return inputText.value.length >= 100;
 });
@@ -98,7 +100,7 @@ function handleNext() {
 
 async function handleSuccessClose() {
   try {
-    await validateWriteMission(MISSION_LIST.missionId);
+    await validateWriteMission(MISSION_INFO.missionId);
     showSuccessModal.value = false;
     router.push('/matching');
   } catch (error) {

@@ -73,8 +73,9 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+import { validateQuizMission } from '@/api/matchingApi';
 import AlertModal from '@/components/AlertModal.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -84,6 +85,15 @@ import ResultModal from './components/ResultModal.vue';
 import { QUIZ_LIST } from './quizData';
 
 const router = useRouter();
+
+const route = useRoute();
+
+// 전달받은 미션 정보
+const MISSION_INFO = {
+  missionId: route.query.id,
+  missionScore: route.query.missionScore,
+  score: route.query.score,
+};
 
 const currentIndex = ref(0);
 const selectedOption = ref(null);
@@ -155,9 +165,19 @@ const handleNext = () => {
   }
 };
 
-const handleQuizComplete = () => {
+const handleQuizComplete = async () => {
   showResultModal.value = false;
-  // 퀴즈 완료 후 이전 페이지로 이동하거나 다른 액션 수행
+
+  if (correctCount.value >= 3) {
+    MISSION_INFO.score = MISSION_INFO.missionScore;
+  }
+
+  try {
+    await validateQuizMission(MISSION_INFO.missionId, MISSION_INFO.score);
+  } catch (error) {
+    console.error('퀴즈 인증 요청 실패:', error);
+  }
+
   router.go(-1);
 };
 
