@@ -60,6 +60,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userEmail');
+      localStorage.removeItem('choogoomiType');
 
       console.log('✅ 인증 정보 초기화 완료');
     },
