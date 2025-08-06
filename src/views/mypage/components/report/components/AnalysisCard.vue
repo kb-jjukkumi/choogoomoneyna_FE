@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 
 // Props 정의
 const props = defineProps({
@@ -122,8 +122,14 @@ const props = defineProps({
     }),
   },
 });
-const { image, name, summary } = props.characterData;
-const { percentage, categories } = props.chartData;
+// 차트 데이터 computed로 반응성 유지
+const percentage = computed(() => props.chartData.percentage);
+const categories = computed(() => props.chartData.categories);
+
+// 캐릭터 데이터 computed로 반응성 유지
+const image = computed(() => props.characterData.image);
+const name = computed(() => props.characterData.name);
+const summary = computed(() => props.characterData.summary);
 </script>
 
 <style scoped>

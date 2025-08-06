@@ -222,11 +222,11 @@ const chartAnalysisData = computed(() => ({
 }));
 
 // AnalysisCard에서 사용할 캐릭터 데이터
-const characterAnalysisData = computed(() => ({
+const characterAnalysisData = ref({
   image: '/src/assets/img/characters/A.png',
-  name: '지출제로형',
+  name: '',
   summary: '작은 실천이 모여 내일을 만든다!',
-}));
+});
 
 // API에서 리포트 목록 가져오기
 const fetchReportList = async () => {
@@ -237,6 +237,8 @@ const fetchReportList = async () => {
     });
     reportList.value = response;
     userData.value.summary = reportList.value[currentReportIndex.value].summary;
+    characterAnalysisData.value.name =
+      reportList.value[currentReportIndex.value].recommend;
     getUserData();
     getAsset();
     return response;
