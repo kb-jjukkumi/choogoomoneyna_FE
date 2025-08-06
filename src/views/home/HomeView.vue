@@ -164,8 +164,11 @@ import RewardModal from '@/components/RewardModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { useChoogoomiStore } from '@/stores/choogoomiStore';
 import { getLevel, LEVEL_THRESHOLDS } from '@/utils/levelUtils';
 import { getMatchingRecordStats } from '@/utils/matchingUtils';
+
+const choogoomiStore = useChoogoomiStore(); // 추구미 유형 저장
 
 const router = useRouter();
 const isLoading = ref(true);
@@ -225,6 +228,7 @@ onMounted(async () => {
   try {
     // 사용자 프로필 정보를 API로부터 받아옴
     const profileData = await userInfo();
+    choogoomiStore.initializeChoogoomiType(profileData);
 
     // 받아온 프로필 정보에 레벨 추가하여 저장
     USER_PROFILE.value = {
