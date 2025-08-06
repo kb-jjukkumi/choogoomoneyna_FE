@@ -20,3 +20,8 @@ export function isEditableDay() {
   }
   return false;
 }
+
+export function calculateRegDate(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString();
+}
