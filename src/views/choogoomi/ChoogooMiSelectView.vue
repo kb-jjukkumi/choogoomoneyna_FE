@@ -65,14 +65,15 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { updateChoogooMi } from '@/api/userApi';
 import AlertModal from '@/components/AlertModal.vue';
 import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
+import { useChoogoomiStore } from '@/stores/choogoomiStore';
 
 import ChoogooMiCard from './ChoogooMiCard.vue';
 import ChoogooMiDetailModal from './ChoogooMiDetailModal.vue';
 
 const router = useRouter();
+const choogoomiStore = useChoogoomiStore();
 
 const selected = ref(null);
 const isModalOpen = ref(false);
@@ -89,7 +90,8 @@ const select = idx => {
 const confirmSelection = async () => {
   try {
     // API 호출: 선택한 추구미로 업데이트
-    await updateChoogooMi(selected.value);
+    // 선택한 추구미 LocalStorage에 저장
+    await choogoomiStore.setChoogoomiType(selected.value);
     isSuccessModalOpen.value = true;
   } catch (error) {
     console.error('추구미 선택 실패:', error);
