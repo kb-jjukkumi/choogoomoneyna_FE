@@ -23,3 +23,15 @@ export const getResultByRound = async roundNumber => {
     console.log(error);
   }
 };
+
+//매칭결과 히스토리 가져오기 (n승 n무 n패 표시용)
+export const getMatchingHistory = async () => {
+  try {
+    const { data } = await axiosInstance.get(
+      '/api/users/matching/result/history'
+    );
+    return data;
+  } catch {
+    throw new Error('매칭결과 히스토리 가져오기 실패');
+  }
+};
