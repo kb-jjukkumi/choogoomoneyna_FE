@@ -13,7 +13,12 @@
           </div>
           <img :src="myUserData.profileImageUrl" class="w-[50px]" />
         </div>
-        <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+        <div class="flex flex-col item-center justify-center text-center">
+          <span class="bg-green text-white text-xs px-3 py-0.5 rounded-full">{{
+            choogoomiStore.choogoomiType
+          }}</span>
+          <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+        </div>
         <!-- 상대 -->
         <div class="flex flex-col flex-1 items-center justify-center">
           <div class="text-limegreen-900 text-xs mb-2">
@@ -216,6 +221,7 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
 const choogoomiStore = useChoogoomiStore();
+console.log(choogoomiStore.choogoomiType);
 
 // 클릭(인증) 가능한 미션인지 확인
 //  -> 미션 타입 & 이미 수행했는지 확인
