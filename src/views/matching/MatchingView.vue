@@ -198,7 +198,12 @@
     />
 
     <!-- 매칭 결과 모달 -->
-    <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
+    <MatchingResultModal
+      v-if="showResultModal"
+      :round-number="2"
+      title="지난주 매칭 결과"
+      @close="closeResultModal"
+    />
 
     <BottomNavigation />
   </div>
@@ -214,6 +219,7 @@ import BottomNavigation from '@/components/BottomNavigation.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
+import { isMonday } from '@/utils/dateUtils';
 import { getLevel } from '@/utils/levelUtils';
 
 import MatchingResultModal from './components/MatchingResultModal.vue';
@@ -224,7 +230,7 @@ const router = useRouter();
 const isLoading = ref(false);
 
 const showModal = ref(false); // 퀴즈 안내 모달
-const showResultModal = ref(false); // 매칭 결과 모달
+const showResultModal = ref(true); // 매칭 결과 모달
 
 // 사용자 프로필 정보
 const myUserData = ref({});
