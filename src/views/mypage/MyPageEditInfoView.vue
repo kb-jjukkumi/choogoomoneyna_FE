@@ -163,17 +163,19 @@ const member = reactive({
   isLevelUp: false,
 });
 
+//백엔드로 보낼 데이터
 const editedProfile = reactive({
   nickname: '',
   password: '',
   newPassword: '',
+  newPasswordConfirm: '',
 });
 
 const userEmail = ref('');
 const newNickname = ref('');
 const currentPassword = ref('');
-const newPassword = ref(''); //비밀번호 확인
-const newPassword2 = ref(''); //비밀번호 확인
+const newPassword = ref(''); //새 비밀번호
+const newPassword2 = ref(''); //새 비밀번호 확인
 
 //항목별 표시할 에러메세지
 const nameErrorMessage = ref('');
@@ -262,12 +264,18 @@ const handleUpdate = async () => {
     hasError = true;
   }
 
+  //새 비밀번호 수정했을 때 대비해서 다시 확인
+  if (!validateNewPassword()) {
+    hasError = true;
+  }
+
   if (hasError) return;
 
   try {
     editedProfile.nickname = newNickname.value;
     editedProfile.password = currentPassword.value;
     editedProfile.newPassword = newPassword.value;
+    editedProfile.newPasswordConfirm = newPassword2.value;
   } finally {
     showConfirmModal.value = true;
   }
