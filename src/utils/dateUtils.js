@@ -20,3 +20,8 @@ export function isEditableDay() {
   }
   return false;
 }
+
+//월요일 찾는 함수 (지난주 매칭 결과 확인용)
+export function isMonday() {
+  return new Date().getDay() === 1;
+}
