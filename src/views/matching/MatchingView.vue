@@ -197,23 +197,30 @@
     />
 
     <!-- 매칭 결과 모달 -->
-    <MatchingResultModal v-if="showResultModal" @close="closeResultModal" />
+    <MatchingResultModal
+      v-if="showResultModal && isMonday()"
+      :round-number="lastweekResult.roundNumber"
+      title="지난주 매칭 결과"
+      @close="closeResultModal"
+    />
 
     <BottomNavigation />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { fetchMatchingData } from '@/api/matchingApi';
+import { getRankingHistory } from '@/api/ranking';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { CHOOGOOMI_MAP } from '@/constants/choogoomiMap';
 import { useChoogoomiStore } from '@/stores/choogoomiStore';
+import { isMonday } from '@/utils/dateUtils';
 import { getLevel } from '@/utils/levelUtils';
 
 import MatchingResultModal from './components/MatchingResultModal.vue';
@@ -238,6 +245,9 @@ const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
 const selectedMission = ref(null); // 선택된 미션 (인증하려는 미션)
 
+//지난주 매칭 결과 모달
+const lastweekResult = reactive({});
+
 // 사용자 프로필 정보
 const myUserData = ref({});
 const opponentUserData = ref({});
@@ -258,6 +268,14 @@ onMounted(async () => {
     isLoading.value = true;
     const matchingData = await fetchMatchingData();
     choogoomiStore.initializeChoogoomiType();
+
+    //매칭 결과 모달에 띄울 데이터 가져오기
+    const result = await getRankingHistory();
+    //매칭 결과 중 가장 최근인 지난주 데이터(인덱스 0) 할당
+    Object.assign(lastweekResult, result[0]);
+
+    //지난주 매칭 결과를 가져온 뒤 모달 표시
+    showResultModal.value = true;
 
     // 나의 프로필 정보
     const myData = matchingData.myMissionProgressList[0];
