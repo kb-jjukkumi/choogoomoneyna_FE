@@ -21,6 +21,12 @@ export function isEditableDay() {
   return false;
 }
 
+// 리포트의 생성날짜 계산해주는 함수
+export function calculateRegDate(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString();
+}
+
 //월요일 찾는 함수 (지난주 매칭 결과 확인용)
 export function isMonday() {
   return new Date().getDay() === 1;

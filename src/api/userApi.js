@@ -31,6 +31,15 @@ export const createReport = async () => {
   }
 };
 
+export const getReportList = async () => {
+  try {
+    const response = await axiosInstance.get('api/report/list');
+    return response.data;
+  } catch {
+    throw new Error('리포트 목록 조회 실패');
+  }
+};
+
 export const fetchUserData = async () => {
   try {
     const response = await axiosInstance.get('api/users/main-profile');

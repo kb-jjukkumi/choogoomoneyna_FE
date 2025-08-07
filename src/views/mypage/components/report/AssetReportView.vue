@@ -1,6 +1,13 @@
 <template>
+  <AlertModal
+    v-if="isAlertModalOpen"
+    @close="isAlertModalOpen = false"
+    :message="'자산 분석 리포트를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.'"
+  />
   <!-- 전체 배경 -->
+
   <div
+    v-else
     class="min-h-screen bg-ivory flex flex-col items-center justify-evenly px-4"
   >
     <!-- 메인 콘텐츠 영역 -->
@@ -73,7 +80,7 @@
       </div>
       <!-- 리포트 생성날짜 및 인덱스 -->
       <div class="text-limegreen-900 text-lg mb-4">
-        {{ currentReport.regDate }}
+        {{ reportList[currentReportIndex].regDate }}
       </div>
 
       <!-- 메인 콘텐츠 박스들 -->
@@ -83,10 +90,10 @@
           class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6"
         >
           <span class="text-limegreen-900 text-lg mb-1">
-            '{{ userData.nickname }}' 님의 순자산
+            {{ userData.nickname }} 님의 순자산
           </span>
           <span class="text-green text-xl">
-            {{ userData.asset.toLocaleString() }}원
+            {{ Number(userData.asset).toLocaleString() }}원
           </span>
           <span class="text-gray-300 text-sm">
             {{ userData.summary }}
@@ -120,11 +127,16 @@
             <div
               class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
             >
-              <span class="text-green text-lg">{{ currentReport.title }}</span>
+              <span class="text-green text-lg">{{
+                reportList[currentReportIndex].advice
+              }}</span>
               <span
                 class="text-gray-600 text-sm leading-relaxed whitespace-pre-line"
+                v-for="(item, index) in reportList[currentReportIndex]
+                  .actionItems"
+                :key="index"
               >
-                {{ currentReport.content }}
+                - {{ item }}
               </span>
             </div>
           </div>
@@ -143,11 +155,16 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
 
+import { fetchAccounts } from '@/api/bankApi';
+import { getReportList } from '@/api/userApi';
+import { fetchUserData } from '@/api/userApi';
+import AlertModal from '@/components/AlertModal.vue';
+import { calculateRegDate } from '@/utils/dateUtils';
 import AnalysisCard from '@/views/mypage/components/report/components/AnalysisCard.vue';
 
 const carouselConfig = {
@@ -173,75 +190,26 @@ const router = useRouter();
 
 // 사용자 데이터
 const userData = ref({
-  nickname: '닉네임',
-  asset: 5000000,
-  summary: '현재 자산은 평균보다 조금 낮아요!',
+  nickname: '',
+  asset: 0,
+  summary: '',
 });
 
-// 리포트 데이터 배열 (API에서 받아올 데이터)
+// 리포트 데이터 배열
 const reportList = ref([
   {
-    reportId: 1,
-    title: '고정비 절약으로 여유자금을 늘려보세요!',
-    content: `월 고정비 분석 결과 절약 가능한 부분들이 발견되었습니다.
-
-  고정비 현황:
-  - 통신비: 12만원 (절약 가능: 4만원)
-  - 구독 서비스: 8만원 (절약 가능: 3만원)
-  - 보험료: 25만원 (적정 수준)
-  - 기타: 15만원
-
-  절약 방안:
-  1. 통신 요금제 최적화 및 가족결합 할인 활용
-  2. 미사용 구독 서비스 정리 (현재 7개 중 3개만 활용)
-  3. 절약된 월 7만원을 투자자금으로 활용
-
-  연간 84만원 절약 효과로 투자 원금 확대가 가능합니다.`,
-    regDate: '2025.07.01',
-  },
-  {
-    reportId: 2,
-    title: '투자 포트폴리오 다양성을 높여보세요!',
-    content: `현재 투자 자산이 예금에만 집중되어 있어 인플레이션 대비 실질 수익률이 낮을 수 있습니다.
-
-    분석 결과:
-    - 예금/적금: 80%
-    - 주식/펀드: 15%
-    - 기타: 5%
-
-    권장사항:
-    1. 주식/펀드 비중을 30-40%까지 단계적으로 확대
-    2. 해외 투자상품 10-15% 편입으로 환위험 분산
-    3. 월 정기적립으로 달러코스트 평균 효과 활용
-
-    이를 통해 연평균 2-3% 추가 수익률 개선이 가능할 것으로 예상됩니다.`,
-    regDate: '2025.07.15',
-  },
-  {
-    reportId: 3,
-    title: '지출이 너무 많고 카페,식사 등 식비에 지출이 큰 유형이에요.',
-    content: `한달 수입의 80퍼센트 이상을 지출로 쓰고 있습니다.
-  그 중 카페에서 매주 10만원 이상을 소비하여 이 부분을 줄인다면
-  목표하는 투자형에 필요한 시드머니를 채울 수 있을 것으로 예상됩니다.
-
-  현재 지출 패턴을 분석한 결과:
-  - 월 카페 지출: 약 40만원
-  - 외식비: 약 25만원
-  - 기타 식비: 약 15만원
-
-  이 중 카페 지출만 절반으로 줄여도 월 20만원, 연간 240만원을 절약할 수 있습니다.
-  절약한 금액을 투자 포트폴리오에 투입하면 장기적으로 더 큰 수익을 기대할 수 있습니다.`,
-    regDate: '2025.07.29',
+    regDate: '',
+    summary: '',
+    advice: '',
+    recommend: '',
+    actionItems: [],
   },
 ]);
 
+const isAlertModalOpen = ref(false);
+
 // 현재 리포트 인덱스
 const currentReportIndex = ref(reportList.value.length - 1);
-
-// 현재 리포트 계산된 속성
-const currentReport = computed(() => {
-  return reportList.value[currentReportIndex.value];
-});
 
 // 차트 데이터
 const expenseRatio = ref(80);
@@ -261,19 +229,49 @@ const chartAnalysisData = computed(() => ({
 // AnalysisCard에서 사용할 캐릭터 데이터
 const characterAnalysisData = computed(() => ({
   image: '/src/assets/img/characters/A.png',
-  name: '지출제로형',
+  name: reportList.value[currentReportIndex.value]?.recommend || '',
   summary: '작은 실천이 모여 내일을 만든다!',
 }));
 
 // API에서 리포트 목록 가져오기
 const fetchReportList = async () => {
   try {
-    // 실제 API 호출 시 사용할 코드
-    // const response = await fetch('/api/user/reports');
-    // const data = await response.json();
-    // reportList.value = data.reports || [];
+    const response = await getReportList();
+    response.forEach(item => {
+      item.regDate = calculateRegDate(item.regDate);
+    });
+    reportList.value = response;
+    userData.value.summary = reportList.value[currentReportIndex.value].summary;
+    getUserData();
+    getAsset();
+    return response;
   } catch (error) {
-    console.error('리포트 목록 로드 실패:', error);
+    isAlertModalOpen.value = true;
+  }
+};
+
+const getUserData = async () => {
+  try {
+    const response = await fetchUserData();
+    userData.value.nickname = response.nickname;
+  } catch (error) {
+    isAlertModalOpen.value = true;
+  }
+};
+
+const getAsset = async () => {
+  try {
+    const accounts = await fetchAccounts();
+    // 계좌가 없으면 종료
+    if (accounts.length === 0) return;
+    // 자산 총액 계산
+    const totalAsset = accounts.reduce(
+      (acc, curr) => acc + curr.accountBalance,
+      0
+    );
+    userData.value.asset = totalAsset;
+  } catch (error) {
+    isAlertModalOpen.value = true;
   }
 };
 
@@ -291,20 +289,13 @@ const goToNextReport = () => {
   }
 };
 
-// 키보드 네비게이션 핸들러
-const handleKeydown = event => {
-  if (event.key === 'ArrowLeft') {
-    event.preventDefault();
-    goToPreviousReport();
-  } else if (event.key === 'ArrowRight') {
-    event.preventDefault();
-    goToNextReport();
-  }
-};
-
 const handleClose = () => {
   router.push('/mypage');
 };
+
+onMounted(() => {
+  fetchReportList();
+});
 </script>
 
 <style scoped>
