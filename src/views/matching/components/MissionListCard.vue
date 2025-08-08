@@ -24,7 +24,7 @@
             :class="[
               'text-sm',
               'mr-5',
-              isMissionCompleted(mission) ? 'text-' : 'text-gray-300',
+              isMissionCompleted(mission) ? 'text-green' : 'text-gray-300',
             ]"
           >
             {{ mission.missionTitle }}
