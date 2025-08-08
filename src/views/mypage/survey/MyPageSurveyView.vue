@@ -75,6 +75,6 @@ const sendSurveyData = async () => {
 
 const handleModalClose = () => {
   isSuccessModalOpen.value = false;
-  router.push('/asset/select');
+  router.push('/mypage');
 };
 </script>
