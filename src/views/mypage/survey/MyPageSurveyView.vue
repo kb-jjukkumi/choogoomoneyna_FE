@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-ivory">
+  <div class="relative min-h-screen bg-ivory">
+    <TopNavigation :show-back="true" :show-logo-text="false" />
     <!-- 설문 1 -->
     <SurveyOneComponent
       v-if="currentStep === 1"
@@ -26,6 +27,7 @@ import { useRouter } from 'vue-router';
 
 import { submitSurvey } from '@/api/userApi';
 import AlertModal from '@/components/AlertModal.vue';
+import TopNavigation from '@/components/TopNavigation.vue';
 
 import SurveyOneComponent from './MyPageSurveyOneComponent.vue';
 import SurveyTwoComponent from './MyPageSurveyTwoComponent.vue';

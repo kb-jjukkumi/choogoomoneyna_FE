@@ -3,7 +3,9 @@
     <div class="bg-ivory flex flex-col gap-6 w-full px-6 justify-between">
       <!-- 타이틀 -->
       <div class="flex flex-col text-center gap-2">
-        <div class="tfont-bold text-2xl justify-center">사전 조사</div>
+        <div class="font-bold flex h-14 text-2xl justify-center items-center">
+          사전 조사
+        </div>
         <div class="text-limegreen-700 text-sm">
           추구 유형 추천을 위한 질문입니다.
         </div>
