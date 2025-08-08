@@ -135,8 +135,8 @@ const connectAsset = async () => {
         fetchTransactionsFromCodef({
           account: account.accountNum,
           organization: account.bankId,
-          startDate: '20250715',
-          endDate: '20250725',
+          startDate: '20250801',
+          endDate: '20250807',
         })
       )
     );
@@ -158,7 +158,7 @@ const handleModalClose = () => {
   isModalOpen.value = false;
   // 성공한 경우에만 추구미 선택 페이지로 이동
   if (modalType.value === true) {
-    router.push({ name: 'choogoomi' });
+    router.push({ name: 'assetReport' });
   }
 };
 

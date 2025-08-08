@@ -1,6 +1,8 @@
 <template>
+  <LoadingModal v-if="isLoading" />
   <!-- 전체 배경 -->
   <div
+    v-else
     class="min-h-screen bg-ivory flex flex-col items-center justify-between px-4"
   >
     <!-- 헤더 -->
@@ -83,8 +85,10 @@ import { useRouter } from 'vue-router';
 
 import { fetchAccounts } from '@/api/bankApi';
 import { createReport, fetchUserData } from '@/api/userApi';
+import LoadingModal from '@/components/LoadingModal.vue';
 import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
 
+const isLoading = ref(false);
 const carouselConfig = {
   // 한 번에 보여줄 슬라이드 개수 (1개씩 보여주기)
   itemsToShow: 1,
@@ -139,6 +143,7 @@ const characterAnalysisData = ref({
 
 // API에서 리포트 데이터 가져오기
 const fetchReportData = async () => {
+  isLoading.value = true;
   try {
     const response = await createReport();
     // 리포트 데이터 저장
@@ -146,12 +151,13 @@ const fetchReportData = async () => {
     userData.value.summary = reportData.value.summary;
 
     characterAnalysisData.value.name = reportData.value.recommend;
-    // 유저 닉네임 가져오기
-    getUserData();
-    // 유저 순자산 잔액 가져오기
-    getAsset();
+
+    // 유저/자산 데이터 병렬 로드가 모두 끝날 때까지 대기
+    await Promise.all([getUserData(), getAsset()]);
   } catch (error) {
     console.error('리포트 데이터 로드 실패:', error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -175,7 +181,7 @@ const getAsset = async () => {
 
 // 다음 버튼 클릭 핸들러
 const handleNext = () => {
-  router.push('/character');
+  router.push('/choogoomi');
 };
 
 onMounted(() => {
