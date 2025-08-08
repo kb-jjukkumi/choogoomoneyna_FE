@@ -17,6 +17,7 @@ import MyPageAssetReportView from '@/views/mypage/components/report/AssetReportV
 import MyPageEditInfoView from '@/views/mypage/MyPageEditInfoView.vue';
 import MyPageRecordView from '@/views/mypage/MyPageRecordView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
+import MyPageSurveyView from '@/views/mypage/survey/MyPageSurveyView.vue';
 import RankingView from '@/views/ranking/RankingView.vue';
 import SurveyView from '@/views/signup/components/survey/SurveyView.vue';
 import SignupView from '@/views/signup/SignupView.vue';
@@ -127,6 +128,11 @@ const router = createRouter({
       path: '/mypage/asset-report',
       name: 'mypageAssetReport',
       component: MyPageAssetReportView,
+    },
+    {
+      path: '/mypage/survey',
+      name: 'mypageSurvey',
+      component: MyPageSurveyView,
     },
   ],
 });

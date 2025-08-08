@@ -86,7 +86,7 @@
           <div class="flex flex-col gap-2.5">
             <MyPageBtn text="나의 자산 분석 리포트" to="mypageAssetReport" />
             <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
-            <MyPageBtn text="사전 조사 다시하기" to="survey" />
+            <MyPageBtn text="사전 조사 다시하기" to="mypageSurvey" />
             <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
             <button
               class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"

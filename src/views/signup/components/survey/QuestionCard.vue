@@ -19,11 +19,11 @@
         :key="index"
         @click="$emit('select', option.value)"
         :class="[
-          'flex justify-center items-center border-2 border-limegreen-500 rounded-lg p-3 text-sm! whitespace-pre-line',
+          'flex justify-center items-center border-2 border-limegreen-500 rounded-lg p-3 text-sm! whitespace-pre-line hover:-translate-y-0.3 hover:shadow-md',
           question.type === 2 ? 'h-35' : 'h-11',
           selectedOption === option.value
             ? 'bg-limegreen-500 text-ivory'
-            : 'bg-ivory text-limegreen-700 bg hover:bg-limegreen-500 hover:text-ivory',
+            : 'bg-ivory text-limegreen-700 hover:bg-white',
         ]"
       >
         {{ option.label }}
