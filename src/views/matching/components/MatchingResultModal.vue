@@ -36,20 +36,10 @@
         <div class="text-limegreen-900 text-lg">미션 목록</div>
         <div class="flex flex-col gap-2 text-sm">
           <!--나의 미션-->
-          <MissionListCard
-            v-for="(myMission, index) in matchingResult.myMissionProgressList"
-            :key="myMission.missionId"
-            :index="index"
-            :missions="myMission"
-          />
+          <MissionListCard :missions="matchingResult.myMissionProgressList" />
           <!--상대방 미션-->
           <MissionListCard
-            v-for="(
-              opponentMission, index
-            ) in matchingResult.opponentMissionProgressList"
-            :key="opponentMission.missionId"
-            :index="index"
-            :missions="opponentMission"
+            :missions="matchingResult.opponentMissionProgressList"
           />
         </div>
       </div>
