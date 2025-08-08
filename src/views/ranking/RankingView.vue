@@ -280,6 +280,16 @@ const loadRankingData = async () => {
       secondRankUser.value = lastRankingList.value[1] || {};
       thirdRankUser.value = lastRankingList.value[2] || {};
 
+      // 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
+      // 데이터 세팅 후 실행
+      if (
+        [firstRankUser, secondRankUser, thirdRankUser].some(
+          user => user && user.value.userNickname === userProfile.value.nickname
+        )
+      ) {
+        showModal.value = true;
+      }
+
       //  모든 요청이 성공하면 로딩 완료
       isLoading.value = false;
     } else {
@@ -293,14 +303,6 @@ const loadRankingData = async () => {
 onMounted(() => {
   loadRankingData();
 });
-// 유저 닉네임이 지난주 랭킹 top3에 포함되면 모달 표시
-if (
-  [firstRankUser, secondRankUser, thirdRankUser].some(
-    user => user && user.userNickname === userProfile.value.nickname
-  )
-) {
-  showModal.value = true;
-}
 
 // 쭈꾸미 유형 가져오기
 const getChoogoomiType = userData => {
