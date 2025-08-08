@@ -51,9 +51,9 @@
                   <div
                     @click="selectOption(question.id, option.value)"
                     :class="[
-                      'w-6 h-6 rounded-full border-2 text-gray-300 border-limegreen-500 flex items-center justify-center text-xs cursor-pointer ',
+                      'w-6 h-6 rounded-full border-2 text-gray-300 border-limegreen-500 flex items-center justify-center text-xs cursor-pointer hover:-translate-y-0.3 hover:shadow-md',
                       answers[question.id] === option.value
-                        ? 'bg-limegreen-100'
+                        ? 'bg-limegreen-500'
                         : 'bg-white hover:bg-limegreen-100',
                     ]"
                   >
