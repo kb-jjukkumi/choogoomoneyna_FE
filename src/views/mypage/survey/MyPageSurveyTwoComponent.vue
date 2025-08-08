@@ -44,7 +44,7 @@
           isProcessing
             ? '처리 중...'
             : currentIndex === surveyList.length - 1
-              ? '자산 연동'
+              ? '제출하기'
               : '다음'
         }}
       </button>
