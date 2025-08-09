@@ -34,7 +34,9 @@
           </div>
           <p
             class="h-3 text-xs"
-            :class="nameErrorMessage ? 'text-red-500' : 'text-transparent'"
+            :class="
+              nameErrorMessage ? 'text-limegreen-700' : 'text-transparent'
+            "
           >
             {{ nameErrorMessage }}
           </p>
