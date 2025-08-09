@@ -28,16 +28,19 @@
         </div>
       </div>
 
-      <!-- 매칭 점수 게이지 바 -->
-      <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
+      <!-- 매칭 점수 게이지 바 (양쪽에서 채워짐) -->
+      <div
+        class="h-2.5 rounded-full mx-6 overflow-hidden bg-limegreen-100 relative"
+      >
+        <!-- 왼쪽: 나의 점수 (red) -->
         <div
-          class="h-full bg-red"
-          :style="{
-            width:
-              (myMatchingScore / (myMatchingScore + opponentMatchingScore)) *
-                100 +
-              '%',
-          }"
+          class="absolute left-0 top-0 bottom-0 bg-red"
+          :style="{ width: myBarWidth }"
+        ></div>
+        <!-- 오른쪽: 상대 점수 (yellow) -->
+        <div
+          class="absolute right-0 top-0 bottom-0 bg-yellow"
+          :style="{ width: opponentBarWidth }"
         ></div>
       </div>
 
@@ -208,7 +211,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { fetchMatchingData } from '@/api/matchingApi';
@@ -260,6 +263,25 @@ const opponentChoogoomiName = 'A';
 // 매칭 점수
 const myMatchingScore = ref(0);
 const opponentMatchingScore = ref(0);
+
+// 게이지 바 너비 계산
+// - 두 점수가 모두 0이면: 좌우 각각 1%
+// - 그 외에는 점수 비율로 좌우 각각 퍼센트
+const myBarWidth = computed(() => {
+  const myScore = myMatchingScore.value;
+  const opponentScore = opponentMatchingScore.value;
+  const total = myScore + opponentScore;
+  if (total === 0) return '1%';
+  return `${(myScore / total) * 100}%`;
+});
+
+const opponentBarWidth = computed(() => {
+  const myScore = myMatchingScore.value;
+  const opponentScore = opponentMatchingScore.value;
+  const total = myScore + opponentScore;
+  if (total === 0) return '1%';
+  return `${(opponentScore / total) * 100}%`;
+});
 
 // 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화
 onMounted(async () => {
