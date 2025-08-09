@@ -26,7 +26,7 @@
                 class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-[10px] disabled:opacity-50"
                 type="button"
                 @click="handleCheckName"
-                :disabled="isNameChecking"
+                :disabled="isNameChecked || !isNicknameValid"
               >
                 {{ isNameChecking ? '확인 중...' : '중복 확인' }}
               </button>
@@ -191,17 +191,33 @@ const showErrorModal = ref(false);
 const isNameChecked = ref(false);
 const isNewPwdChecked = ref(false);
 
+const isNicknameValid = ref(false); // 닉네임 유효성 검사 상태
+
 // 로딩 상태 관리
 const isNameChecking = ref(false);
 
 //닉네임이 다시 입력되면 중복 체크 상태 초기화
 const onNicknameInput = () => {
+  const idRegex = /^[A-Za-z0-9가-힣]{2,7}$/; //영문+숫자 2~7자리
+  const inputValue = newNickname.value.trim(); //현재 입력된 닉네임
+
+  // 정규식 유효성 검사 실패 시
+  if (!idRegex.test(inputValue)) {
+    nameErrorMessage.value = '닉네임은 2~7자리 한글,영문,숫자만 가능합니다.';
+    isNicknameValid.value = false;
+    isNameChecked.value = false; // 중복 확인 초기화
+    return;
+  }
+
   isNameChecked.value = false;
+  isNicknameValid.value = true;
   nameErrorMessage.value = '';
 };
 
 //닉네임 중복 체크
 const handleCheckName = async () => {
+  if (!isNicknameValid.value) return; // 유효성 통과 안하면 중단
+
   if (isNameChecking.value) return; // 중복 요청 방지
 
   if (!newNickname.value.trim()) {
