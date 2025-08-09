@@ -34,8 +34,7 @@
           class="h-full bg-red"
           :style="{
             width:
-              (myUserData.matchingScore /
-                (myUserData.matchingScore + opponentUserData.matchingScore)) *
+              (myMatchingScore / (myMatchingScore + opponentMatchingScore)) *
                 100 +
               '%',
           }"
