@@ -72,6 +72,7 @@
     @additional-connect="handleAdditionalConnect"
     @close="handleModalClose"
   />
+  <LoadingModal v-if="isLoading" />
 </template>
 
 <script setup>
@@ -80,6 +81,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { fetchBankFromCodef, fetchTransactionsFromCodef } from '@/api/bankApi';
 import BankIcon from '@/components/BankIcon.vue';
+import LoadingModal from '@/components/LoadingModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 import { BANK_LIST } from '@/constants/bankList';
 
@@ -97,6 +99,7 @@ const userBankPassword = ref('');
 const isConnecting = ref(false);
 const isModalOpen = ref(false);
 const modalType = ref(true); // true: 성공, false: 실패
+const isLoading = ref(false);
 
 // Computed
 const bankName = computed(() => {
@@ -115,6 +118,7 @@ const isInputEmpty = computed(() => {
 const connectAsset = async () => {
   if (isConnecting.value) return;
   isConnecting.value = true;
+  isLoading.value = true; // 로딩 모달 시작
 
   try {
     // 계좌 연동
@@ -141,11 +145,14 @@ const connectAsset = async () => {
       )
     );
 
-    // 성공 시 모달만 표시
+    // 로딩 모달 숨기고 성공 모달 표시
+    isLoading.value = false;
     modalType.value = true;
     isModalOpen.value = true;
   } catch (error) {
     console.error('자산 연동 실패:', error);
+    // 로딩 모달 숨기고 실패 모달 표시
+    isLoading.value = false;
     modalType.value = false;
     isModalOpen.value = true;
   } finally {
