@@ -227,6 +227,9 @@ const levelInfo = computed(() => {
 // 컴포넌트가 마운트될 때 실행
 onMounted(async () => {
   try {
+    // 랭킹 데이터 업데이트 (초기 사용자도 랭킹 데이터에 추가)
+    await updateRankingData();
+
     // 사용자 프로필 정보를 API로부터 받아옴
     const profileData = await userInfo();
     choogoomiStore.initializeChoogoomiType(profileData);
