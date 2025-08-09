@@ -1,135 +1,155 @@
 <template>
-  <div class="flex justify-center w-full">
-    <div class="bg-ivory flex flex-col gap-7 w-full px-4">
+  <div class="min-h-screen flex items-center justify-center w-full bg-ivory">
+    <div class="flex flex-col gap-7 w-full max-w-md px-4">
       <TermsAgreement
         v-if="!termsAgreement"
         @next="handleTermsNext"
         @back="handleTermsBack"
       />
       <!-- 타이틀 -->
-      <div v-else>
-        <div class="flex font-bold text-xl justify-center">회원가입</div>
-        <!-- 입력 폼 -->
-        <form class="flex flex-col gap-6" @submit.prevent="handleSubmit">
-          <div class="flex flex-col gap-2">
-            <div class="flex flex-col">
-              <label for="nickname" class="block mb-1 font-bold">닉네임</label>
-              <div class="flex gap-3">
-                <input
-                  v-model="member.nickname"
-                  id="nickname"
-                  type="text"
-                  placeholder="한글,영문,숫자 2~10자리"
-                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
-                />
-                <button
-                  class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg disabled:opacity-50"
-                  @click="handleCheckName"
-                  type="button"
-                  :disabled="isNameChecking"
-                >
-                  {{ isNameChecking ? '확인 중...' : '중복 확인' }}
-                </button>
-              </div>
-            </div>
-            <p
-              class="h-3 text-xs"
-              :class="
-                nameErrorMessage ? 'text-limegreen-700' : 'text-transparent'
-              "
-            >
-              {{ nameErrorMessage }}
-            </p>
-          </div>
+      <div v-else class="min-h-screen flex flex-col">
+        <!-- 상단 타이틀 -->
+        <div class="flex font-bold text-xl justify-center pt-8 pb-4">
+          회원가입
+        </div>
 
-          <div>
-            <label for="email" class="mb-1 block font-bold">이메일</label>
+        <!-- 중앙 폼 영역 -->
+        <div class="flex-1 flex items-center justify-center">
+          <form
+            id="signup-form"
+            class="flex flex-col gap-6 w-full"
+            @submit.prevent="handleSubmit"
+          >
             <div class="flex flex-col gap-2">
-              <div class="flex gap-3">
-                <input
-                  v-model="email.email"
-                  id="email"
-                  type="email"
-                  placeholder="이메일을 입력해주세요"
-                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
-                />
-                <button
-                  class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
-                  @click="send"
-                  type="button"
-                  :disabled="isSendingEmail"
+              <div class="flex flex-col">
+                <label for="nickname" class="block mb-1 font-bold"
+                  >닉네임</label
                 >
-                  {{ isSendingEmail ? '전송 중...' : '인증 요청' }}
-                </button>
-              </div>
-              <div class="flex gap-3">
-                <input
-                  v-model="verifyEmail.code"
-                  id="email-code"
-                  type="text"
-                  placeholder="인증번호를 입력해주세요."
-                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
-                />
-                <button
-                  class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
-                  @click="verify"
-                  type="button"
-                  :disabled="isVerifyingEmail"
-                >
-                  {{ isVerifyingEmail ? '확인 중...' : '확인' }}
-                </button>
+                <div class="flex gap-3">
+                  <input
+                    v-model="member.nickname"
+                    id="nickname"
+                    type="text"
+                    placeholder="한글,영문,숫자 2~10자리"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                  />
+                  <button
+                    class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg disabled:opacity-50"
+                    @click="handleCheckName"
+                    type="button"
+                    :disabled="isNameChecking"
+                  >
+                    {{ isNameChecking ? '확인 중...' : '중복 확인' }}
+                  </button>
+                </div>
               </div>
               <p
                 class="h-3 text-xs"
-                :class="emailErrorMessage ? 'text-red-500' : 'text-transparent'"
+                :class="
+                  nameErrorMessage ? 'text-limegreen-700' : 'text-transparent'
+                "
               >
-                {{ emailErrorMessage }}
+                {{ nameErrorMessage }}
               </p>
             </div>
-          </div>
-          <div class="flex flex-col gap-2">
+
             <div>
-              <label for="password" class="mb-1 block font-bold"
-                >비밀번호</label
-              >
-              <input
-                v-model="member.password"
-                id="password"
-                type="password"
-                placeholder="비밀번호 입력"
-                style="font-family: Arial, sans-serif"
-                class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
-              />
+              <label for="email" class="mb-1 block font-bold">이메일</label>
+              <div class="flex flex-col gap-2">
+                <div class="flex gap-3">
+                  <input
+                    v-model="email.email"
+                    id="email"
+                    type="email"
+                    placeholder="이메일을 입력해주세요"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                  />
+                  <button
+                    class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
+                    @click="send"
+                    type="button"
+                    :disabled="isSendingEmail"
+                  >
+                    {{ isSendingEmail ? '전송 중...' : '인증 요청' }}
+                  </button>
+                </div>
+                <div class="flex gap-3">
+                  <input
+                    v-model="verifyEmail.code"
+                    id="email-code"
+                    type="text"
+                    placeholder="인증번호를 입력해주세요."
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                  />
+                  <button
+                    class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
+                    @click="verify"
+                    type="button"
+                    :disabled="isVerifyingEmail"
+                  >
+                    {{ isVerifyingEmail ? '확인 중...' : '확인' }}
+                  </button>
+                </div>
+                <p
+                  class="h-3 text-xs"
+                  :class="
+                    emailErrorMessage ? 'text-red-500' : 'text-transparent'
+                  "
+                >
+                  {{ emailErrorMessage }}
+                </p>
+              </div>
             </div>
-            <div>
-              <label for="password2" class="mb-1 block font-bold"
-                >비밀번호 확인</label
+            <div class="flex flex-col gap-2">
+              <div>
+                <label for="password" class="mb-1 block font-bold"
+                  >비밀번호</label
+                >
+                <input
+                  v-model="member.password"
+                  id="password"
+                  type="password"
+                  placeholder="비밀번호 입력"
+                  style="font-family: Arial, sans-serif"
+                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
+                />
+              </div>
+              <div>
+                <label for="password2" class="mb-1 block font-bold"
+                  >비밀번호 확인</label
+                >
+                <input
+                  v-model="password2"
+                  id="password2"
+                  type="password"
+                  placeholder="비밀번호 확인"
+                  style="font-family: Arial, sans-serif"
+                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
+                  @input="validatePassword"
+                />
+              </div>
+              <p
+                class="h-3 text-xs"
+                :class="pwdErrorMessage ? 'text-red-500' : 'text-transparent'"
               >
-              <input
-                v-model="password2"
-                id="password2"
-                type="password"
-                placeholder="비밀번호 확인"
-                style="font-family: Arial, sans-serif"
-                class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
-                @input="validatePassword"
-              />
+                {{ pwdErrorMessage }}
+              </p>
             </div>
-            <p
-              class="h-3 text-xs"
-              :class="pwdErrorMessage ? 'text-red-500' : 'text-transparent'"
-            >
-              {{ pwdErrorMessage }}
-            </p>
-          </div>
+          </form>
+        </div>
+
+        <!-- 하단 버튼 -->
+        <div class="pb-8 pt-4">
           <button
             type="submit"
-            class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal disabled:opacity-50"
+            form="signup-form"
+            class="bg-limegreen-500 text-white w-full rounded-lg py-3 text-lg font-normal disabled:opacity-50"
             :disabled="isSubmitting"
+            @click="handleSubmit"
           >
             {{ isSubmitting ? '처리 중...' : '다음' }}
           </button>
-        </form>
+        </div>
       </div>
     </div>
     <AlertModal
