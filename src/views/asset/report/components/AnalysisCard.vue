@@ -45,7 +45,7 @@
         <!-- 카테고리별 데이터 -->
         <div class="flex flex-col space-y-2">
           <div
-            v-for="category in categoryList"
+            v-for="category in sortedCategoryList"
             :key="category.name"
             class="flex items-center justify-between gap-2"
           >
@@ -139,6 +139,11 @@ const categoryList = computed(() =>
     amount: categoryValue?.amount ?? 0,
     percentage: Number(categoryValue?.ratio ?? 0),
   }))
+);
+
+// 카테고리 퍼센트 내림차순 정렬 리스트
+const sortedCategoryList = computed(() =>
+  [...categoryList.value].sort((a, b) => b.percentage - a.percentage)
 );
 
 // 도넛 차트 세그먼트 계산
