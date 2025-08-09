@@ -93,7 +93,9 @@
                 <p
                   class="h-3 text-xs"
                   :class="
-                    emailErrorMessage ? 'text-red-500' : 'text-transparent'
+                    emailErrorMessage
+                      ? 'text-limegreen-700'
+                      : 'text-transparent'
                   "
                 >
                   {{ emailErrorMessage }}
