@@ -1,6 +1,6 @@
 <template>
   <nav class="w-full absolute top-0 left-0 right-0 z-10">
-    <div class="grid grid-cols-3 items-center h-14 px-4">
+    <div class="grid grid-cols-3 items-center h-14">
       <!-- 왼쪽 영역: 뒤로가기 버튼 -->
       <div class="flex justify-start">
         <button
