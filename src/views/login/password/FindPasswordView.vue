@@ -11,7 +11,7 @@
         <form class="flex flex-col mt-8 gap-6" @submit.prevent="handleSubmit">
           <div>
             <label for="email" class="mb-2 block text-limegreen-900"
-              >이메일<span class="text-red">* </span></label
+              >이메일</label
             >
             <div class="flex flex-col gap-3">
               <div class="flex gap-3">
