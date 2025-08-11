@@ -1,26 +1,23 @@
 <template>
   <LoadingModal v-if="isLoading" />
   <!-- 전체 배경 -->
-  <div
-    v-else
-    class="min-h-screen bg-ivory flex flex-col items-center justify-between px-4"
-  >
+  <div v-else class="min-h-screen bg-ivory flex flex-col items-center px-4">
     <!-- 헤더 -->
-    <div class="text-black text-3xl h-20 flex items-center">
+    <div class="text-limegreen-900 text-2xl h-20 flex items-center mt-4">
       자산 분석 리포트
     </div>
 
     <!-- 메인 콘텐츠 영역 -->
-    <div class="w-full flex flex-col gap-y-6 pb-6">
+    <div class="w-full flex flex-col gap-y-6">
       <!-- 순자산 박스 -->
       <div class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6">
-        <span class="text-limegreen-900 text-lg mb-1">
+        <span class="text-limegreen-900 text-xl">
           {{ userData.nickname }} 님의 순자산
         </span>
         <span class="text-green text-xl">
           {{ Number(userData.asset).toLocaleString() }}원
         </span>
-        <span class="text-gray-300 text-sm">
+        <span class="text-gray-300 text-base whitespace-pre-line break-keep">
           {{ userData.summary }}
         </span>
       </div>
@@ -52,9 +49,9 @@
           <div
             class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
           >
-            <div class="text-gray-600">{{ reportData.advice }}</div>
+            <div class="text-green">{{ reportData.advice }}</div>
             <div
-              class="text-gray-600 leading-relaxed whitespace-pre-line"
+              class="text-limegreen-900 leading-relaxed whitespace-pre-line"
               v-for="(item, index) in reportData.actionItems"
               :key="index"
             >
@@ -66,7 +63,7 @@
     </div>
 
     <!-- 다음 버튼 -->
-    <div class="w-full pb-6">
+    <div class="w-full pb-10 mt-6">
       <button
         class="w-full bg-limegreen-500 text-white text-2xl py-4 rounded-lg"
         @click="handleNext"

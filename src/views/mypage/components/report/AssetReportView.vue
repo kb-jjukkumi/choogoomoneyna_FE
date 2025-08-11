@@ -15,7 +15,7 @@
       class="flex flex-col w-full items-center justify-center overflow-y-auto"
     >
       <!-- 헤더 -->
-      <div class="h-20 flex items-center justify-center w-full gap-x-4">
+      <div class="h-12 flex items-center justify-center w-full gap-x-4">
         <!-- 이전 버튼 -->
         <div
           class="flex items-center justify-center bg-limegreen-100 rounded-xl"
@@ -46,7 +46,9 @@
           </button>
         </div>
         <!-- 제목 -->
-        <div class="text-black text-2xl text-center">자산 분석 리포트</div>
+        <div class="text-limegreen-900 text-2xl text-center">
+          자산 분석 리포트
+        </div>
         <!-- 다음 버튼 -->
         <div
           class="flex items-center justify-center bg-limegreen-100 rounded-xl"
@@ -79,23 +81,23 @@
         </div>
       </div>
       <!-- 리포트 생성날짜 및 인덱스 -->
-      <div class="text-limegreen-900 text-lg mb-4">
+      <div class="text-limegreen-700 text-lg mb-4">
         {{ reportList[currentReportIndex].regDate }}
       </div>
 
       <!-- 메인 콘텐츠 박스들 -->
-      <div class="w-full flex flex-col gap-y-6">
+      <div class="w-full flex flex-col gap-y-4">
         <!-- 순자산 박스 -->
         <div
           class="bg-limegreen-100 rounded-lg w-full flex flex-col gap-y-1 p-6"
         >
-          <span class="text-limegreen-900 text-lg mb-1">
+          <span class="text-limegreen-900 text-xl">
             {{ userData.nickname }} 님의 순자산
           </span>
           <span class="text-green text-xl">
             {{ Number(userData.asset).toLocaleString() }}원
           </span>
-          <span class="text-gray-300 text-sm">
+          <span class="text-gray-300 text-base whitespace-pre-line break-keep">
             {{ userData.summary }}
           </span>
         </div>
@@ -127,11 +129,12 @@
             <div
               class="bg-ivory rounded-lg p-4 flex flex-col gap-y-1 h-80 overflow-y-scroll [&::-webkit-scrollbar]:hidden"
             >
-              <span class="text-green text-lg">{{
-                reportList[currentReportIndex].advice
-              }}</span>
               <span
-                class="text-gray-600 text-sm leading-relaxed whitespace-pre-line"
+                class="text-green text-base whitespace-pre-line break-keep"
+                >{{ reportList[currentReportIndex].advice }}</span
+              >
+              <span
+                class="text-gray-600 text-base leading-relaxed whitespace-pre-line"
                 v-for="(item, index) in reportList[currentReportIndex]
                   .actionItems"
                 :key="index"
