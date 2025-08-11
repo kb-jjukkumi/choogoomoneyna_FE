@@ -313,7 +313,7 @@ const getChoogoomiType = userData => {
   if (!choogoomiData) {
     return '알 수 없음';
   }
-  return choogoomiData.userLevel[0].choogoomiType;
+  return choogoomiData.choogoomiType;
 };
 
 const getProfileImage = userData => {
@@ -332,15 +332,9 @@ const getProfileImage = userData => {
       import.meta.url
     ).href;
   }
-  const profileData = choogoomiData.userLevel[level];
-  if (!profileData) {
-    // 기본 레벨(0) 데이터 사용
-    const defaultProfileData = choogoomiData.userLevel[0];
-    return new URL(defaultProfileData.profile, import.meta.url).href;
-  }
-  const profileUrl = profileData.profile;
-  // 프로필 이미지 경로 반환
-  return new URL(profileUrl, import.meta.url).href;
+  const profileData =
+    choogoomiData.userLevel[level] || choogoomiData.userLevel[0];
+  return new URL(profileData.image_url, import.meta.url).href;
 };
 
 function handlePhoneSubmit(phoneNumber) {

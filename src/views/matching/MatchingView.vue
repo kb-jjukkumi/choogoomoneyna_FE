@@ -281,11 +281,8 @@ const opponentBarWidth = computed(() => {
 
 // 추구미 캐릭터 경로 조회 헬퍼: 스토어의 한글 타입 라벨과 레벨로 이미지 경로 찾기
 const getCharacterPath = (typeLabel, level) => {
-  // 레벨에 해당하는 라벨이 일치하는 항목 우선 탐색
-  const typeData = CHOOGOOMI_MAP.find(
-    e => e.userLevel[level].choogoomiType === typeLabel
-  );
-  return typeData.userLevel[level].character;
+  const characterData = CHOOGOOMI_MAP.find(e => e.choogoomiType === typeLabel);
+  return characterData.userLevel[level].image_url;
 };
 
 // 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화

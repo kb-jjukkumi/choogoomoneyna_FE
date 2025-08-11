@@ -243,14 +243,12 @@ onMounted(async () => {
 
     userLevel.value = USER_PROFILE.value.userLevel;
 
-    // 추구미 이름 & 레벨 -> 추구미 캐릭터 정보 매핑
+    // 추구미 이름 & 레벨 -> 캐릭터 이미지 URL
     choogoomi.value = CHOOGOOMI_MAP.find(
       item => item.choogoomiName === USER_PROFILE.value.choogooMi
-    ).userLevel[userLevel.value];
-
-    // 추구미 캐릭터 이미지 URL
+    );
     choogoomiImage.value = new URL(
-      choogoomi.value.character,
+      choogoomi.value.userLevel[userLevel.value].image_url,
       import.meta.url
     ).href;
 
