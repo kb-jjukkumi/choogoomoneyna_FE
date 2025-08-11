@@ -12,12 +12,12 @@
           <img
             :src="choogoomiImage"
             alt="캐릭터 이미지"
-            class="w-[100px] mx-auto mt-8 mb-2"
+            class="w-38 mx-auto mt-8"
           />
 
           <!-- 추구미 유형명 -->
           <span
-            class="bg-green text-white px-2.5 py-[2px] rounded-full text-xs text-center tracking-wide"
+            class="bg-green text-white px-4 py-1 rounded-full text-sm text-center tracking-wide"
           >
             {{ choogoomi.choogoomiType }}
           </span>
@@ -39,14 +39,14 @@
             </div>
 
             <!-- 현재 레벨 & 점수 -->
-            <div class="text-center text-limegreen-700 text-xs">
+            <div class="text-center text-limegreen-700 text-sm">
               {{ levelInfo }}
             </div>
           </div>
 
           <!-- 현재 순위 & 최근 성적 -->
           <div
-            class="flex justify-between text-center w-full max-w-[400px] px-30"
+            class="flex justify-between text-center w-full max-w-[400px] px-30 my-1"
           >
             <div>
               <span class="text-[14px] text-limegreen-700">현재 순위</span
@@ -76,7 +76,7 @@
 
           <!-- 연동 계좌 목록 -->
           <div
-            class="max-h-[calc(100vh-550px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
+            class="max-h-[calc(100vh-580px)] overflow-scroll [&::-webkit-scrollbar]:hidden mb-1 px-3 space-y-2"
           >
             <div
               v-for="(account, i) in ACCOUNTS"
@@ -221,7 +221,7 @@ const levelInfo = computed(() => {
     return `Lv.${currentLevel} (MAX) / ${currentScore}점`;
   }
 
-  return `Lv.${currentLevel} / ${currentScore}`;
+  return `Lv.${currentLevel} / ${currentScore}점`;
 });
 
 // 컴포넌트가 마운트될 때 실행
