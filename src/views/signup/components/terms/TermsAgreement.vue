@@ -1,21 +1,20 @@
 <template>
   <!-- 전체 배경 -->
-  <div class="min-h-screen bg-ivory flex flex-col px-4 relative">
+  <div class="min-h-screen bg-ivory flex flex-col px-6 relative">
+    <TopNavigation :show-back="true" :show-logo-text="false" />
     <!-- 상단 네비게이션 -->
-    <TopNavigation
-      :show-back="true"
-      :show-logo-text="true"
-      :logo-text="'약관 동의'"
-    />
 
+    <div class="flex flex-col items-center pt-12">
+      <p class="text-2xl text-limegreen-900">약관 동의</p>
+    </div>
     <!-- 메인 컨테이너 -->
-    <div class="flex-1 flex flex-col pt-20 pb-6 gap-6">
+    <div class="flex-1 flex flex-col pt-8 pb-6 gap-24">
       <!-- 약관 동의 박스 -->
       <div
-        class="flex-1 bg-white border-2 border-limegreen-500 rounded-lg p-6 flex flex-col gap-y-4"
+        class="pb-20 bg-white border-2 border-limegreen-500 rounded-lg p-6 flex flex-col gap-y-4"
       >
-        <!-- 전체 동의 섹션 (회색 배경) -->
-        <div class="">
+        <!-- 전체 동의 섹션 (흰색 배경) -->
+        <div>
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <div
@@ -70,7 +69,7 @@
             <div class="flex">
               <div class="flex items-center flex-1">
                 <div
-                  class="w-6 h-6 rounded-full flex items-center justify-center mr-3 cursor-pointer"
+                  class="w-5 h-5 rounded-full flex items-center justify-center mr-3 cursor-pointer"
                   :class="term.agreed ? 'bg-limegreen-500' : 'bg-limegreen-100'"
                   @click="toggleTerm(index)"
                 >

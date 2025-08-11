@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-ivory">
+  <div class="min-h-screen bg-ivory px-6 relative">
     <!-- 설문 1 -->
     <SurveyOneComponent
       v-if="currentStep === 1"
