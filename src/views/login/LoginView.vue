@@ -1,19 +1,15 @@
 <template>
   <div class="flex justify-center">
     <div class="bg-ivory flex w-full flex-col gap-8 px-4">
-      <!-- 타이틀 -->
-      <div class="flex flex-col items-center">
-        <span class="text-3xl text-limegreen-900">로그인</span>
-      </div>
       <!-- 동물 캐릭터 이미지 -->
-      <div class="flex justify-center">
+      <div class="flex justify-center pt-20">
         <img
           src="../../assets/img/icons/system/system_login.png"
           alt="login_logo"
         />
       </div>
       <!-- 입력 폼 -->
-      <form class="flex flex-col gap-4" @submit.prevent="handleLogin">
+      <form class="flex flex-col gap-2" @submit.prevent="handleLogin">
         <div>
           <label for="email" class="mb-2 block text-limegreen-900"
             >이메일 ID</label
@@ -81,39 +77,39 @@
             </button>
           </div>
         </div>
-        <div class="mt-12">
-          <button
-            type="submit"
-            class="w-full rounded-[10px] h-13 text-xl! text-ivory bg-limegreen-500"
-          >
-            로그인
-          </button>
-        </div>
       </form>
       <!-- 하단 버튼 -->
-      <div class="flex gap-2">
+      <div class="flex flex-col gap-y-4">
         <button
-          class="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-[#ffe812] h-12 text-black shadow-sm"
+          type="submit"
+          class="w-full rounded-[10px] h-13 text-xl! text-ivory bg-limegreen-500"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            class="h-5 w-5"
+          로그인
+        </button>
+        <div class="flex gap-2">
+          <button
+            class="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-[#ffe812] h-12 text-black shadow-sm"
           >
-            <path
-              d="M12 2C6.477 2 2 5.805 2 10.111c0 2.7 2.09 5.06 5.25 6.44-.22.77-.8 2.8-.91 3.25 0 0-.02.16.08.22.1.06.23-.02.23-.02.3-.04 3.37-2.23 4.13-2.77.41.04.83.06 1.25.06 5.523 0 10-3.805 10-8.111C22 5.805 17.523 2 12 2z"
-            />
-          </svg>
-          카카오 로그인
-        </button>
-        <button
-          type="button"
-          class="text-limegreen-900 flex-1 rounded-[10px] bg-transparent border-2 border-limegreen-500 h-12"
-          @click="goToSignup"
-        >
-          회원가입
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              class="h-5 w-5"
+            >
+              <path
+                d="M12 2C6.477 2 2 5.805 2 10.111c0 2.7 2.09 5.06 5.25 6.44-.22.77-.8 2.8-.91 3.25 0 0-.02.16.08.22.1.06.23-.02.23-.02.3-.04 3.37-2.23 4.13-2.77.41.04.83.06 1.25.06 5.523 0 10-3.805 10-8.111C22 5.805 17.523 2 12 2z"
+              />
+            </svg>
+            카카오 로그인
+          </button>
+          <button
+            type="button"
+            class="text-limegreen-900 flex-1 rounded-[10px] bg-transparent border-2 border-limegreen-500 h-12"
+            @click="goToSignup"
+          >
+            회원가입
+          </button>
+        </div>
       </div>
     </div>
   </div>
