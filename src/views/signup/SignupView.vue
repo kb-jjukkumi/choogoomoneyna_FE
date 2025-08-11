@@ -10,9 +10,7 @@
       <div v-else class="min-h-screen flex flex-col relative">
         <!-- 상단 타이틀 -->
         <TopNavigation :show-back="true" :show-logo-text="false" />
-        <div
-          class="flex font-bold text-2xl justify-center pt-8 text-limegreen-900 pb-4"
-        >
+        <div class="flex text-2xl justify-center pt-12 text-limegreen-900 pb-4">
           회원가입
         </div>
 
