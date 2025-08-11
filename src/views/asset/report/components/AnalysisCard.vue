@@ -78,7 +78,7 @@
       >
         <!-- 캐릭터 이미지 -->
         <div class="flex items-center justify-center flex-col">
-          <img :src="image" :alt="name" class="size-22 object-cover" />
+          <img :src="image" :alt="name" class="size-28 object-cover" />
           <div class="text-limegreen-700">
             {{ name }}
           </div>

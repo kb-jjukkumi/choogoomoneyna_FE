@@ -8,7 +8,7 @@
     ]"
     @click="$emit('click')"
   >
-    <img :src="img" :alt="label" class="w-20 h-20 mb-2 object-contain" />
+    <img :src="img" :alt="label" class="w-24 h-24 mb-2 object-contain" />
     <span :class="['text-sm text-center font-bold text-limegreen-900']">
       {{ label }}
     </span>

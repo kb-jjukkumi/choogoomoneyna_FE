@@ -181,13 +181,11 @@ onMounted(async () => {
 
     //추구미 알파벳을 유형명으로 매핑
     const choogoomi = CHOOGOOMI_MAP.find(
-      choogoomi => choogoomi.choogoomiName === data.choogooMi
+      c => c.choogoomiName === data.choogooMi
     );
-
-    const choogoomiName = choogoomi.userLevel[0].choogoomiType;
-
+    const choogoomiName = choogoomi.choogoomiType;
     choogoomiImage.value = new URL(
-      choogoomi.userLevel[userLevel.value].character,
+      choogoomi.userLevel[userLevel.value].image_url,
       import.meta.url
     ).href;
 

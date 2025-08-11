@@ -1,8 +1,8 @@
-import characterA from '@/assets/img/characters/A.png';
-import characterB from '@/assets/img/characters/B.png';
-import characterC from '@/assets/img/characters/C.png';
-import characterD from '@/assets/img/characters/D.png';
-import characterE from '@/assets/img/characters/E.png';
+import characterA from '@/assets/img/characters/A/3.png';
+import characterB from '@/assets/img/characters/B/3.png';
+import characterC from '@/assets/img/characters/C/3.png';
+import characterD from '@/assets/img/characters/D/3.png';
+import characterE from '@/assets/img/characters/E/3.png';
 
 export const CHOOGOOMI_CHARACTERS = [
   {
