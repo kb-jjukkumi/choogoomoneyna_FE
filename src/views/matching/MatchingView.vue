@@ -230,7 +230,6 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
 const choogoomiStore = useChoogoomiStore();
-console.log(choogoomiStore.choogoomiType);
 
 // 클릭(인증) 가능한 미션인지 확인
 //  -> 미션 타입 & 이미 수행했는지 확인
@@ -257,9 +256,6 @@ const opponentUserData = ref({});
 const myMissionList = ref({});
 const opponentMissionList = ref({});
 
-const myChoogoomiName = 'A';
-const opponentChoogoomiName = 'A';
-
 // 매칭 점수
 const myMatchingScore = ref(0);
 const opponentMatchingScore = ref(0);
@@ -283,12 +279,21 @@ const opponentBarWidth = computed(() => {
   return `${(opponentScore / total) * 100}%`;
 });
 
+// 추구미 캐릭터 경로 조회 헬퍼: 스토어의 한글 타입 라벨과 레벨로 이미지 경로 찾기
+const getCharacterPath = (typeLabel, level) => {
+  // 레벨에 해당하는 라벨이 일치하는 항목 우선 탐색
+  const typeData = CHOOGOOMI_MAP.find(
+    e => e.userLevel[level].choogoomiType === typeLabel
+  );
+  return typeData.userLevel[level].character;
+};
+
 // 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화
 onMounted(async () => {
   try {
     isLoading.value = true;
     const matchingData = await fetchMatchingData();
-    choogoomiStore.initializeChoogoomiType();
+    await choogoomiStore.initializeChoogoomiType();
 
     //매칭 결과 모달에 띄울 데이터 가져오기
     const result = await getRankingHistory();
@@ -306,9 +311,7 @@ onMounted(async () => {
     const myTotalScore = matchingData.myTotalScore;
     const myLevel = getLevel(myTotalScore);
     const myCharacter = new URL(
-      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
-        myLevel
-      ].character,
+      getCharacterPath(choogoomiStore.choogoomiType, myLevel),
       import.meta.url
     ).href;
 
@@ -329,9 +332,7 @@ onMounted(async () => {
     const opponentTotalScore = matchingData.opponentTotalScore;
     const opponentLevel = getLevel(opponentTotalScore);
     const opponentCharacter = new URL(
-      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
-        opponentLevel
-      ].character,
+      getCharacterPath(choogoomiStore.choogoomiType, opponentLevel),
       import.meta.url
     ).href;
 
