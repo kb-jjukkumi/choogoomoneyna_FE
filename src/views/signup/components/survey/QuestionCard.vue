@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-5 justify-center bg-limegreen-100 px-4 rounded-lg text-center h-100"
+    class="flex flex-col gap-5 justify-center bg-limegreen-100 px-4 rounded-lg text-center h-100 w-full"
   >
     <div class="flex flex-col gap-3">
       <div class="text-green">{{ question.question }}</div>

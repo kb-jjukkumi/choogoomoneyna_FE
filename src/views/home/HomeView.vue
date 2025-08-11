@@ -156,6 +156,7 @@ import { useRouter } from 'vue-router';
 
 import { userInfo } from '@/api/authApi';
 import { fetchAccounts, updateAccountFromCodef } from '@/api/bankApi';
+import { updateRankingData } from '@/api/ranking';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
 import BottomNavigation from '@/components/BottomNavigation.vue';
@@ -226,6 +227,9 @@ const levelInfo = computed(() => {
 // 컴포넌트가 마운트될 때 실행
 onMounted(async () => {
   try {
+    // 랭킹 데이터 업데이트 (초기 사용자도 랭킹 데이터에 추가)
+    await updateRankingData();
+
     // 사용자 프로필 정보를 API로부터 받아옴
     const profileData = await userInfo();
     choogoomiStore.initializeChoogoomiType(profileData);
@@ -269,6 +273,9 @@ onMounted(async () => {
         date: account.fetchedDate,
       };
     });
+
+    await updateRankingData();
+    // 명예의 전당 데이터 가져오기
     isLoading.value = false;
   } catch (err) {
     console.error('계좌 가져오기 실패:', err);
