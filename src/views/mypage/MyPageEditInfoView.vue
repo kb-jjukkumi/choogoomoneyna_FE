@@ -213,7 +213,7 @@ const onNicknameInput = () => {
 
   // 정규식 유효성 검사 실패 시
   if (!nicknameRegex.test(inputValue)) {
-    nameErrorMessage.value = '닉네임은 2~7자리 한글,영문,숫자만 가능합니다.';
+    nameErrorMessage.value = '닉네임은 2~7자리 한글, 영문, 숫자만 가능합니다.';
     isNicknameValid.value = false;
     isNameChecked.value = false; // 중복 확인 초기화
     return;
@@ -267,7 +267,7 @@ const validateNewPassword = () => {
 
   if (!passwordRegex.test(newPassword.value)) {
     NewPwdErrorMessage.value =
-      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+      '8~20자리 영문, 숫자, 특수문자 조합으로 입력해주세요.';
     isNewPwdChecked.value = false;
     return false;
   }

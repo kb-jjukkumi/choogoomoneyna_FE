@@ -246,8 +246,7 @@ const handleCheckName = async () => {
   }
 
   if (!nicknameRegex.test(member.nickname)) {
-    nameErrorMessage.value =
-      '닉네임은 영문, 숫자, 특수문자만 2~10자리로 입력해주세요.';
+    nameErrorMessage.value = '닉네임은 2~7자리 한글, 영문, 숫자만 가능합니다.';
     isNameChecked.value = false;
     return;
   }
@@ -331,7 +330,7 @@ const validatePassword = () => {
 
   if (!passwordRegex.test(member.password)) {
     pwdErrorMessage.value =
-      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+      '8~20자리 영문, 숫자, 특수문자 조합으로 입력해주세요.';
     isPwdChecked.value = false;
     return false;
   }

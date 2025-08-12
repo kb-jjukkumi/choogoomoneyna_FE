@@ -313,7 +313,7 @@ const validatePassword = () => {
 
   if (!passwordRegex.test(userData.password)) {
     pwdErrorMessage.value =
-      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+      '8~20자리 영문, 숫자, 특수문자 조합으로 입력해주세요.';
     isPwdChecked.value = false;
     return false;
   }
