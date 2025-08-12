@@ -59,6 +59,13 @@
       :message="MISSION_INFO.missionTitle"
       @close="handleSuccessClose"
     />
+
+    <AlertModal
+      v-if="showFailModal"
+      title="미션 인증 실패"
+      :message="MISSION_INFO.missionTitle"
+      @close="handleRetry"
+    />
   </div>
 </template>
 
@@ -67,6 +74,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { validateWriteMission } from '@/api/matchingApi';
+import AlertModal from '@/components/AlertModal.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
 
@@ -76,7 +84,7 @@ const route = useRoute();
 
 // 전달받은 미션 정보
 const MISSION_INFO = {
-  missionId: route.query.id,
+  missionId: Number(route.query.id),
   missionTitle: route.query.title,
   missionContent: route.query.content,
   missionScore: route.query.score,
@@ -84,6 +92,7 @@ const MISSION_INFO = {
 
 const inputText = ref('');
 const showSuccessModal = ref(false); // 미션 성공 모달
+const showFailModal = ref(false); // 미션 인증 실패 모달
 
 const router = useRouter();
 
@@ -92,20 +101,46 @@ const isMissionCompleted = computed(() => {
   return inputText.value.length >= 100;
 });
 
-function handleNext() {
-  if (isMissionCompleted.value) {
-    showSuccessModal.value = true;
-  }
-}
-
-async function handleSuccessClose() {
+// 미션 제출 후 성공 여부 판단
+const submitMission = async missionId => {
   try {
-    await validateWriteMission(MISSION_INFO.missionId);
-    showSuccessModal.value = false;
-    router.push('/matching');
+    const data = await validateWriteMission(missionId, inputText.value);
+    // 미션 성공 여부 판단하기 위해 응답 데이터에 접근
+    const list = data.missionProgressDTOList;
+    const missionIdNumber = Number(missionId);
+    const missionData = list.find(
+      item => Number(item.missionId) === missionIdNumber
+    );
+    // 해당 미션 점수가 0이 아닌 경우 성공
+    const isSuccess = Number(missionData.score) !== 0;
+    return isSuccess;
   } catch (error) {
-    alert('미션 인증에 실패했습니다.');
-    console.error(error);
+    throw new Error(error);
   }
-}
+};
+// 미션 성공 여부 판단 후 모달 표시
+const handleNext = async () => {
+  if (!isMissionCompleted.value) {
+    return;
+  }
+  const isSuccess = await submitMission(MISSION_INFO.missionId);
+  if (isSuccess) {
+    showSuccessModal.value = true;
+    return;
+  }
+  showFailModal.value = true;
+  return;
+};
+
+// 미션 성공 모달 닫기
+const handleSuccessClose = () => {
+  showSuccessModal.value = false;
+  router.push('/matching');
+};
+
+// 미션 인증 실패 모달 닫기
+const handleRetry = () => {
+  showFailModal.value = false;
+  router.go(-1);
+};
 </script>
