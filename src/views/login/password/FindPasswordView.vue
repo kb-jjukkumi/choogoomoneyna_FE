@@ -308,6 +308,16 @@ const verify = async () => {
 
 //비밀번호 실시간 일치 여부 확인
 const validatePassword = () => {
+  //유효성
+  const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,20}$/;
+
+  if (!passwordRegex.test(userData.password)) {
+    pwdErrorMessage.value =
+      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+    isPwdChecked.value = false;
+    return false;
+  }
+
   // 비밀번호가 입력되지 않은 경우
   if (!userData.password.trim() || !password2.value.trim()) {
     pwdErrorMessage.value = '';
