@@ -204,6 +204,13 @@ const onNicknameInput = () => {
   const idRegex = /^[A-Za-z0-9가-힣]{2,7}$/; //영문+숫자 2~7자리
   const inputValue = newNickname.value.trim(); //현재 입력된 닉네임
 
+  if (inputValue === member.nickname) {
+    nameErrorMessage.value = '';
+    isNameChecked.value = true;
+    isNicknameValid.value = true;
+    return;
+  }
+
   // 정규식 유효성 검사 실패 시
   if (!idRegex.test(inputValue)) {
     nameErrorMessage.value = '닉네임은 2~7자리 한글,영문,숫자만 가능합니다.';
@@ -331,6 +338,10 @@ onMounted(async () => {
     Object.assign(member, data);
     newNickname.value = member.nickname;
     userEmail.value = localStorage.getItem('userEmail');
+
+    // 닉네임을 안 바꾼 경우 바로 중복확인 통과 처리
+    isNicknameValid.value = true;
+    isNameChecked.value = true;
   } catch (error) {
     console.error('회원 정보 불러오기 실패');
   }
