@@ -32,6 +32,7 @@
                     type="text"
                     placeholder="한글,영문,숫자 2~10자리"
                     class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                    @input="isNameChecked = false"
                   />
                   <button
                     class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-lg disabled:opacity-50"
@@ -114,6 +115,7 @@
                   placeholder="비밀번호 입력"
                   style="font-family: Arial, sans-serif"
                   class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
+                  @input="validatePassword"
                 />
               </div>
               <div>
@@ -235,9 +237,17 @@ const verifyEmail = reactive({
 //닉네임 중복 체크
 const handleCheckName = async () => {
   if (isNameChecking.value) return; // 중복 요청 방지
+  const nicknameRegex = /^[A-Za-z0-9가-힣]{2,7}$/; //영문+숫자 2~7자리
 
   if (!member.nickname.trim()) {
     nameErrorMessage.value = '닉네임을 입력하세요.';
+    isNameChecked.value = false;
+    return;
+  }
+
+  if (!nicknameRegex.test(member.nickname)) {
+    nameErrorMessage.value =
+      '닉네임은 영문, 숫자, 특수문자만 2~10자리로 입력해주세요.';
     isNameChecked.value = false;
     return;
   }
@@ -317,12 +327,22 @@ const verify = async () => {
 
 //비밀번호 일치 여부 확인
 const validatePassword = () => {
+  const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,20}$/;
+
+  if (!passwordRegex.test(member.password)) {
+    pwdErrorMessage.value =
+      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+    isPwdChecked.value = false;
+    return false;
+  }
+
   if (!member.password.trim() || !password2.value.trim()) {
     pwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
   if (member.password !== password2.value) {
     pwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
+    isPwdChecked.value = false;
     return false;
   }
   pwdErrorMessage.value = '';
