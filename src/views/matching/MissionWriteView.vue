@@ -1,13 +1,13 @@
 <template>
-  <div class="relative flex justify-center w-full">
+  <div class="relative flex justify-center w-full h-screen">
     <TopNavigation :showBack="true" :showLogoText="false" />
-    <div class="bg-ivory flex flex-col gap-6 w-full mt-10 px-6 justify-between">
+    <div class="bg-ivory flex flex-col gap-10 w-full mt-10 px-6">
       <!-- 타이틀 -->
-      <div class="flex flex-col text-center gap-2">
+      <div class="flex flex-col text-center gap-6">
         <div class="tfont-bold text-2xl justify-center">
           {{ MISSION_INFO.missionTitle }}
         </div>
-        <div class="text-limegreen-700 text-sm mt-2 whitespace-pre-line">
+        <div class="text-limegreen-700 text-sm whitespace-pre-line">
           {{ MISSION_INFO.missionContent }}
         </div>
         <div class="text-red text-sm">(100자 이상)</div>

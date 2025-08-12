@@ -8,29 +8,29 @@
         <!-- 매칭 점수 비교 -->
         <!-- 나 -->
         <div class="flex flex-col flex-1 items-center justify-center">
-          <div class="text-limegreen-900 text-xs mb-1">
+          <div class="text-limegreen-900 text-lg mb-1">
             {{ myMatchingScore }}점
           </div>
-          <img :src="myUserData.profileImageUrl" class="w-[50px]" />
+          <img :src="myUserData.profileImageUrl" class="w-20" />
         </div>
         <div class="flex flex-col item-center justify-center text-center">
-          <span class="bg-green text-white text-xs px-3 py-0.5 rounded-full">{{
+          <span class="bg-green text-white text-sm px-3 py-0.5 rounded-full">{{
             choogoomiStore.choogoomiType
           }}</span>
-          <span class="text-limegreen-900 text-medium font-bold mt-3">VS</span>
+          <span class="text-limegreen-900 text-xl font-bold mt-3">VS</span>
         </div>
         <!-- 상대 -->
         <div class="flex flex-col flex-1 items-center justify-center">
-          <div class="text-limegreen-900 text-xs mb-2">
+          <div class="text-limegreen-900 text-lg mb-2">
             {{ opponentMatchingScore }}점
           </div>
-          <img :src="opponentUserData.profileImageUrl" class="w-[50px]" />
+          <img :src="opponentUserData.profileImageUrl" class="w-20" />
         </div>
       </div>
 
       <!-- 매칭 점수 게이지 바 (양쪽에서 채워짐) -->
       <div
-        class="h-2.5 rounded-full mx-6 overflow-hidden bg-limegreen-100 relative"
+        class="h-3 rounded-full mx-6 overflow-hidden bg-limegreen-100 relative"
       >
         <!-- 왼쪽: 나의 점수 (red) -->
         <div
@@ -49,14 +49,14 @@
         <!-- 나 -->
         <div class="flex flex-col flex-1 justify-center items-center">
           <span
-            class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
+            class="bg-limegreen-100 text-limegreen-900 px-3 py-0.5 rounded-full text-sm z-10"
           >
             {{ myUserData.ranking }}위
           </span>
-          <div class="text-xs text-limegreen-900 mt-1">
+          <div class="text-lg text-limegreen-900">
             {{ myUserData.nickname }}
           </div>
-          <div class="text-[10px] text-gray-300">
+          <div class="text-sm text-gray-300">
             {{
               'Lv.' + myUserData.level + ' / ' + myUserData.totalScore + '점'
             }}
@@ -66,14 +66,14 @@
         <!-- 상대 -->
         <div class="flex flex-col flex-1 justify-center items-center">
           <span
-            class="bg-limegreen-100 text-limegreen-900 px-2.5 py-1 rounded-full text-[9px] z-10"
+            class="bg-limegreen-100 text-limegreen-900 px-3 py-0.5 rounded-full text-sm z-10"
           >
             {{ opponentUserData.ranking }}위
           </span>
-          <div class="text-xs text-limegreen-900 mt-1">
+          <div class="text-lg text-limegreen-900">
             {{ opponentUserData.nickname }}
           </div>
-          <div class="text-[10px] text-gray-300">
+          <div class="text-sm text-gray-300">
             {{
               'Lv.' +
               opponentUserData.level +
@@ -102,8 +102,10 @@
               class="absolute right-0 -mr-2 top-full mt-1.5 w-75 bg-white border border-limegreen-500 text-xs rounded-xl shadow-lg drop-shadow-[0_8px_10px_rgba(163,230,53,0.6)] z-20 px-4 py-4 space-y-3 group-hover:block hidden"
             >
               <div v-for="(info, i) in MISSION_INFORMATION" :key="i">
-                <p class="text-green-700 mb-0.5">{{ info.title }}</p>
-                <p class="text-limegreen-700 leading-tight whitespace-pre-line">
+                <p class="text-green-700 mb-0.5 text-lg">{{ info.title }}</p>
+                <p
+                  class="text-limegreen-700 leading-tight whitespace-pre-line text-sm"
+                >
                   {{ info.description }}
                 </p>
               </div>
@@ -114,7 +116,7 @@
         <!-- 나 -->
         <div class="bg-ivory p-3 rounded-xl">
           <span
-            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
+            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-base"
           >
             {{ myUserData.nickname }}
           </span>
@@ -144,7 +146,7 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-[10px]">
+                <span class="pr-2 text-gray-300 text-xs">
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>
@@ -153,9 +155,9 @@
         </div>
 
         <!-- 상대 -->
-        <div class="bg-ivory p-3 mt-2 rounded-xl">
+        <div class="bg-ivory p-3 mt-4 rounded-xl">
           <span
-            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-xs"
+            class="bg-limegreen-100 text-green px-2 py-1 rounded-lg text-base"
           >
             {{ opponentUserData.nickname }}
           </span>
@@ -179,7 +181,7 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-[10px]">
+                <span class="pr-2 text-gray-300 text-xs">
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>

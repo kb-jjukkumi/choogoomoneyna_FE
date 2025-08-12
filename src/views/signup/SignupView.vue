@@ -1,20 +1,21 @@
 <template>
   <div class="min-h-screen flex items-center justify-center w-full bg-ivory">
-    <div class="flex flex-col gap-7 w-full max-w-md px-4">
+    <div class="flex flex-col gap-7 w-full max-w-md">
       <TermsAgreement
         v-if="!termsAgreement"
         @next="handleTermsNext"
         @back="handleTermsBack"
       />
       <!-- 타이틀 -->
-      <div v-else class="min-h-screen flex flex-col">
+      <div v-else class="min-h-screen flex flex-col relative">
         <!-- 상단 타이틀 -->
-        <div class="flex font-bold text-xl justify-center pt-8 pb-4">
+        <TopNavigation :show-back="true" :show-logo-text="false" />
+        <div class="flex text-2xl justify-center pt-12 text-limegreen-900 pb-4">
           회원가입
         </div>
 
         <!-- 중앙 폼 영역 -->
-        <div class="flex-1 flex items-center justify-center">
+        <div class="flex-1 flex items-center justify-center px-6">
           <form
             id="signup-form"
             class="flex flex-col gap-6 w-full"
@@ -22,7 +23,9 @@
           >
             <div class="flex flex-col gap-2">
               <div class="flex flex-col">
-                <label for="nickname" class="block mb-1 font-bold"
+                <label
+                  for="nickname"
+                  class="block mb-1 font-bold text-limegreen-900"
                   >닉네임</label
                 >
                 <div class="flex gap-3">
@@ -54,7 +57,9 @@
             </div>
 
             <div>
-              <label for="email" class="mb-1 block font-bold">이메일</label>
+              <label for="email" class="mb-1 block font-bold text-limegreen-900"
+                >이메일</label
+              >
               <div class="flex flex-col gap-2">
                 <div class="flex gap-3">
                   <input
@@ -104,7 +109,9 @@
             </div>
             <div class="flex flex-col gap-2">
               <div>
-                <label for="password" class="mb-1 block font-bold"
+                <label
+                  for="password"
+                  class="mb-1 block font-bold text-limegreen-900"
                   >비밀번호</label
                 >
                 <input
@@ -117,7 +124,9 @@
                 />
               </div>
               <div>
-                <label for="password2" class="mb-1 block font-bold"
+                <label
+                  for="password2"
+                  class="mb-1 block font-bold text-limegreen-900"
                   >비밀번호 확인</label
                 >
                 <input
@@ -141,11 +150,11 @@
         </div>
 
         <!-- 하단 버튼 -->
-        <div class="pb-8 pt-4">
+        <div class="pb-8 pt-4 flex justify-center">
           <button
             type="submit"
             form="signup-form"
-            class="bg-limegreen-500 text-white w-full rounded-lg py-3 text-lg font-normal disabled:opacity-50"
+            class="bg-limegreen-500 text-white w-[342px] rounded-lg py-3 text-lg font-normal disabled:opacity-50"
             :disabled="isSubmitting"
             @click="handleSubmit"
           >
@@ -179,6 +188,7 @@ import { useRouter } from 'vue-router';
 
 import { checkName, sendCode, signup, verifyCode } from '@/api/authApi';
 import AlertModal from '@/components/AlertModal.vue';
+import TopNavigation from '@/components/TopNavigation.vue';
 
 import TermsAgreement from './components/terms/TermsAgreement.vue';
 

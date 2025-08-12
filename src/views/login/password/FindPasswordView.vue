@@ -1,19 +1,19 @@
 <template>
-  <div class="flex justify-center w-full relative">
+  <div class="flex justify-center w-full relative h-screen">
     <TopNavigation :showBack="true" :show-logo-text="false" />
-    <div class="bg-ivory flex flex-col gap-7 w-full px-4 mt-16">
+    <div class="bg-ivory flex flex-col gap-7 w-full px-6 mt-12 h-screen">
       <!-- 타이틀 -->
-      <div>
+      <div class="flex flex-col gap-6">
         <div class="flex text-2xl justify-center text-limegreen-900">
           비밀번호 재설정
         </div>
         <!-- 입력 폼 -->
-        <form class="flex flex-col gap-6" @submit.prevent="handleSubmit">
+        <form class="flex flex-col mt-8 gap-6" @submit.prevent="handleSubmit">
           <div>
-            <label for="email" class="mb-1 block font-bold"
-              >이메일<span class="text-red">* </span></label
+            <label for="email" class="mb-2 block text-limegreen-900"
+              >이메일</label
             >
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-3">
               <div class="flex gap-3">
                 <div class="relative flex-2">
                   <div
@@ -38,7 +38,7 @@
                     id="email"
                     type="email"
                     placeholder="이메일을 입력해주세요"
-                    class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 focus:outline-none"
+                    class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 focus:outline-none placeholder:text-[#BDBFB5]"
                   />
                 </div>
 
@@ -75,7 +75,7 @@
                     id="email-code"
                     type="text"
                     placeholder="인증번호를 입력해주세요."
-                    class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3"
+                    class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:text-[#BDBFB5]"
                   />
                 </div>
                 <button
@@ -95,9 +95,9 @@
               </p>
             </div>
           </div>
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-3">
             <div>
-              <label for="password" class="mb-1 block font-bold"
+              <label for="password" class="mb-1 block text-limegreen-900"
                 >새 비밀번호</label
               >
               <div class="relative">
@@ -124,13 +124,13 @@
                   type="password"
                   placeholder="비밀번호 입력"
                   style="font-family: Arial, sans-serif"
-                  class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:font-jua"
+                  class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:font-jua placeholder:text-[#BDBFB5]"
                   @input="validatePassword"
                 />
               </div>
             </div>
             <div>
-              <label for="password2" class="mb-1 block font-bold"
+              <label for="password2" class="mb-1 block text-limegreen-900"
                 >새 비밀번호 확인</label
               >
               <div class="relative">
@@ -157,7 +157,7 @@
                   type="password"
                   placeholder="비밀번호 확인"
                   style="font-family: Arial, sans-serif"
-                  class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:font-jua"
+                  class="border-2 border-limegreen-500 w-full h-11 rounded-lg bg-white pl-10 pr-3 py-3 placeholder:font-jua placeholder:text-[#BDBFB5]"
                   @input="validatePassword"
                 />
               </div>
@@ -175,7 +175,7 @@
           </div>
           <button
             type="submit"
-            class="bg-limegreen-500 text-white mt-2 w-full rounded-lg py-3 text-lg font-normal disabled:opacity-50"
+            class="bg-limegreen-500 text-white mt-2 w-[342px] rounded-lg py-3 text-lg font-normal disabled:opacity-50 fixed bottom-20 left-1/2 -translate-x-1/2"
             :disabled="isSubmitting"
           >
             {{ isSubmitting ? '처리 중...' : '확인' }}
