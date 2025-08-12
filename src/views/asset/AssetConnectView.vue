@@ -80,7 +80,7 @@
   <AlertModal
     v-if="isAlreadyAddedAccounts"
     title="계좌를 확인해주세요."
-    :message="`${bankName} 계좌가 이미 연동되어 있습니다.`"
+    :message="`이미 연동된 계좌입니다.`"
     @close="handleAlreadyModalClose"
   />
 
