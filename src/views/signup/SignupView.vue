@@ -158,7 +158,7 @@
             :disabled="isSubmitting"
             @click="handleSubmit"
           >
-            {{ isSubmitting ? '처리 중...' : '다음' }}
+            {{ isSubmitting ? '처리 중...' : '회원가입 완료' }}
           </button>
         </div>
       </div>
