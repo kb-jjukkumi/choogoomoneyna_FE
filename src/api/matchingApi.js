@@ -25,11 +25,11 @@ export const getResultByRound = async roundNumber => {
 };
 
 // 글쓰기 미션 인증 요청
-export const validateWriteMission = async missionId => {
+export const validateWriteMission = async (missionId, contents) => {
   try {
     const response = await axiosInstance.put(
       `/api/matching/missions/validate/3`,
-      { missionId }
+      { missionId, contents }
     );
     return response.data;
   } catch (error) {
