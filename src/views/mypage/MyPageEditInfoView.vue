@@ -92,6 +92,7 @@
               placeholder="새 비밀번호를 입력해주세요."
               style="font-family: Arial, sans-serif"
               class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-[10px] bg-white px-3 py-3 placeholder:font-jua"
+              @input="validateNewPassword"
             />
           </div>
           <div>
@@ -255,12 +256,22 @@ const handleCheckName = async () => {
 
 //새 비밀번호 일치 여부 확인
 const validateNewPassword = () => {
+  const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,20}$/;
+
+  if (!passwordRegex.test(newPassword.value)) {
+    NewPwdErrorMessage.value =
+      '8~20자의 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+    isNewPwdChecked.value = false;
+    return false;
+  }
+
   if (!newPassword.value.trim() || !newPassword2.value.trim()) {
     NewPwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
   if (newPassword.value !== newPassword2.value) {
     NewPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
+    isNewPwdChecked.value = false;
     return false;
   }
   NewPwdErrorMessage.value = '';
