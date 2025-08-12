@@ -255,7 +255,7 @@ const isClickableMission = mission => {
 
 const isLoading = ref(false);
 const isFailMatching = ref(false); // 매칭 데이터 불러오기 실패 모달
-const MATCHING_ERROR_MESSAGE = '다음 주 월요일 00:00에 매칭이 시작됩니다.';
+const MATCHING_ERROR_MESSAGE = '다음 주 월요일 09:00에 매칭이 시작됩니다.';
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
