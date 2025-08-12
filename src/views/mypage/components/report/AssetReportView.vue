@@ -164,6 +164,7 @@ import { fetchAccounts } from '@/api/bankApi';
 import { getReportList } from '@/api/userApi';
 import { fetchUserData } from '@/api/userApi';
 import AlertModal from '@/components/AlertModal.vue';
+import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
 import { calculateRegDate } from '@/utils/dateUtils';
 import AnalysisCard from '@/views/mypage/components/report/components/AnalysisCard.vue';
 
@@ -212,26 +213,36 @@ const isAlertModalOpen = ref(false);
 const currentReportIndex = ref(reportList.value.length - 1);
 
 // 차트 데이터
-const expenseRatio = ref(80);
-const expenseCategories = ref([
-  { name: '식비', percentage: 35 },
-  { name: '카페', percentage: 25 },
-  { name: '쇼핑', percentage: 20 },
-  { name: '기타', percentage: 20 },
-]);
+const expenseCategories = ref({
+  식비: {
+    amount: 0,
+    ratio: 0,
+  },
+  교통비: {
+    amount: 0,
+    ratio: 0,
+  },
+  쇼핑: {
+    amount: 0,
+    ratio: 0,
+  },
+  기타: {
+    amount: 0,
+    ratio: 0,
+  },
+});
 
 // AnalysisCard에서 사용할 차트 데이터
 const chartAnalysisData = computed(() => ({
-  percentage: expenseRatio.value,
   categories: expenseCategories.value,
 }));
 
 // AnalysisCard에서 사용할 캐릭터 데이터
-const characterAnalysisData = computed(() => ({
-  image: '/src/assets/img/characters/A.png',
-  name: reportList.value[currentReportIndex.value]?.recommend || '',
-  summary: '작은 실천이 모여 내일을 만든다!',
-}));
+const characterAnalysisData = ref({
+  image: '',
+  name: '',
+  summary: '',
+});
 
 // API에서 리포트 목록 가져오기
 const fetchReportList = async () => {
@@ -242,8 +253,26 @@ const fetchReportList = async () => {
     });
     reportList.value = response;
     userData.value.summary = reportList.value[currentReportIndex.value].summary;
-    getUserData();
-    getAsset();
+    Promise.all([getUserData(), getAsset()]);
+
+    expenseCategories.value =
+      reportList.value[currentReportIndex.value].categorySpent;
+
+    characterAnalysisData.value.name =
+      reportList.value[currentReportIndex.value].recommend;
+
+    const choogoomi = CHOOGOOMI_CHARACTERS.find(
+      choogoomi =>
+        choogoomi.label === reportList.value[currentReportIndex.value].recommend
+    );
+
+    // 추천받은 추구미 데이터 설정
+    characterAnalysisData.value = {
+      image: choogoomi.img,
+      name: choogoomi.label,
+      summary: choogoomi.summary,
+    };
+
     return response;
   } catch (error) {
     isAlertModalOpen.value = true;

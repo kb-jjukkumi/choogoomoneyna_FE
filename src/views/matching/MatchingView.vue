@@ -28,17 +28,19 @@
         </div>
       </div>
 
-      <!-- 매칭 점수 게이지 바 -->
-      <div class="h-2.5 bg-yellow rounded-full mx-6 overflow-hidden">
+      <!-- 매칭 점수 게이지 바 (양쪽에서 채워짐) -->
+      <div
+        class="h-2.5 rounded-full mx-6 overflow-hidden bg-limegreen-100 relative"
+      >
+        <!-- 왼쪽: 나의 점수 (red) -->
         <div
-          class="h-full bg-red"
-          :style="{
-            width:
-              (myUserData.matchingScore /
-                (myUserData.matchingScore + opponentUserData.matchingScore)) *
-                100 +
-              '%',
-          }"
+          class="absolute left-0 top-0 bottom-0 bg-red"
+          :style="{ width: myBarWidth }"
+        ></div>
+        <!-- 오른쪽: 상대 점수 (yellow) -->
+        <div
+          class="absolute right-0 top-0 bottom-0 bg-yellow"
+          :style="{ width: opponentBarWidth }"
         ></div>
       </div>
 
@@ -209,7 +211,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { fetchMatchingData } from '@/api/matchingApi';
@@ -228,7 +230,6 @@ import QuizAlertModal from './components/QuizAlertModal.vue';
 
 const router = useRouter();
 const choogoomiStore = useChoogoomiStore();
-console.log(choogoomiStore.choogoomiType);
 
 // 클릭(인증) 가능한 미션인지 확인
 //  -> 미션 타입 & 이미 수행했는지 확인
@@ -255,19 +256,41 @@ const opponentUserData = ref({});
 const myMissionList = ref({});
 const opponentMissionList = ref({});
 
-const myChoogoomiName = 'A';
-const opponentChoogoomiName = 'A';
-
 // 매칭 점수
 const myMatchingScore = ref(0);
 const opponentMatchingScore = ref(0);
+
+// 게이지 바 너비 계산
+// - 두 점수가 모두 0이면: 좌우 각각 1%
+// - 그 외에는 점수 비율로 좌우 각각 퍼센트
+const myBarWidth = computed(() => {
+  const myScore = myMatchingScore.value;
+  const opponentScore = opponentMatchingScore.value;
+  const total = myScore + opponentScore;
+  if (total === 0) return '1%';
+  return `${(myScore / total) * 100}%`;
+});
+
+const opponentBarWidth = computed(() => {
+  const myScore = myMatchingScore.value;
+  const opponentScore = opponentMatchingScore.value;
+  const total = myScore + opponentScore;
+  if (total === 0) return '1%';
+  return `${(opponentScore / total) * 100}%`;
+});
+
+// 추구미 캐릭터 경로 조회 헬퍼: 스토어의 한글 타입 라벨과 레벨로 이미지 경로 찾기
+const getCharacterPath = (typeLabel, level) => {
+  const characterData = CHOOGOOMI_MAP.find(e => e.choogoomiType === typeLabel);
+  return characterData.userLevel[level].image_url;
+};
 
 // 페이지 로드 시 매칭 데이터 fetch 및 상태 초기화
 onMounted(async () => {
   try {
     isLoading.value = true;
     const matchingData = await fetchMatchingData();
-    choogoomiStore.initializeChoogoomiType();
+    await choogoomiStore.initializeChoogoomiType();
 
     //매칭 결과 모달에 띄울 데이터 가져오기
     const result = await getRankingHistory();
@@ -285,9 +308,7 @@ onMounted(async () => {
     const myTotalScore = matchingData.myTotalScore;
     const myLevel = getLevel(myTotalScore);
     const myCharacter = new URL(
-      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
-        myLevel
-      ].character,
+      getCharacterPath(choogoomiStore.choogoomiType, myLevel),
       import.meta.url
     ).href;
 
@@ -308,9 +329,7 @@ onMounted(async () => {
     const opponentTotalScore = matchingData.opponentTotalScore;
     const opponentLevel = getLevel(opponentTotalScore);
     const opponentCharacter = new URL(
-      CHOOGOOMI_MAP.find(c => c.choogoomiName === myChoogoomiName).userLevel[
-        opponentLevel
-      ].character,
+      getCharacterPath(choogoomiStore.choogoomiType, opponentLevel),
       import.meta.url
     ).href;
 

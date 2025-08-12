@@ -34,7 +34,7 @@
             <!-- 지출 분석 차트 박스 -->
             <AnalysisCard
               mode="chart"
-              title="전체 수입 대비 지출이 많아요!"
+              title="카테고리 별 소비"
               :chart-data="chartAnalysisData"
             />
           </Slide>
@@ -86,6 +86,7 @@ import { useRouter } from 'vue-router';
 import { fetchAccounts } from '@/api/bankApi';
 import { createReport, fetchUserData } from '@/api/userApi';
 import LoadingModal from '@/components/LoadingModal.vue';
+import { CHOOGOOMI_CHARACTERS } from '@/constants/ChoogoomiList';
 import AnalysisCard from '@/views/asset/report/components/AnalysisCard.vue';
 
 const isLoading = ref(false);
@@ -120,25 +121,35 @@ const userData = ref({
 });
 
 // 차트 데이터
-const expenseRatio = ref(80);
-const expenseCategories = ref([
-  { name: '식비', percentage: 35 },
-  { name: '카페', percentage: 25 },
-  { name: '쇼핑', percentage: 20 },
-  { name: '기타', percentage: 20 },
-]);
+const expenseCategories = ref({
+  식비: {
+    amount: 0,
+    ratio: 0,
+  },
+  교통비: {
+    amount: 0,
+    ratio: 0,
+  },
+  쇼핑: {
+    amount: 0,
+    ratio: 0,
+  },
+  기타: {
+    amount: 0,
+    ratio: 0,
+  },
+});
 
 // AnalysisCard에서 사용할 차트 데이터
 const chartAnalysisData = computed(() => ({
-  percentage: expenseRatio.value,
   categories: expenseCategories.value,
 }));
 
 // AnalysisCard에서 사용할 캐릭터 데이터
 const characterAnalysisData = ref({
-  image: '/src/assets/img/characters/A.png',
+  image: '',
   name: '',
-  summary: '작은 실천이 모여 내일을 만든다!',
+  summary: '',
 });
 
 // API에서 리포트 데이터 가져오기
@@ -149,11 +160,23 @@ const fetchReportData = async () => {
     // 리포트 데이터 저장
     reportData.value = response;
     userData.value.summary = reportData.value.summary;
+    expenseCategories.value = reportData.value.categorySpent;
 
     characterAnalysisData.value.name = reportData.value.recommend;
 
     // 유저/자산 데이터 병렬 로드가 모두 끝날 때까지 대기
     await Promise.all([getUserData(), getAsset()]);
+
+    // 추천받은 추구미 데이터 찾기
+    const choogoomi = CHOOGOOMI_CHARACTERS.find(
+      choogoomi => choogoomi.label === reportData.value.recommend
+    );
+    // 추천받은 추구미 데이터 설정
+    characterAnalysisData.value = {
+      image: choogoomi.img,
+      name: choogoomi.label,
+      summary: choogoomi.summary,
+    };
   } catch (error) {
     console.error('리포트 데이터 로드 실패:', error);
   } finally {

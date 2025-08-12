@@ -94,7 +94,7 @@ const pagedRecordsWithImages = computed(() =>
     const choogoomi = CHOOGOOMI_MAP.find(
       c => c.choogoomiName === record.choogooMi
     );
-    const imageUrl = new URL(choogoomi.userLevel[0].character, import.meta.url)
+    const imageUrl = new URL(choogoomi.userLevel[0].image_url, import.meta.url)
       .href;
 
     return {
