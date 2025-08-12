@@ -26,7 +26,7 @@
                 class="flex-1 w-full h-11 text-white bg-limegreen-500 rounded-[10px] disabled:opacity-50"
                 type="button"
                 @click="handleCheckName"
-                :disabled="isNameChecking"
+                :disabled="isNameChecked || !isNicknameValid"
               >
                 {{ isNameChecking ? '확인 중...' : '중복 확인' }}
               </button>
@@ -92,6 +92,7 @@
               placeholder="새 비밀번호를 입력해주세요."
               style="font-family: Arial, sans-serif"
               class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-[10px] bg-white px-3 py-3 placeholder:font-jua"
+              @input="validateNewPassword"
             />
           </div>
           <div>
@@ -193,17 +194,40 @@ const showErrorModal = ref(false);
 const isNameChecked = ref(false);
 const isNewPwdChecked = ref(false);
 
+const isNicknameValid = ref(false); // 닉네임 유효성 검사 상태
+
 // 로딩 상태 관리
 const isNameChecking = ref(false);
 
 //닉네임이 다시 입력되면 중복 체크 상태 초기화
 const onNicknameInput = () => {
+  const nicknameRegex = /^[A-Za-z0-9가-힣]{2,7}$/; //영문+숫자 2~7자리
+  const inputValue = newNickname.value.trim(); //현재 입력된 닉네임
+
+  if (inputValue === member.nickname) {
+    nameErrorMessage.value = '';
+    isNameChecked.value = true;
+    isNicknameValid.value = true;
+    return;
+  }
+
+  // 정규식 유효성 검사 실패 시
+  if (!nicknameRegex.test(inputValue)) {
+    nameErrorMessage.value = '닉네임은 2~7자리 한글, 영문, 숫자만 가능합니다.';
+    isNicknameValid.value = false;
+    isNameChecked.value = false; // 중복 확인 초기화
+    return;
+  }
+
   isNameChecked.value = false;
+  isNicknameValid.value = true;
   nameErrorMessage.value = '';
 };
 
 //닉네임 중복 체크
 const handleCheckName = async () => {
+  if (!isNicknameValid.value) return; // 유효성 통과 안하면 중단
+
   if (isNameChecking.value) return; // 중복 요청 방지
 
   if (!newNickname.value.trim()) {
@@ -239,12 +263,22 @@ const handleCheckName = async () => {
 
 //새 비밀번호 일치 여부 확인
 const validateNewPassword = () => {
+  const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,20}$/;
+
+  if (!passwordRegex.test(newPassword.value)) {
+    NewPwdErrorMessage.value =
+      '8~20자리 영문, 숫자, 특수문자 조합으로 입력해주세요.';
+    isNewPwdChecked.value = false;
+    return false;
+  }
+
   if (!newPassword.value.trim() || !newPassword2.value.trim()) {
     NewPwdErrorMessage.value = '비밀번호를 입력해주세요.';
     return false;
   }
   if (newPassword.value !== newPassword2.value) {
     NewPwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
+    isNewPwdChecked.value = false;
     return false;
   }
   NewPwdErrorMessage.value = '';
@@ -304,6 +338,10 @@ onMounted(async () => {
     Object.assign(member, data);
     newNickname.value = member.nickname;
     userEmail.value = localStorage.getItem('userEmail');
+
+    // 닉네임을 안 바꾼 경우 바로 중복확인 통과 처리
+    isNicknameValid.value = true;
+    isNameChecked.value = true;
   } catch (error) {
     console.error('회원 정보 불러오기 실패');
   }
