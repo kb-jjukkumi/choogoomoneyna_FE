@@ -1,5 +1,15 @@
 <template>
-  <LoadingScreen v-if="isLoading" class="h-screen" />
+  <div
+    v-if="isFailMatching"
+    class="h-screen flex items-center justify-center bg-ivory"
+  >
+    <AlertModal
+      title="매칭 시작 전입니다."
+      :message="MATCHING_ERROR_MESSAGE"
+      @close="handleRetry"
+    />
+  </div>
+  <LoadingScreen v-else-if="isLoading" class="h-screen" />
   <div v-else class="relative flex justify-center">
     <TopNavigation />
     <div class="flex flex-col w-full min-h-[calc(100vh-120px)] bg-ivory mt-18">
@@ -219,6 +229,7 @@ import { useRouter } from 'vue-router';
 import { fetchMatchingData } from '@/api/matchingApi';
 import { getRankingHistory } from '@/api/ranking';
 import icon_info from '@/assets/img/icons/feature/icon_info.png';
+import AlertModal from '@/components/AlertModal.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -243,6 +254,8 @@ const isClickableMission = mission => {
 };
 
 const isLoading = ref(false);
+const isFailMatching = ref(false); // 매칭 데이터 불러오기 실패 모달
+const MATCHING_ERROR_MESSAGE = '다음 주 월요일 00:00에 매칭이 시작됩니다.';
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달
@@ -388,7 +401,8 @@ onMounted(async () => {
 
     isLoading.value = false;
   } catch (err) {
-    console.error('매칭 데이터 불러오기 실패:', err);
+    isLoading.value = false;
+    isFailMatching.value = true;
   }
 });
 
@@ -454,5 +468,10 @@ const goToQuiz = () => {
 // 퀴즈 모달 닫기
 const modalClose = () => {
   showModal.value = false;
+};
+
+// 매칭 데이터 로딩 실패 모달 확인 → 홈으로 이동
+const handleRetry = () => {
+  router.replace({ name: 'home' });
 };
 </script>
