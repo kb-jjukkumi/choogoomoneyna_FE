@@ -77,6 +77,13 @@
     @additional-connect="handleAdditionalConnect"
     @close="handleModalClose"
   />
+  <AlertModal
+    v-if="isAlreadyAddedAccounts"
+    title="계좌를 확인해주세요."
+    :message="`이미 연동된 계좌입니다.`"
+    @close="handleAlreadyModalClose"
+  />
+
   <LoadingModal v-if="isLoading" />
 </template>
 
@@ -85,6 +92,7 @@ import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { fetchBankFromCodef, fetchTransactionsFromCodef } from '@/api/bankApi';
+import AlertModal from '@/components/AlertModal.vue';
 import BankIcon from '@/components/BankIcon.vue';
 import LoadingModal from '@/components/LoadingModal.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
@@ -105,6 +113,7 @@ const isConnecting = ref(false);
 const isModalOpen = ref(false);
 const modalType = ref(true); // true: 성공, false: 실패
 const isLoading = ref(false);
+const isAlreadyAddedAccounts = ref(false); // 이미 연동된 계좌 모달
 
 // Computed
 const bankName = computed(() => {
@@ -132,6 +141,12 @@ const connectAsset = async () => {
       userBankId: userBankId.value,
       userBankPassword: userBankPassword.value,
     });
+
+    if (bankInfo === 'Already added Accounts') {
+      isLoading.value = false;
+      isAlreadyAddedAccounts.value = true;
+      return;
+    }
 
     // 연동된 계좌의 계좌 번호 리스트 만들기
     const accountList = bankInfo.map(account => {
@@ -172,6 +187,10 @@ const handleModalClose = () => {
   if (modalType.value === true) {
     router.push({ name: 'assetReport' });
   }
+};
+
+const handleAlreadyModalClose = () => {
+  isAlreadyAddedAccounts.value = false;
 };
 
 const handleAdditionalConnect = () => {
