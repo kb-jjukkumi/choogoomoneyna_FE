@@ -10,7 +10,7 @@
       <div v-else class="min-h-screen flex flex-col relative">
         <!-- 상단 타이틀 -->
         <TopNavigation :show-back="true" :show-logo-text="false" />
-        <div class="flex text-2xl justify-center pt-12 text-limegreen-900 pb-4">
+        <div class="flex text-2xl justify-center mt-16 text-limegreen-900">
           회원가입
         </div>
 
@@ -18,23 +18,30 @@
         <div class="flex-1 flex items-center justify-center px-6">
           <form
             id="signup-form"
-            class="flex flex-col gap-6 w-full"
+            class="flex flex-col gap-4 w-full"
             @submit.prevent="handleSubmit"
           >
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
               <div class="flex flex-col">
-                <label
-                  for="nickname"
-                  class="block mb-1 font-bold text-limegreen-900"
+                <label for="nickname" class="block mb-1 text-limegreen-900"
                   >닉네임</label
                 >
-                <div class="flex gap-3">
+                <div class="flex gap-2 relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <img
+                      src="@/assets/img/icons/feature/icon_nickname.png"
+                      alt="닉네임"
+                      class="w-5 h-5"
+                    />
+                  </div>
                   <input
                     v-model="member.nickname"
                     id="nickname"
                     type="text"
-                    placeholder="한글,영문,숫자 2~10자리"
-                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                    placeholder="한글,영문,숫자 2~7자리"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 pl-10"
                     @input="isNameChecked = false"
                   />
                   <button
@@ -58,17 +65,26 @@
             </div>
 
             <div>
-              <label for="email" class="mb-1 block font-bold text-limegreen-900"
+              <label for="email" class="mb-1 block text-limegreen-900"
                 >이메일</label
               >
-              <div class="flex flex-col gap-2">
-                <div class="flex gap-3">
+              <div class="flex flex-col gap-4">
+                <div class="flex gap-2 relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <img
+                      src="@/assets/img/icons/feature/icon_email.png"
+                      alt="이메일"
+                      class="w-5 h-5"
+                    />
+                  </div>
                   <input
                     v-model="email.email"
                     id="email"
                     type="email"
                     placeholder="이메일을 입력해주세요"
-                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 pl-10"
                   />
                   <button
                     class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
@@ -79,13 +95,22 @@
                     {{ isSendingEmail ? '전송 중...' : '인증 요청' }}
                   </button>
                 </div>
-                <div class="flex gap-3">
+                <div class="flex gap-2 relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <img
+                      src="@/assets/img/icons/feature/icon_email.png"
+                      alt="이메일"
+                      class="w-5 h-5"
+                    />
+                  </div>
                   <input
                     v-model="verifyEmail.code"
                     id="email-code"
                     type="text"
                     placeholder="인증번호를 입력해주세요."
-                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 pl-10"
                   />
                   <button
                     class="flex-1 w-full h-11 text-white font-thin bg-limegreen-500 rounded-lg disabled:opacity-50"
@@ -108,38 +133,56 @@
                 </p>
               </div>
             </div>
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-4">
               <div>
-                <label
-                  for="password"
-                  class="mb-1 block font-bold text-limegreen-900"
+                <label for="password" class="mb-1 block text-limegreen-900"
                   >비밀번호</label
                 >
-                <input
-                  v-model="member.password"
-                  id="password"
-                  type="password"
-                  placeholder="비밀번호 입력"
-                  style="font-family: Arial, sans-serif"
-                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
-                  @input="validatePassword"
-                />
+                <div class="flex gap-2 relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <img
+                      src="@/assets/img/icons/feature/icon_password.png"
+                      alt="비밀번호"
+                      class="w-5 h-5"
+                    />
+                  </div>
+                  <input
+                    v-model="member.password"
+                    id="password"
+                    type="password"
+                    placeholder="비밀번호 입력"
+                    style="font-family: Arial, sans-serif"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua pl-10"
+                    @input="validatePassword"
+                  />
+                </div>
               </div>
               <div>
-                <label
-                  for="password2"
-                  class="mb-1 block font-bold text-limegreen-900"
+                <label for="password2" class="mb-1 block text-limegreen-900"
                   >비밀번호 확인</label
                 >
-                <input
-                  v-model="password2"
-                  id="password2"
-                  type="password"
-                  placeholder="비밀번호 확인"
-                  style="font-family: Arial, sans-serif"
-                  class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua"
-                  @input="validatePassword"
-                />
+                <div class="flex gap-2 relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <img
+                      src="@/assets/img/icons/feature/icon_password.png"
+                      alt="비밀번호 확인"
+                      class="w-5 h-5"
+                    />
+                  </div>
+                  <input
+                    v-model="password2"
+                    id="password2"
+                    type="password"
+                    placeholder="비밀번호 확인"
+                    style="font-family: Arial, sans-serif"
+                    class="border-2 border-limegreen-500 flex-2 w-full h-11 rounded-lg bg-white px-3 py-3 placeholder:font-jua pl-10"
+                    @input="validatePassword"
+                  />
+                </div>
               </div>
               <p
                 class="h-3 text-xs"
