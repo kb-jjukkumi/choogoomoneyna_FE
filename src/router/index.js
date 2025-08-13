@@ -54,13 +54,6 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-      beforeEnter: async (to, from, next) => {
-        const userData = await userInfo();
-        if (userData.choogooMi === 'O') {
-          return next('/survey');
-        }
-        next();
-      },
     },
     {
       path: '/kakao',
