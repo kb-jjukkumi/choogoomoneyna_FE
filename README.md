@@ -22,14 +22,32 @@
 
 ## 프로젝트 실행 방법
 
-1. 패키지 설치
+### 1) 패키지 설치
 
 ```sh
 npm install
 ```
 
-2. 개발 서버 실행
+### 2) 환경 변수 설정
+
+`.env.local`파일을 루트 디렉토리에 생성한 다음 아래의 값들을 추가해주세요.
+
+```js
+# .env.local (예시)
+VITE_API_BASE_URL= {API_URL}
+
+# 카카오 인가 URL 전체 문자열 (client_id, redirect_uri, response_type=code 포함)
+VITE_KAKAO_API_URL=https://kauth.kakao.com/oauth/authorize?client_id={YOUR_CLIENT_ID}&redirect_uri={YOUR_REDIRECT_URI}&response_type=code
+```
+
+- VITE_API_BASE_URL: 백엔드 API 서버의 베이스 URL.
+- VITE_KAKAO_API_URL: 카카오 로그인 인가 요청 URL 전체. `client_id`, `redirect_uri`, `response_type=code`를 포함해야 합니다.
+  - `redirect_uri`는 카카오 개발자 콘솔에 등록된 값과 반드시 동일해야 합니다.
+
+### 3) 개발 서버 실행
 
 ```sh
 npm run dev
 ```
+
+브라우저가 자동으로 열리지 않는다면 로컬 주소(`http://localhost:5173`)로 접속하세요.
