@@ -5,7 +5,9 @@
     <!-- 질문 헤더 -->
     <div class="flex flex-col gap-3">
       <div class="text-green text-2xl font-bold">Q{{ quizData.id }}</div>
-      <div class="text-limegreen-800 text-lg font-medium leading-relaxed px-2">
+      <div
+        class="text-limegreen-800 text-lg font-medium leading-relaxed px-2 whitespace-pre-line break-keep"
+      >
         {{ quizData.question }}
       </div>
     </div>
