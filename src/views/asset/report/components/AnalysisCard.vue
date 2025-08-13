@@ -47,13 +47,13 @@
           <div
             v-for="category in sortedCategoryList"
             :key="category.name"
-            class="flex items-center justify-between gap-2"
+            class="flex items-center gap-x-2"
           >
             <!-- 카테고리 이름 -->
-            <span class="text-gray-300 text-sm">{{ category.name }}</span>
-            <div class="flex items-center gap-2">
+            <div class="text-gray-300 text-sm w-10">{{ category.name }}</div>
+            <div class="flex items-center">
               <!-- 진행률 바 -->
-              <div class="w-20 h-2 rounded-full overflow-hidden">
+              <div class="h-2 w-20 rounded-full overflow-hidden">
                 <div
                   class="h-full rounded-full"
                   :style="{
@@ -180,7 +180,7 @@ const donutSegments = computed(() => {
         CATEGORY_COLOR_MAP[category.name] ||
         DEFAULT_COLOR_PALETTE[index % DEFAULT_COLOR_PALETTE.length],
       // 세그먼트 대시 배열
-      strokeDasharray: `${segmentLength} ${CIRCUMFERENCE}`,
+      strokeDasharray: `${CIRCUMFERENCE}`,
       // 세그먼트 대시 오프셋
       strokeDashoffset: accumulatedLength,
     };
