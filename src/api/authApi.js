@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import axiosInstance from './axios';
 
 export const checkName = async name => {
@@ -98,5 +100,22 @@ export const findPassword = async (email, verificationCode, newPassword) => {
     return true;
   } catch {
     return false;
+  }
+};
+
+export const kakaoLogin = async code => {
+  try {
+    const { data } = await axios.post(
+      'http://localhost:8080/api/v1/oauth2/kakao/login',
+      {
+        code,
+      }
+    );
+    const { accessToken, refreshToken } = data;
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    return true;
+  } catch {
+    throw new Error('카카오 로그인 실패');
   }
 };
