@@ -26,7 +26,7 @@
           'min-h-[3rem]',
           selectedOption === option.value
             ? 'bg-limegreen-500 text-ivory border-limegreen-500 shadow-md'
-            : 'bg-ivory text-limegreen-700 hover:bg-limegreen-500 hover:text-ivory hover:shadow-md',
+            : 'bg-ivory text-limegreen-700 hover:bg-ivory hover:text-limegreen-800 hover:shadow-md',
 
           // 2컬럼일 때 텍스트 크기 조정
           optionLayout === '2' ? 'text-base font-semibold' : '',
