@@ -8,6 +8,7 @@ import AssetReportView from '@/views/asset/report/AssetReportView.vue';
 import ChoogooMiSelectView from '@/views/choogoomi/ChoogooMiSelectView.vue';
 import HomeView from '@/views/home/HomeView.vue';
 import TransactionView from '@/views/home/TransactionView.vue';
+import KakaoLoginView from '@/views/kakao/KakaoLoginView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import FindPasswordView from '@/views/login/password/FindPasswordView.vue';
 import MatchingView from '@/views/matching/MatchingView.vue';
@@ -53,6 +54,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+    },
+    {
+      path: '/kakao',
+      name: 'kakao',
+      component: KakaoLoginView,
     },
     {
       path: '/find-password',

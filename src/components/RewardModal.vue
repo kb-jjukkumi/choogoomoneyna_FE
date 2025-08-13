@@ -4,15 +4,19 @@
       class="bg-ivory rounded-4xl px-7 py-8 w-[40vh] flex flex-col text-center items-center shadow-lg"
     >
       <div class="my-4 text-3xl">🎉</div>
-      <div class="text-green text-lg mb-3 whitespace-pre-line leading-tight">
+      <div
+        class="text-green text-lg mb-3 whitespace-pre-line leading-tight break-keep"
+      >
         {{ title }}
       </div>
       <div
-        class="text-limegreen-700 text-sm mb-6 text-center whitespace-pre-line"
+        class="text-limegreen-700 text-sm mb-6 text-center whitespace-pre-line break-keep"
       >
         {{ message }}
       </div>
-      <div class="text-gray-300 text-sm mb-6 text-center whitespace-pre-line">
+      <div
+        class="text-gray-300 text-sm mb-6 text-center whitespace-pre-line break-keep"
+      >
         {{ caution }}
       </div>
       <div class="mb-6 w-full relative">

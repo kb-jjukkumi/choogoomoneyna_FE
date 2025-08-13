@@ -167,19 +167,22 @@
                   'text-blue-500': user.ranking - user.beforeRanking > 0,
                 }"
               >
-                <img
-                  v-if="user.ranking - user.beforeRanking !== 0"
-                  :src="rankChange"
-                  class="size-2 mr-1"
-                  :class="{
-                    'rotate-180': user.ranking - user.beforeRanking > 0,
-                    'icon-red': user.ranking - user.beforeRanking < 0,
-                    'icon-blue': user.ranking - user.beforeRanking > 0,
-                  }"
-                />
-                <span v-if="user.ranking - user.beforeRanking !== 0">{{
-                  Math.abs(user.ranking - user.beforeRanking)
-                }}</span>
+                <div v-if="user.beforeRanking" class="flex items-center">
+                  <img
+                    v-if="user.ranking - user.beforeRanking !== 0"
+                    :src="rankChange"
+                    class="size-2 mr-1"
+                    :class="{
+                      'rotate-180': user.ranking - user.beforeRanking > 0,
+                      'icon-red': user.ranking - user.beforeRanking < 0,
+                      'icon-blue': user.ranking - user.beforeRanking > 0,
+                    }"
+                  />
+                  <span v-if="user.ranking - user.beforeRanking !== 0">
+                    {{ Math.abs(user.ranking - user.beforeRanking) }}
+                  </span>
+                  <span v-else>-</span>
+                </div>
                 <span v-else>-</span>
               </div>
             </div>

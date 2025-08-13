@@ -53,7 +53,7 @@
     </div>
     <BottomNavigation />
 
-    <SuccessModal
+    <AlertModal
       v-if="showSuccessModal"
       title="미션 성공"
       :message="MISSION_INFO.missionTitle"
@@ -77,8 +77,6 @@ import { validateWriteMission } from '@/api/matchingApi';
 import AlertModal from '@/components/AlertModal.vue';
 import BottomNavigation from '@/components/BottomNavigation.vue';
 import TopNavigation from '@/components/TopNavigation.vue';
-
-import SuccessModal from './components/SuccessModal.vue';
 
 const route = useRoute();
 

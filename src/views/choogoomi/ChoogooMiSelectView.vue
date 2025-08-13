@@ -5,6 +5,13 @@
     >
       추구미 선택
     </p>
+    <div
+      class="text-center text-base text-gray-300 whitespace-pre-line break-keep"
+    >
+      <span>어떤 스타일로 자산을 관리하고 싶으신가요?</span>
+      <br />
+      <span> 나에게 맞는 '추구미'를 선택해보세요! </span>
+    </div>
     <div class="min-w-xs mt-10">
       <!-- 첫 번째 행: 2개 -->
       <div class="grid grid-cols-2 gap-x-8 gap-y-8 mb-8">

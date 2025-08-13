@@ -180,7 +180,7 @@ const donutSegments = computed(() => {
         CATEGORY_COLOR_MAP[category.name] ||
         DEFAULT_COLOR_PALETTE[index % DEFAULT_COLOR_PALETTE.length],
       // 세그먼트 대시 배열
-      strokeDasharray: `${segmentLength} ${CIRCUMFERENCE}`,
+      strokeDasharray: `${CIRCUMFERENCE}`,
       // 세그먼트 대시 오프셋
       strokeDashoffset: accumulatedLength,
     };

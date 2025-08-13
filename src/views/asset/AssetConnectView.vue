@@ -154,13 +154,13 @@ const connectAsset = async () => {
     });
 
     // 연동된 계좌의 거래 내역 불러오기
-    const transactionList = await Promise.all(
+    await Promise.all(
       accountList.map(account =>
         fetchTransactionsFromCodef({
           account: account.accountNum,
           organization: account.bankId,
           startDate: '20250801',
-          endDate: '20250807',
+          endDate: '20250813',
         })
       )
     );
