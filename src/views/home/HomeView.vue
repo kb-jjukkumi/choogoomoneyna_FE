@@ -135,17 +135,31 @@
 
       <BottomNavigation />
 
-      <RewardModal
-        v-if="showModal"
-        :title="'레벨 ' + USER_PROFILE.userLevel + ' 달성 \n 축하합니다!'"
-        message="꾸준한 미션 수행으로 추구미를 향해 멋지게 성장하고 있어요 👏
-       기프티콘 발송을 위해 휴대폰 번호를 입력해주세요.
-       입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
-        caution="‼️ 기회는 단 한 번뿐 ‼️
-잘못 입력하면 보상을 받을 수 없어요."
-        @submit="handlePhoneSubmit"
-        @close="showModal = false"
-      />
+      <div v-if="showModal">
+        <RewardModal
+          v-if="!isLevel4"
+          :title="'레벨 ' + USER_PROFILE.userLevel + ' 달성 \n 축하합니다!'"
+          message="꾸준한 미션 수행으로 추구미를 향해 멋지게 성장하고 있어요 👏
+         기프티콘 발송을 위해 휴대폰 번호를 입력해주세요.
+         입력된 번호는 보상 발송 목적 외에는 사용되지 않으며, 사용 후 즉시 폐기됩니다."
+          caution="‼️ 기회는 단 한 번뿐 ‼️
+  잘못 입력하면 보상을 받을 수 없어요."
+          @submit="handlePhoneSubmit"
+          @close="showModal = false"
+        />
+        <RewardModal
+          v-else
+          :title="'레벨 ' + USER_PROFILE.userLevel + ' 달성 \n 축하합니다!'"
+          message="지금까지의 노력이 쌓여 멋진 결과를 만들어냈어요 👏
+보상을 받기 위해 정확한 휴대폰 번호를 입력해주세요.
+⚠️ 기회는 한 번뿐! 잘못 입력하면 보상을 받을 수 없어요."
+          caution="‼️ 기회는 단 한 번뿐 ‼️
+  잘못 입력하면 보상을 받을 수 없어요."
+          @submit="handlePhoneSubmit"
+          @close="router.push({ name: 'choogoomi' })"
+          :buttonText="'추구미 선택'"
+        />
+      </div>
     </template>
   </div>
 </template>
@@ -175,6 +189,7 @@ const router = useRouter();
 const isLoading = ref(true);
 const ACCOUNTS = ref([]); // 계좌목록 데이터
 const userLevel = ref(0); // 레벨
+const isLevel4 = ref(false); // 레벨 4 여부
 const USER_PROFILE = ref({}); // 프로필 정보
 // 추구미 유형 정보 - 추구미 유형명, 캐릭터
 const choogoomi = ref({});
@@ -257,6 +272,7 @@ onMounted(async () => {
 
     // 레벨 업 여부에 따라 보상 모달 표시 여부 결정
     showModal.value = USER_PROFILE.value.isLevelUp;
+    isLevel4.value = USER_PROFILE.value.userLevel === 4;
 
     // 계좌목록 데이터를 API로부터 받아옴
     const data = await fetchAccounts();
