@@ -1,9 +1,9 @@
 <template>
-  <div class="flex justify-center w-full">
-    <div class="bg-ivory flex flex-col gap-6 w-full px-6">
+  <div class="flex justify-center w-full px-6">
+    <div class="bg-ivory flex flex-col gap-6 w-full">
       <!-- 타이틀 -->
-      <div class="flex flex-col text-center gap-2">
-        <div class="font-bold flex h-14 text-2xl justify-center items-center">
+      <div class="flex flex-col text-center gap-2 mt-12">
+        <div class="font-bold text-2xl text-limegreen-900 justify-center">
           사전 조사
         </div>
         <div class="text-limegreen-700 text-sm">
@@ -12,7 +12,7 @@
       </div>
 
       <!-- 설문조사 문항 -->
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-8">
         <div
           v-for="question in surveyList"
           :key="question.id"
@@ -23,12 +23,12 @@
             class="px-3 py-1 rounded-lg flex bg-limegreen-100 justify-between items-center"
           >
             <div class="flex items-center">
-              <div class="font-thin text-sm text-limegreen-800">
+              <div class="font-thin text-base text-limegreen-800">
                 {{ question.title }}
               </div>
               <div
                 v-if="question.subtitle"
-                class="text-xs text-gray-300 font-thin px-1"
+                class="text-xs text-gray-300 pl-0.5"
               >
                 {{ question.subtitle }}
               </div>
@@ -51,7 +51,7 @@
                   <div
                     @click="selectOption(question.id, option.value)"
                     :class="[
-                      'w-6 h-6 rounded-full border-2 text-gray-300 border-limegreen-500 flex items-center justify-center text-xs cursor-pointer hover:-translate-y-0.3 hover:shadow-md',
+                      'w-8 h-8 rounded-full border-2 text-gray-300 border-limegreen-500 flex items-center justify-center text-base cursor-pointer hover:-translate-y-0.3 hover:shadow-md',
                       answers[question.id] === option.value
                         ? 'bg-limegreen-500'
                         : 'bg-white hover:bg-limegreen-100',
@@ -61,7 +61,7 @@
                   </div>
                   <!-- 라벨 -->
                   <div
-                    class="text-xs text-center text-gray-300 mt-1 whitespace-pre-line"
+                    class="text-sm text-center text-gray-300 mt-1 whitespace-pre-line"
                   >
                     {{ option.label }}
                   </div>
