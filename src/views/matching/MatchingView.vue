@@ -137,6 +137,7 @@
                 :class="{
                   'cursor-pointer hover:bg-limegreen-500':
                     isClickableMission(mission),
+                  'bg-limegreen-500': mission.score !== 0,
                 }"
                 @click="
                   isClickableMission(mission) &&
@@ -156,7 +157,10 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-xs">
+                <span
+                  class="pr-2 text-gray-300 text-xs"
+                  :class="{ 'text-limegreen-900': mission.score !== 0 }"
+                >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>
@@ -178,6 +182,7 @@
             <div class="flex items-center mt-2">
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
+                :class="{ 'bg-limegreen-500': mission.score !== 0 }"
               >
                 <div>
                   <span class="text-green">{{
@@ -191,7 +196,10 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-xs">
+                <span
+                  class="pr-2 text-gray-300 text-xs"
+                  :class="{ 'text-limegreen-900': mission.score !== 0 }"
+                >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>
