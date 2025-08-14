@@ -135,7 +135,7 @@
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
                 :class="{
-                  'cursor-pointer hover:bg-limegreen-500':
+                  'cursor-pointer hover:shadow-lg transition-all duration-300':
                     isClickableMission(mission),
                   'bg-limegreen-500': mission.score !== 0,
                 }"
@@ -148,7 +148,10 @@
                   <span class="text-green">{{
                     '[' + mission.missionScore + '점] '
                   }}</span>
-                  <span class="text-limegreen-900">
+                  <span
+                    class="text-limegreen-900"
+                    :class="{ 'text-green': mission.score !== 0 }"
+                  >
                     {{
                       (Object.keys(myMissionList)[0] === missionId
                         ? '공통 미션: '
@@ -159,7 +162,7 @@
                 </div>
                 <span
                   class="pr-2 text-gray-300 text-xs"
-                  :class="{ 'text-limegreen-900': mission.score !== 0 }"
+                  :class="{ 'text-black!': mission.score !== 0 }"
                 >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
@@ -198,7 +201,7 @@
                 </div>
                 <span
                   class="pr-2 text-gray-300 text-xs"
-                  :class="{ 'text-limegreen-900': mission.score !== 0 }"
+                  :class="{ 'text-black!': mission.score !== 0 }"
                 >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
