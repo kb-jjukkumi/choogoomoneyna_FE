@@ -135,8 +135,9 @@
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
                 :class="{
-                  'cursor-pointer hover:bg-limegreen-500':
+                  'cursor-pointer hover:shadow-lg transition-all duration-300':
                     isClickableMission(mission),
+                  'bg-limegreen-500': mission.score !== 0,
                 }"
                 @click="
                   isClickableMission(mission) &&
@@ -147,7 +148,10 @@
                   <span class="text-green">{{
                     '[' + mission.missionScore + '점] '
                   }}</span>
-                  <span class="text-limegreen-900">
+                  <span
+                    class="text-limegreen-900"
+                    :class="{ 'text-green': mission.score !== 0 }"
+                  >
                     {{
                       (Object.keys(myMissionList)[0] === missionId
                         ? '공통 미션: '
@@ -156,7 +160,10 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-xs">
+                <span
+                  class="pr-2 text-gray-300 text-xs"
+                  :class="{ 'text-black!': mission.score !== 0 }"
+                >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>
@@ -178,6 +185,7 @@
             <div class="flex items-center mt-2">
               <div
                 class="flex justify-between items-center bg-limegreen-100 w-full rounded-lg text-[13px] pl-2 py-2 text-limegreen-900"
+                :class="{ 'bg-limegreen-500': mission.score !== 0 }"
               >
                 <div>
                   <span class="text-green">{{
@@ -191,7 +199,10 @@
                     }}
                   </span>
                 </div>
-                <span class="pr-2 text-gray-300 text-xs">
+                <span
+                  class="pr-2 text-gray-300 text-xs"
+                  :class="{ 'text-black!': mission.score !== 0 }"
+                >
                   {{ mission.score + '/' + mission.missionScore }}
                 </span>
               </div>
@@ -255,7 +266,7 @@ const isClickableMission = mission => {
 
 const isLoading = ref(false);
 const isFailMatching = ref(false); // 매칭 데이터 불러오기 실패 모달
-const MATCHING_ERROR_MESSAGE = '다음 주 월요일 05:00에 매칭이 시작됩니다.';
+const MATCHING_ERROR_MESSAGE = '다음 주 월요일 09:00에 매칭이 시작됩니다.';
 
 const showModal = ref(false); // 퀴즈 안내 모달
 const showResultModal = ref(false); // 매칭 결과 모달

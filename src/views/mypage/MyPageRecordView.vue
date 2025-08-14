@@ -3,7 +3,9 @@
     <TopNavigation :show-back="true" :show-logo-text="false" />
     <div class="bg-ivory flex flex-col gap-2 w-full px-6">
       <!-- 타이틀 -->
-      <div class="flex font-bold text-xl justify-center h-14 items-center">
+      <div
+        class="flex text-limegreen-900 text-2xl justify-center h-14 items-center mt-16"
+      >
         매칭 기록
       </div>
       <!--랭킹 기록 영역-->
@@ -90,18 +92,22 @@ function nextPage() {
 
 //한 페이지에 표시할 기록들 배열에 추구미 이미지 경로 추가
 const pagedRecordsWithImages = computed(() =>
-  pagedRecords.value.map(record => {
-    const choogoomi = CHOOGOOMI_MAP.find(
-      c => c.choogoomiName === record.choogooMi
-    );
-    const imageUrl = new URL(choogoomi.userLevel[0].image_url, import.meta.url)
-      .href;
+  pagedRecords.value
+    .slice(0, -1) // 마지막 요소 제외
+    .map(record => {
+      const choogoomi = CHOOGOOMI_MAP.find(
+        c => c.choogoomiName === record.choogooMi
+      );
+      const imageUrl = new URL(
+        choogoomi.userLevel[0].image_url,
+        import.meta.url
+      ).href;
 
-    return {
-      ...record,
-      imageUrl,
-    };
-  })
+      return {
+        ...record,
+        imageUrl,
+      };
+    })
 );
 
 onMounted(async () => {
