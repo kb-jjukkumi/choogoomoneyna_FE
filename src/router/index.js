@@ -24,7 +24,7 @@ import SurveyView from '@/views/signup/components/survey/SurveyView.vue';
 import SignupView from '@/views/signup/SignupView.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.API_BASE_URL),
   routes: [
     {
       path: '/',
@@ -150,7 +150,7 @@ router.beforeEach(async (to, from, next) => {
   const isLoggedIn = authStore.isLoggedIn;
 
   // 공개 페이지 정의
-  const publicPages = ['/login', '/signup', '/find-password'];
+  const publicPages = ['/login', '/signup', '/find-password', '/kakao'];
 
   console.log('🚦 Router Guard:', {
     to: to.path,

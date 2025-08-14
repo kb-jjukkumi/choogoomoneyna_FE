@@ -90,6 +90,7 @@
           <div class="flex gap-2">
             <button
               class="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-[#ffe812] h-12 text-black shadow-sm"
+              @click="handleKakaoLogin"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -199,5 +200,9 @@ const navigateToFindPassword = () => {
 
 const goToSignup = () => {
   router.push('/signup');
+};
+
+const handleKakaoLogin = () => {
+  window.location.href = import.meta.env.VITE_KAKAO_API_URL;
 };
 </script>
