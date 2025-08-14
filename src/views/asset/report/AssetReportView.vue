@@ -193,7 +193,7 @@ const getAsset = async () => {
   if (accounts.length === 0) return;
   // 자산 총액 계산
   const totalAsset = accounts.reduce(
-    (acc, curr) => acc + curr.accountBalance,
+    (acc, curr) => Number(acc) + Number(curr.accountBalance),
     0
   );
   userData.value.asset = totalAsset;
