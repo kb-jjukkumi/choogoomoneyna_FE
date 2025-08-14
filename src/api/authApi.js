@@ -4,11 +4,14 @@ import axiosInstance from './axios';
 
 export const checkName = async name => {
   try {
-    const { data } = await axiosInstance.get(`api/users/check-nickname`, {
-      params: {
-        nickname: name,
-      },
-    });
+    const { data } = await axiosInstance.get(
+      `api/users/signup/check-nickname`,
+      {
+        params: {
+          nickname: name,
+        },
+      }
+    );
     return data;
   } catch {
     throw new Error('이름 중복 체크 실패');
@@ -18,7 +21,10 @@ export const checkName = async name => {
 //이메일로 인증코드 전송
 export const sendCode = async email => {
   try {
-    const { data } = await axiosInstance.post('api/email-auth/send', email);
+    const { data } = await axiosInstance.post(
+      'api/email-auth/signup/send',
+      email
+    );
     return data;
   } catch {
     throw new Error('이메일 전송 실패');
@@ -29,7 +35,7 @@ export const sendCode = async email => {
 export const verifyCode = async verifyEmail => {
   try {
     const { data } = await axiosInstance.post(
-      'api/email-auth/verify',
+      'api/email-auth/signup/verify',
       verifyEmail
     );
     return data;
