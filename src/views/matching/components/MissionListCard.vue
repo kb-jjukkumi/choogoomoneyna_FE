@@ -13,6 +13,7 @@
       <!--미션 하나-->
       <div
         class="flex justify-between bg-limegreen-100 p-1.5 rounded-[10px] items-center"
+        :class="{ 'bg-limegreen-300': isMissionCompleted(mission) }"
       >
         <div class="flex gap-2">
           <div
@@ -24,7 +25,7 @@
             :class="[
               'text-sm',
               'mr-5',
-              isMissionCompleted(mission) ? 'text-green' : 'text-gray-300',
+              isMissionCompleted(mission) ? 'text-black' : 'text-gray-300',
             ]"
           >
             {{ mission.missionTitle }}
@@ -34,7 +35,7 @@
           :class="[
             'text-xs',
             'mr-1',
-            isMissionCompleted(mission) ? 'text-yellow' : 'text-gray-300',
+            isMissionCompleted(mission) ? 'text-black' : 'text-gray-300',
           ]"
         >
           {{ mission.score }}점
