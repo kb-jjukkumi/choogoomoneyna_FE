@@ -86,7 +86,7 @@ export const userInfo = async () => {
 export const sendPasswordResetEmail = async email => {
   try {
     const { data } = await axiosInstance.post(
-      'api/email-auth/password-reset/send',
+      'api/email-auth/signup/send',
       email
     );
     return data;
@@ -96,12 +96,18 @@ export const sendPasswordResetEmail = async email => {
 };
 
 // 비밀번호 재설정
-export const findPassword = async (email, verificationCode, newPassword) => {
+export const findPassword = async (
+  email,
+  verificationCode,
+  newPassword,
+  newPasswordConfirm
+) => {
   try {
-    await axiosInstance.put('api/users/password/reset', {
+    await axiosInstance.put('api/users/signup/password/reset', {
       email,
       verificationCode,
       newPassword,
+      newPasswordConfirm,
     });
     return true;
   } catch {

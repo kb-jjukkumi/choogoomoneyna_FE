@@ -119,7 +119,7 @@
                   </svg>
                 </div>
                 <input
-                  v-model="userData.password"
+                  v-model="userData.newPassword"
                   id="password"
                   type="password"
                   placeholder="비밀번호 입력"
@@ -152,7 +152,7 @@
                   </svg>
                 </div>
                 <input
-                  v-model="password2"
+                  v-model="userData.newPasswordConfirm"
                   id="password2"
                   type="password"
                   placeholder="비밀번호 확인"
@@ -245,7 +245,8 @@ const isSubmitting = ref(false);
 const userData = reactive({
   email: '',
   verificationCode: '',
-  password: '',
+  newPassword: '',
+  newPasswordConfirm: '',
 });
 
 //이메일 인증번호 전송
@@ -311,7 +312,7 @@ const validatePassword = () => {
   //유효성
   const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,20}$/;
 
-  if (!passwordRegex.test(userData.password)) {
+  if (!passwordRegex.test(userData.newPassword)) {
     pwdErrorMessage.value =
       '8~20자리 영문, 숫자, 특수문자 조합으로 입력해주세요.';
     isPwdChecked.value = false;
@@ -319,14 +320,14 @@ const validatePassword = () => {
   }
 
   // 비밀번호가 입력되지 않은 경우
-  if (!userData.password.trim() || !password2.value.trim()) {
+  if (!userData.newPassword.trim() || !userData.newPasswordConfirm.trim()) {
     pwdErrorMessage.value = '';
     isPwdChecked.value = false;
     return false;
   }
 
   // 둘 다 입력된 경우 비교
-  if (userData.password !== password2.value) {
+  if (userData.newPassword !== userData.newPasswordConfirm) {
     pwdErrorMessage.value = '비밀번호가 일치하지 않습니다.';
     isPwdChecked.value = false;
     return false;
@@ -351,10 +352,10 @@ const handleSubmit = async () => {
   }
 
   // 비밀번호 확인
-  if (!userData.password.trim()) {
+  if (!userData.newPassword.trim()) {
     pwdErrorMessage.value = '비밀번호를 입력해주세요.';
     hasError = true;
-  } else if (!password2.value.trim()) {
+  } else if (!userData.newPasswordConfirm.trim()) {
     pwdErrorMessage.value = '비밀번호 확인을 입력해주세요.';
     hasError = true;
   } else if (!validatePassword()) {
@@ -368,7 +369,8 @@ const handleSubmit = async () => {
     const response = await findPassword(
       userData.email,
       userData.verificationCode,
-      userData.password
+      userData.newPassword,
+      userData.newPasswordConfirm
     );
     if (response) {
       // 성공 메시지 표시
