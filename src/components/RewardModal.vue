@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center bg-black/70 z-20">
+  <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-20">
     <div
       class="bg-ivory rounded-4xl px-7 py-8 w-[40vh] flex flex-col text-center items-center shadow-lg"
     >
