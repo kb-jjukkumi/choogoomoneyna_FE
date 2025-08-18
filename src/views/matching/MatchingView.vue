@@ -195,7 +195,8 @@
                     {{
                       (Object.keys(opponentMissionList)[0] === missionId
                         ? '공통 미션: '
-                        : '지출제로형 미션: ') + mission.missionTitle
+                        : choogoomiStore.choogoomiType + ' 미션: ') +
+                      mission.missionTitle
                     }}
                   </span>
                 </div>
@@ -224,7 +225,7 @@
     <!-- 매칭 결과 모달 -->
     <MatchingResultModal
       v-if="showResultModal && isMonday()"
-      :round-number="lastweekResult.roundNumber"
+      :round-number="lastweekResult.roundNumber - 1"
       title="지난주 매칭 결과"
       @close="closeResultModal"
     />

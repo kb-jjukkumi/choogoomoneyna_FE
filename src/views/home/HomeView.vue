@@ -170,6 +170,7 @@ import { useRouter } from 'vue-router';
 
 import { userInfo } from '@/api/authApi';
 import { fetchAccounts, updateAccountFromCodef } from '@/api/bankApi';
+import { fetchTransactionsFromCodef } from '@/api/bankApi';
 import { updateRankingData } from '@/api/ranking';
 import icon_plus from '@/assets/img/icons/feature/icon_plus.png';
 import icon_refresh from '@/assets/img/icons/feature/icon_refresh.png';
@@ -189,7 +190,7 @@ const router = useRouter();
 const isLoading = ref(true);
 const ACCOUNTS = ref([]); // 계좌목록 데이터
 const userLevel = ref(0); // 레벨
-const isLevel4 = ref(false); // 레벨 4 여부
+const isLevel4 = ref(true); // 레벨 4 여부
 const USER_PROFILE = ref({}); // 프로필 정보
 // 추구미 유형 정보 - 추구미 유형명, 캐릭터
 const choogoomi = ref({});
@@ -217,11 +218,13 @@ const experienceProgress = computed(() => {
   }
 
   const nextLevelThreshold = LEVEL_THRESHOLDS[currentLevel + 1];
+  const threshold = nextLevelThreshold - LEVEL_THRESHOLDS[currentLevel];
+  const currentScoreValue = currentScore - LEVEL_THRESHOLDS[currentLevel];
+  const percentage = (currentScoreValue / threshold) * 100;
 
   // 현재 레벨에서의 진행도 계산
   // 퍼센트 계산 (0-100 사이 값)
-  const percentage = Math.min((currentScore / nextLevelThreshold) * 100, 100);
-  return Math.max(percentage, 0);
+  return percentage;
 });
 
 // 레벨 정보 텍스트 계산
@@ -299,9 +302,19 @@ onMounted(async () => {
 // 계좌 새로고침 함수
 const refreshAccount = async (account, index) => {
   try {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 14);
+
     const updated = await updateAccountFromCodef({
       bankId: account.bankId,
       accountNum: account.accountNum,
+    });
+
+    await fetchTransactionsFromCodef({
+      account: account.accountNum,
+      organization: account.bankId,
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: updated.fetchedDate,
     });
 
     const bankInfo = getBankInfo(updated.bankId);
