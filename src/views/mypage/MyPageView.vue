@@ -87,7 +87,11 @@
             <MyPageBtn text="나의 자산 분석 리포트" to="mypageAssetReport" />
             <MyPageBtn text="나의 매칭 기록" to="mypageRecord" />
             <MyPageBtn text="사전 조사 다시하기" to="mypageSurvey" />
-            <MyPageBtn text="회원 정보 수정" to="mypageEditInfo" />
+            <MyPageBtn
+              v-if="!isKakao(userInfo.nickname)"
+              text="회원 정보 수정"
+              to="mypageEditInfo"
+            />
             <button
               class="w-full bg-ivory border-2 border-limegreen-500 text-limegreen-500 h-12 rounded-[10px]"
               @click="showModal = true"
@@ -170,6 +174,10 @@ const isEditable = isEditableDay();
 const logout = () => {
   authStore.clearAuth();
   router.push('/login');
+};
+
+const isKakao = nickname => {
+  return nickname.includes('_');
 };
 
 onMounted(async () => {
