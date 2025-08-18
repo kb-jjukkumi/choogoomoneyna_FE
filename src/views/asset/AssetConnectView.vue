@@ -153,17 +153,22 @@ const connectAsset = async () => {
       return { accountNum: account.accountNum, bankId: account.bankId };
     });
 
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 14);
+
     // 연동된 계좌의 거래 내역 불러오기
     await Promise.all(
       accountList.map(account =>
         fetchTransactionsFromCodef({
           account: account.accountNum,
           organization: account.bankId,
-          startDate: '20250801',
-          endDate: '20250813',
+          startDate: startDate.toISOString().split('T')[0].replace(/-/g, ''),
+          endDate: endDate.toISOString().split('T')[0].replace(/-/g, ''),
         })
       )
     );
+    console.log(accountList);
 
     // 로딩 모달 숨기고 성공 모달 표시
     isLoading.value = false;
