@@ -158,7 +158,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Carousel, Slide } from 'vue3-carousel';
 import 'vue3-carousel/carousel.css';
 import { useRouter } from 'vue-router';
@@ -215,36 +215,34 @@ const isAlertModalOpen = ref(false);
 // 현재 리포트 인덱스
 const currentReportIndex = ref(reportList.value.length - 1);
 
-// 차트 데이터
-const expenseCategories = ref({
-  식비: {
-    amount: 0,
-    ratio: 0,
-  },
-  교통비: {
-    amount: 0,
-    ratio: 0,
-  },
-  쇼핑: {
-    amount: 0,
-    ratio: 0,
-  },
-  기타: {
-    amount: 0,
-    ratio: 0,
-  },
+// 차트 기본 카테고리
+const DEFAULT_EXPENSE_CATEGORIES = {
+  식비: { amount: 0, ratio: 0 },
+  교통비: { amount: 0, ratio: 0 },
+  쇼핑: { amount: 0, ratio: 0 },
+  기타: { amount: 0, ratio: 0 },
+};
+
+// AnalysisCard에서 사용할 차트 데이터 (현재 인덱스 기반)
+const chartAnalysisData = computed(() => {
+  const current = reportList.value[currentReportIndex.value];
+  return {
+    categories: current?.categorySpent || DEFAULT_EXPENSE_CATEGORIES,
+  };
 });
 
-// AnalysisCard에서 사용할 차트 데이터
-const chartAnalysisData = computed(() => ({
-  categories: expenseCategories.value,
-}));
-
-// AnalysisCard에서 사용할 캐릭터 데이터
-const characterAnalysisData = ref({
-  image: '',
-  name: '',
-  summary: '',
+// AnalysisCard에서 사용할 캐릭터 데이터 (현재 인덱스 기반)
+const characterAnalysisData = computed(() => {
+  const current = reportList.value[currentReportIndex.value];
+  const name = current?.recommend || '';
+  const choogoomi = CHOOGOOMI_CHARACTERS.find(c => c.label === name);
+  return choogoomi
+    ? {
+        image: choogoomi.img,
+        name: choogoomi.label,
+        summary: choogoomi.summary,
+      }
+    : { image: '', name, summary: '' };
 });
 
 // API에서 리포트 목록 가져오기
@@ -255,27 +253,13 @@ const fetchReportList = async () => {
       item.regDate = calculateRegDate(item.regDate);
     });
     reportList.value = response;
-    userData.value.summary = reportList.value[currentReportIndex.value].summary;
+    // 최신 리포트가 기본으로 보이도록 설정
+    currentReportIndex.value = Math.max(0, reportList.value.length - 1);
+    // 사용자 데이터/자산 동시 요청
     Promise.all([getUserData(), getAsset()]);
-
-    expenseCategories.value =
-      reportList.value[currentReportIndex.value].categorySpent;
-
-    characterAnalysisData.value.name =
-      reportList.value[currentReportIndex.value].recommend;
-
-    const choogoomi = CHOOGOOMI_CHARACTERS.find(
-      choogoomi =>
-        choogoomi.label === reportList.value[currentReportIndex.value].recommend
-    );
-
-    // 추천받은 추구미 데이터 설정
-    characterAnalysisData.value = {
-      image: choogoomi.img,
-      name: choogoomi.label,
-      summary: choogoomi.summary,
-    };
-
+    // 요약 텍스트 초기화
+    userData.value.summary =
+      reportList.value[currentReportIndex.value]?.summary || '';
     return response;
   } catch (error) {
     isAlertModalOpen.value = true;
@@ -327,6 +311,12 @@ const handleClose = () => {
 
 onMounted(() => {
   fetchReportList();
+});
+
+// 인덱스 변경 시 요약 텍스트 갱신
+watch(currentReportIndex, () => {
+  userData.value.summary =
+    reportList.value[currentReportIndex.value]?.summary || '';
 });
 </script>
 
