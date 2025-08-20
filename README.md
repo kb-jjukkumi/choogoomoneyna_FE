@@ -1,4 +1,84 @@
-# 추구머니나
+# 추구머니나 (ChoogooMoney)
+
+## 서비스 소개
+
+![표지](docs/images/서비스표지.png)
+
+**"추구하는 자산 관리 성향으로 성장하는 개인 맞춤형 게이미피케이션 금융 서비스"**
+
+사용자는 자신이 추구하는 자산 관리 유형을 '추구미' 캐릭터를 통해 선택합니다.
+실제 은행 인터넷 뱅킹 계좌 연동을 통해 실시간 자산 현황, 카테고리별 소비를 파악하며, 퀴즈와 미션, 챌린지를 통해 **자산 관리를 도움** 받을 수 있습니다.
+
+---
+
+## 서비스 선정 배경
+
+![주제선정배경](docs/images/주제선정배경.png)
+
+1. 게이미피케이션 시장의 지속적인 성장
+2. 게임 요소에 관심을 가지는 MZ 세대와 그에 맞는 수요 증가
+3. KB 국민은행의 게이미피케이션 관심과 시도
+
+---
+
+## 핵심 기능
+
+### 1. 사전 조사 및 계좌 연동으로 리포트 생성
+
+![리포트생성](docs/images/리포트생성.png)
+![리포트생성결과](docs/images/리포트생성결과.png)
+
+- **사전 조사** : 본인의 상황과 소비 성향 응답
+- **계좌 연동** : 실제 계좌 연동으로 거래 내역 조회
+- 조사 응답과 거래 내역 기반으로 **조언 및 유형 추천**
+
+<br>
+
+### 2. 추구미 캐릭터
+
+<p align="center">
+<img src='docs/images/A.png' width=30%/>
+<img src='docs/images/B.png' width=30%/>
+<img src='docs/images/C.png' width=30%/>
+<img src='docs/images/D.png' width=30%/>
+<img src='docs/images/E.png' width=30%/>
+</p>
+
+> **5가지 성향**: 지출제로형, 합리소비형, 저축실천형, 투자도전형, 금융탐구형
+> **개인화된 경험**: 사용자의 소비 패턴과 목표에 맞는 캐릭터 추천
+> **성장 시스템**: 레벨업과 경험치를 통한 캐릭터 성장
+
+<br>
+
+### 3. 매칭 및 미션
+
+<img src="docs/images/매칭.png" />
+
+<br>
+<img src="docs/images/매칭미션_퀴즈.png" />
+<img src="docs/images/매칭미션_텍스트.png" />
+
+---
+
+### 시스템 아키텍처
+
+## ![시스템 아키텍처](docs/images/시스템아키텍처.png)
+
+---
+
+## 기술 스택
+
+### Frontend
+
+[![My Skills](https://skillicons.dev/icons?i=javascript,npm,vue,pinia,tailwind,vite)](https://skillicons.dev)
+
+### Backend
+
+[![My Skills](https://skillicons.dev/icons?i=spring,gradle,mysql)](https://skillicons.dev)
+
+### Deploy
+
+[![My Skills](https://skillicons.dev/icons?i=vercel,docker,aws,php,githubactions,)](https://skillicons.dev)
 
 ## ⚠️ 개발 환경 및 버전 안내
 
